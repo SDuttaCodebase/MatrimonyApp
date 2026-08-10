@@ -11,6 +11,27 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		5D72342CB0E843DCA26CE05C /* SansitaBlack.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A2B992D08304170B46A782F /* SansitaBlack.ttf */; };
+		BA719626728244BAABDE01EB /* SansitaBlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FEC296FD36A047E888E02DF7 /* SansitaBlackItalic.ttf */; };
+		375D0E685C23485088F8546E /* SansitaBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A8708991AA434D9D84FDD76D /* SansitaBold.ttf */; };
+		09B8BA66E0E24CA7AD04E19C /* SansitaBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F1B6493AB1C5411FBCB427B9 /* SansitaBoldItalic.ttf */; };
+		ECD45604CD4641DB8CDC5AFF /* SansitaExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E50AEDB124D241219229D4FA /* SansitaExtraBold.ttf */; };
+		F5AAFCB799FB45BB9D09960C /* SansitaExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 877A851651EB48BFAD804C4C /* SansitaExtraBoldItalic.ttf */; };
+		12FE6F465D6C4CCCB6BA6910 /* SansitaItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 84D69DB7D1DC484AB2968B19 /* SansitaItalic.ttf */; };
+		B43183E2044A4C9BB1901CE7 /* SansitaRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5B67E95045614FF1A6DD3134 /* SansitaRegular.ttf */; };
+		BEB4BFAEC0F94DF29D48EA98 /* SarabunBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4142802610E04391A457310F /* SarabunBold.ttf */; };
+		13D8C14D8F9F4381B2DE952E /* SarabunBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F4EF1292CEF24962803263F5 /* SarabunBoldItalic.ttf */; };
+		FA5F3F957DDA41719B42C79F /* SarabunExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A855A2F37B894E149E196207 /* SarabunExtraBold.ttf */; };
+		A7269F7AD54F4C9AB885B471 /* SarabunExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A06EC7ACCAAB4853AD0F5E39 /* SarabunExtraBoldItalic.ttf */; };
+		0BBE2172E3C04DBB802F0824 /* SarabunExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6143AD53DF7940AB8AB68206 /* SarabunExtraLight.ttf */; };
+		D0DC9BD09FA4459FA5D128E0 /* SarabunItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0B859343B9F945BA9BB76FC3 /* SarabunItalic.ttf */; };
+		2C823FD9A274431094715541 /* SarabunLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 71BA8E8C79B34E32984BA06E /* SarabunLight.ttf */; };
+		E5C084FA4A22477398E6532C /* SarabunLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D21464083EEC4A8BB6DF963C /* SarabunLightItalic.ttf */; };
+		8E76CFC2EEBD40A29A46A95A /* SarabunMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51C4A0CD63BC4CE8909F7CAF /* SarabunMedium.ttf */; };
+		2E9DCD00F4AB4ADBAE00D6D8 /* SarabunMediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88F776E6FCC44CCEB97C036E /* SarabunMediumItalic.ttf */; };
+		460937CCC1004B1A80CA4687 /* SarabunRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1ACE318AA0E0421F9F88AB44 /* SarabunRegular.ttf */; };
+		C588295183D94445B402009C /* SarabunSemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B04E4BE097D94AD69B1AC1F7 /* SarabunSemiBold.ttf */; };
+		206CD92159394157A547703D /* SarabunSemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 33641D8ED8BB464489125F09 /* SarabunSemiBoldItalic.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +45,27 @@
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = MatrimonyApp/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MatrimonyApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		7A2B992D08304170B46A782F /* SansitaBlack.ttf */ = {isa = PBXFileReference; name = "SansitaBlack.ttf"; path = "../src/assets/fonts/SansitaBlack.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		FEC296FD36A047E888E02DF7 /* SansitaBlackItalic.ttf */ = {isa = PBXFileReference; name = "SansitaBlackItalic.ttf"; path = "../src/assets/fonts/SansitaBlackItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A8708991AA434D9D84FDD76D /* SansitaBold.ttf */ = {isa = PBXFileReference; name = "SansitaBold.ttf"; path = "../src/assets/fonts/SansitaBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F1B6493AB1C5411FBCB427B9 /* SansitaBoldItalic.ttf */ = {isa = PBXFileReference; name = "SansitaBoldItalic.ttf"; path = "../src/assets/fonts/SansitaBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E50AEDB124D241219229D4FA /* SansitaExtraBold.ttf */ = {isa = PBXFileReference; name = "SansitaExtraBold.ttf"; path = "../src/assets/fonts/SansitaExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		877A851651EB48BFAD804C4C /* SansitaExtraBoldItalic.ttf */ = {isa = PBXFileReference; name = "SansitaExtraBoldItalic.ttf"; path = "../src/assets/fonts/SansitaExtraBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		84D69DB7D1DC484AB2968B19 /* SansitaItalic.ttf */ = {isa = PBXFileReference; name = "SansitaItalic.ttf"; path = "../src/assets/fonts/SansitaItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		5B67E95045614FF1A6DD3134 /* SansitaRegular.ttf */ = {isa = PBXFileReference; name = "SansitaRegular.ttf"; path = "../src/assets/fonts/SansitaRegular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4142802610E04391A457310F /* SarabunBold.ttf */ = {isa = PBXFileReference; name = "SarabunBold.ttf"; path = "../src/assets/fonts/SarabunBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F4EF1292CEF24962803263F5 /* SarabunBoldItalic.ttf */ = {isa = PBXFileReference; name = "SarabunBoldItalic.ttf"; path = "../src/assets/fonts/SarabunBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A855A2F37B894E149E196207 /* SarabunExtraBold.ttf */ = {isa = PBXFileReference; name = "SarabunExtraBold.ttf"; path = "../src/assets/fonts/SarabunExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A06EC7ACCAAB4853AD0F5E39 /* SarabunExtraBoldItalic.ttf */ = {isa = PBXFileReference; name = "SarabunExtraBoldItalic.ttf"; path = "../src/assets/fonts/SarabunExtraBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		6143AD53DF7940AB8AB68206 /* SarabunExtraLight.ttf */ = {isa = PBXFileReference; name = "SarabunExtraLight.ttf"; path = "../src/assets/fonts/SarabunExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0B859343B9F945BA9BB76FC3 /* SarabunItalic.ttf */ = {isa = PBXFileReference; name = "SarabunItalic.ttf"; path = "../src/assets/fonts/SarabunItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		71BA8E8C79B34E32984BA06E /* SarabunLight.ttf */ = {isa = PBXFileReference; name = "SarabunLight.ttf"; path = "../src/assets/fonts/SarabunLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D21464083EEC4A8BB6DF963C /* SarabunLightItalic.ttf */ = {isa = PBXFileReference; name = "SarabunLightItalic.ttf"; path = "../src/assets/fonts/SarabunLightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		51C4A0CD63BC4CE8909F7CAF /* SarabunMedium.ttf */ = {isa = PBXFileReference; name = "SarabunMedium.ttf"; path = "../src/assets/fonts/SarabunMedium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		88F776E6FCC44CCEB97C036E /* SarabunMediumItalic.ttf */ = {isa = PBXFileReference; name = "SarabunMediumItalic.ttf"; path = "../src/assets/fonts/SarabunMediumItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		1ACE318AA0E0421F9F88AB44 /* SarabunRegular.ttf */ = {isa = PBXFileReference; name = "SarabunRegular.ttf"; path = "../src/assets/fonts/SarabunRegular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B04E4BE097D94AD69B1AC1F7 /* SarabunSemiBold.ttf */ = {isa = PBXFileReference; name = "SarabunSemiBold.ttf"; path = "../src/assets/fonts/SarabunSemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		33641D8ED8BB464489125F09 /* SarabunSemiBoldItalic.ttf */ = {isa = PBXFileReference; name = "SarabunSemiBoldItalic.ttf"; path = "../src/assets/fonts/SarabunSemiBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +116,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				82139D5794C44B6BBC1C1093 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -96,6 +139,35 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		82139D5794C44B6BBC1C1093 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				7A2B992D08304170B46A782F /* SansitaBlack.ttf */,
+				FEC296FD36A047E888E02DF7 /* SansitaBlackItalic.ttf */,
+				A8708991AA434D9D84FDD76D /* SansitaBold.ttf */,
+				F1B6493AB1C5411FBCB427B9 /* SansitaBoldItalic.ttf */,
+				E50AEDB124D241219229D4FA /* SansitaExtraBold.ttf */,
+				877A851651EB48BFAD804C4C /* SansitaExtraBoldItalic.ttf */,
+				84D69DB7D1DC484AB2968B19 /* SansitaItalic.ttf */,
+				5B67E95045614FF1A6DD3134 /* SansitaRegular.ttf */,
+				4142802610E04391A457310F /* SarabunBold.ttf */,
+				F4EF1292CEF24962803263F5 /* SarabunBoldItalic.ttf */,
+				A855A2F37B894E149E196207 /* SarabunExtraBold.ttf */,
+				A06EC7ACCAAB4853AD0F5E39 /* SarabunExtraBoldItalic.ttf */,
+				6143AD53DF7940AB8AB68206 /* SarabunExtraLight.ttf */,
+				0B859343B9F945BA9BB76FC3 /* SarabunItalic.ttf */,
+				71BA8E8C79B34E32984BA06E /* SarabunLight.ttf */,
+				D21464083EEC4A8BB6DF963C /* SarabunLightItalic.ttf */,
+				51C4A0CD63BC4CE8909F7CAF /* SarabunMedium.ttf */,
+				88F776E6FCC44CCEB97C036E /* SarabunMediumItalic.ttf */,
+				1ACE318AA0E0421F9F88AB44 /* SarabunRegular.ttf */,
+				B04E4BE097D94AD69B1AC1F7 /* SarabunSemiBold.ttf */,
+				33641D8ED8BB464489125F09 /* SarabunSemiBoldItalic.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -159,6 +231,27 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				5D72342CB0E843DCA26CE05C /* SansitaBlack.ttf in Resources */,
+				BA719626728244BAABDE01EB /* SansitaBlackItalic.ttf in Resources */,
+				375D0E685C23485088F8546E /* SansitaBold.ttf in Resources */,
+				09B8BA66E0E24CA7AD04E19C /* SansitaBoldItalic.ttf in Resources */,
+				ECD45604CD4641DB8CDC5AFF /* SansitaExtraBold.ttf in Resources */,
+				F5AAFCB799FB45BB9D09960C /* SansitaExtraBoldItalic.ttf in Resources */,
+				12FE6F465D6C4CCCB6BA6910 /* SansitaItalic.ttf in Resources */,
+				B43183E2044A4C9BB1901CE7 /* SansitaRegular.ttf in Resources */,
+				BEB4BFAEC0F94DF29D48EA98 /* SarabunBold.ttf in Resources */,
+				13D8C14D8F9F4381B2DE952E /* SarabunBoldItalic.ttf in Resources */,
+				FA5F3F957DDA41719B42C79F /* SarabunExtraBold.ttf in Resources */,
+				A7269F7AD54F4C9AB885B471 /* SarabunExtraBoldItalic.ttf in Resources */,
+				0BBE2172E3C04DBB802F0824 /* SarabunExtraLight.ttf in Resources */,
+				D0DC9BD09FA4459FA5D128E0 /* SarabunItalic.ttf in Resources */,
+				2C823FD9A274431094715541 /* SarabunLight.ttf in Resources */,
+				E5C084FA4A22477398E6532C /* SarabunLightItalic.ttf in Resources */,
+				8E76CFC2EEBD40A29A46A95A /* SarabunMedium.ttf in Resources */,
+				2E9DCD00F4AB4ADBAE00D6D8 /* SarabunMediumItalic.ttf in Resources */,
+				460937CCC1004B1A80CA4687 /* SarabunRegular.ttf in Resources */,
+				C588295183D94445B402009C /* SarabunSemiBold.ttf in Resources */,
+				206CD92159394157A547703D /* SarabunSemiBoldItalic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

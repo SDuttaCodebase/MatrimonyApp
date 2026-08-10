@@ -28,14 +28,13 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-	  <!-- Do not change NSAllowsArbitraryLoads to true, or you will risk app rejection! -->
 		<key>NSAllowsArbitraryLoads</key>
 		<false/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -55,5 +54,29 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>SansitaBlack.ttf</string>
+		<string>SansitaBlackItalic.ttf</string>
+		<string>SansitaBold.ttf</string>
+		<string>SansitaBoldItalic.ttf</string>
+		<string>SansitaExtraBold.ttf</string>
+		<string>SansitaExtraBoldItalic.ttf</string>
+		<string>SansitaItalic.ttf</string>
+		<string>SansitaRegular.ttf</string>
+		<string>SarabunBold.ttf</string>
+		<string>SarabunBoldItalic.ttf</string>
+		<string>SarabunExtraBold.ttf</string>
+		<string>SarabunExtraBoldItalic.ttf</string>
+		<string>SarabunExtraLight.ttf</string>
+		<string>SarabunItalic.ttf</string>
+		<string>SarabunLight.ttf</string>
+		<string>SarabunLightItalic.ttf</string>
+		<string>SarabunMedium.ttf</string>
+		<string>SarabunMediumItalic.ttf</string>
+		<string>SarabunRegular.ttf</string>
+		<string>SarabunSemiBold.ttf</string>
+		<string>SarabunSemiBoldItalic.ttf</string>
+	</array>
 </dict>
 </plist>
