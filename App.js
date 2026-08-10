@@ -14,6 +14,8 @@ import RegisterStep2Screen from './src/screens/Auth/RegisterStep2Screen';
 import RegisterStep3Screen from './src/screens/Auth/RegisterStep3Screen';
 import RegisterStep4Screen from './src/screens/Auth/RegisterStep4Screen';
 import AddProfilePicScreen from './src/screens/Auth/AddProfilePicScreen';
+import VerificationPendingScreen from './src/screens/Auth/VerificationPendingScreen';     
+import RegistrationSuccessScreen from './src/screens/Auth/RegistrationSuccessScreen';
 import MainTabNavigator from './src/navigation/MainTabNavigator';
 
 const Stack = createNativeStackNavigator();
@@ -32,6 +34,8 @@ export default function App() {
           <Stack.Screen name="RegisterStep3" component={RegisterStep3Screen} />
           <Stack.Screen name="RegisterStep4" component={RegisterStep4Screen} />
           <Stack.Screen name="AddProfilePic" component={AddProfilePicScreen} />
+          <Stack.Screen name="VerificationPending" component={VerificationPendingScreen} />
+          <Stack.Screen name="RegistrationSuccess" component={RegistrationSuccessScreen} />
           <Stack.Screen name="MainApp" component={MainTabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>

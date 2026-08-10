@@ -22,8 +22,8 @@ export default function AddProfilePicScreen({ navigation }) {
       const image = await ImagePicker.openCamera({
         width: 400,
         height: 400,
-        cropping: true, // Enables the crop grid view with check/cross buttons!
-        cropperCircleOverlay: true, // Optional: makes the crop frame circular for profile pics
+        cropping: true,
+        cropperCircleOverlay: true,
         compressImageQuality: 0.8,
       });
       setImageUri(image.path);
@@ -40,7 +40,7 @@ export default function AddProfilePicScreen({ navigation }) {
       const image = await ImagePicker.openPicker({
         width: 400,
         height: 400,
-        cropping: true, // Opens the grid crop interface immediately after selecting a photo
+        cropping: true,
         cropperCircleOverlay: true,
         compressImageQuality: 0.8,
       });
@@ -52,9 +52,14 @@ export default function AddProfilePicScreen({ navigation }) {
     }
   };
 
-  const handleFinish = () => {
-    // Proceed to the main application dashboard
-    navigation.replace('MainApp');
+  // Official registration submission trigger
+  const handleRegister = () => {
+    navigation.replace('VerificationPending');
+  };
+
+  // Skip trigger
+  const handleSkip = () => {
+    navigation.replace('VerificationPending');
   };
 
   return (
@@ -79,14 +84,17 @@ export default function AddProfilePicScreen({ navigation }) {
           )}
         </View>
 
-        {/* Use Camera Trigger */}
-        <TouchableOpacity style={styles.cameraTriggerRow} onPress={handleOpenCameraController}>
+        {/* Clean Styled Camera Button Box */}
+        <TouchableOpacity 
+          style={[styles.cameraButtonBox, { borderColor: theme.colors.primary }]} 
+          onPress={handleOpenCameraController}
+        >
           <Text style={styles.cameraIcon}>📷</Text>
           <Text style={[styles.cameraText, { color: theme.colors.primary }]}>Use Camera</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Choose From Gallery Main Button */}
+      {/* Gallery Button, Skip Option, and Final Register Button Container */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity 
           style={[styles.galleryButton, { backgroundColor: theme.colors.primary }]}
@@ -95,9 +103,17 @@ export default function AddProfilePicScreen({ navigation }) {
           <Text style={styles.galleryButtonText}>Choose Photo From Gallery</Text>
         </TouchableOpacity>
 
-        {/* Skip Option */}
-        <TouchableOpacity style={styles.skipButton} onPress={handleFinish}>
-          <Text style={[styles.skipText, { color: theme.colors.primary }]}>Skip</Text>
+        {/* Skip Option moved right below gallery button */}
+        <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
+          <Text style={[styles.skipText, { color: theme.colors.subtext }]}>Skip For Now</Text>
+        </TouchableOpacity>
+
+        {/* Final Registration Submit Button at the bottom */}
+        <TouchableOpacity 
+          style={[styles.registerButton, { backgroundColor: theme.colors.brandDarkest }]}
+          onPress={handleRegister}
+        >
+          <Text style={styles.registerButtonText}>Register</Text>
         </TouchableOpacity>
       </View>
 
@@ -113,7 +129,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     alignItems: 'center',
-    marginTop: 70,
+    marginTop: 20,
   },
   title: {
     fontSize: 22,
@@ -131,7 +147,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F0F0F0',
-    marginBottom: 15,
+    marginBottom: 20,
   },
   selectedImage: {
     width: '100%',
@@ -145,17 +161,21 @@ const styles = StyleSheet.create({
     fontSize: 70,
     color: '#888',
   },
-  cameraTriggerRow: {
+  cameraButtonBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 5,
+    borderWidth: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    backgroundColor: '#FAFAFA',
   },
   cameraIcon: {
     fontSize: 16,
     marginRight: 6,
   },
   cameraText: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '600',
   },
   buttonContainer: {
@@ -166,7 +186,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 250,
+    marginBottom: 15,
   },
   galleryButtonText: {
     color: '#FFFFFF',
@@ -175,9 +195,21 @@ const styles = StyleSheet.create({
   },
   skipButton: {
     alignItems: 'center',
+    marginBottom: 25,
   },
   skipText: {
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  registerButton: {
+    height: 50,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  registerButtonText: {
+    color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
 });
