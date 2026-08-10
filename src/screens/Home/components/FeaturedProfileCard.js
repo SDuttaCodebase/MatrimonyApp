@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import useThemeStore from '../../../store/useThemeStore';
+import ShareBottomSheet from './ShareBottomSheet';
 
 const { width: windowWidth } = Dimensions.get('window');
 const CARD_WIDTH = windowWidth - 30;
@@ -50,6 +51,11 @@ export default function FeaturedProfileCard() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [activeMenuIndex, setActiveMenuIndex] = useState(null);
+  
+  // Share bottom sheet states
+  const [shareModalVisible, setShareModalVisible] = useState(false);
+  const [selectedProfileForShare, setSelectedProfileForShare] = useState(null);
+
   const scrollViewRef = useRef(null);
 
   // Auto-scroll effect every 3 seconds unless paused or menu is open
@@ -110,6 +116,14 @@ export default function FeaturedProfileCard() {
     setActiveMenuIndex(activeMenuIndex === index ? null : index);
   };
 
+  // Open share bottom sheet handler
+  const handleOpenShare = (profile, event) => {
+    event.stopPropagation();
+    setIsPaused(true);
+    setSelectedProfileForShare(profile);
+    setShareModalVisible(true);
+  };
+
   return (
     <View
       style={styles.outerContainer}
@@ -161,9 +175,14 @@ export default function FeaturedProfileCard() {
                   <Text style={styles.iconText}>⋮</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.iconButton}>
+                {/* Share Icon Button */}
+                <TouchableOpacity 
+                  style={styles.iconButton}
+                  onPress={(e) => handleOpenShare(profile, e)}
+                >
                   <Text style={styles.iconText}>🔗</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.iconButton}>
                   <Text style={styles.iconText}>🤍</Text>
                 </TouchableOpacity>
@@ -251,6 +270,13 @@ export default function FeaturedProfileCard() {
           </View>
         ))}
       </ScrollView>
+
+      {/* Share Bottom Sheet Modal */}
+      <ShareBottomSheet 
+        visible={shareModalVisible} 
+        onClose={() => setShareModalVisible(false)} 
+        profile={selectedProfileForShare} 
+      />
     </View>
   );
 }

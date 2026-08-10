@@ -1,90 +1,404 @@
 // src/screens/Home/ProfileDetailScreen.js
 import React, { useState } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  ScrollView, 
-  TouchableOpacity, 
-  SafeAreaView 
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 import useThemeStore from '../../store/useThemeStore';
+import ShareBottomSheet from './components/ShareBottomSheet'; // Imported share sheet component
 
 const INTERESTS = [
-  'Travelling', 'Dance', 
-  'Skating', 'Movie', 
-  'Singing', 'Reading', 
-  'Football', 'Swimming'
+  'Travelling',
+  'Dance',
+  'Skating',
+  'Movie',
+  'Singing',
+  'Reading',
+  'Football',
+  'Swimming',
 ];
 
-const TABS = ['Personal Details', 'Family Details', 'Career & Occup', 'Horoscope'];
+const TABS = [
+  'Personal Details',
+  'Family Details',
+  'Career & Occup',
+  'Horoscope',
+];
 
 export default function ProfileDetailScreen({ route, navigation }) {
   const { theme } = useThemeStore();
   const profile = route?.params?.profile || {
-    idCode: "ABW1230",
-    name: "Rahul Roy",
+    idCode: 'ABW1230',
+    name: 'Rahul Roy',
     age: 28,
-    height: "5ft 9in - 157cm",
-    religion: "Hindu",
-    community: "Bengali Kashyap",
-    location: "Kolkata, West Bengal, India",
+    height: '5ft 9in - 157cm',
+    religion: 'Hindu',
+    community: 'Bengali Kashyap',
+    location: 'Kolkata, West Bengal, India',
   };
 
   const [activeTab, setActiveTab] = useState('Personal Details');
+  const [shareModalVisible, setShareModalVisible] = useState(false); // Share modal state
 
-  return (
-    <SafeAreaView style={[styles.container, { backgroundColor: '#F8F9FA' }]}>
-      
-      {/* Top Navigation Bar */}
-      <View style={styles.headerBar}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Text style={[styles.backText, { color: theme.colors.brandDarkest }]}>←</Text>
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        
-        {/* 1. Top Profile Image Card Preview (Without confusing bottom dots) */}
-        <View style={styles.heroCard}>
-          <View style={[styles.imagePlaceholder, { backgroundColor: '#888' }]}>
-            
-            {/* Top Left: ID Code */}
-            <View style={styles.idBadge}>
-              <Text style={styles.idText}>ID Code - #{profile.idCode}</Text>
+  // Renders content dynamically based on the selected tab pill
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'Family Details':
+        return (
+          <View style={styles.attributesContainer}>
+            <Text
+              style={[
+                styles.sectionTitle,
+                { color: theme.colors.brandDarkest, marginBottom: 15 },
+              ]}
+            >
+              Nuclear Family
+            </Text>
+            <View style={styles.attrRow}>
+              <Text style={styles.detailLabel}>Father's Name :</Text>
+              <Text style={styles.detailValue}> Brijesh Roy</Text>
             </View>
-
-            {/* Right Side Action Icons */}
-            <View style={styles.actionColumn}>
-              <TouchableOpacity style={styles.iconButton}><Text style={styles.iconText}>⋮</Text></TouchableOpacity>
-              <TouchableOpacity style={styles.iconButton}><Text style={styles.iconText}>🔗</Text></TouchableOpacity>
-              <TouchableOpacity style={styles.iconButton}><Text style={styles.iconText}>🤍</Text></TouchableOpacity>
-              <TouchableOpacity style={styles.iconButton}><Text style={styles.iconText}>🖼</Text></TouchableOpacity>
+            <View style={styles.attrRow}>
+              <Text style={styles.detailLabel}>Father's Occupation :</Text>
+              <Text style={styles.detailValue}> Service</Text>
             </View>
+            <View style={styles.attrRow}>
+              <Text style={styles.detailLabel}>Mother's Occupation :</Text>
+              <Text style={styles.detailValue}> House Wife</Text>
+            </View>
+            <View style={styles.attrRow}>
+              <Text style={styles.detailLabel}>Sister's Name :</Text>
+              <Text style={styles.detailValue}> Priya Roy</Text>
+            </View>
+            <View style={styles.attrRow}>
+              <Text style={styles.detailLabel}>Sister's Marital Status :</Text>
+              <Text style={styles.detailValue}> Married</Text>
+            </View>
+            <View style={styles.attrRow}>
+              <Text style={styles.detailLabel}>Brother's Name :</Text>
+              <Text style={styles.detailValue}> Anik Roy</Text>
+            </View>
+            <View style={styles.attrRow}>
+              <Text style={styles.detailLabel}>Brother's Marital Status :</Text>
+              <Text style={styles.detailValue}> Married</Text>
+            </View>
+          </View>
+        );
 
-            {/* Bottom Overlay Info */}
-            <View style={styles.heroBottomOverlay}>
-              <Text style={styles.heroNameText}>
-                {profile.name} <Text style={{ fontWeight: 'normal' }}>| {profile.age}yrs | {profile.height}</Text>
+      case 'Career & Occup':
+        return (
+          <View style={styles.attributesContainer}>
+            <View style={styles.attrRow}>
+              <Text style={styles.detailLabel}>Highest Qualificarion :</Text>
+              <Text
+                style={[
+                  styles.detailValue,
+                  { color: theme.colors.primary, fontWeight: 'bold' },
+                ]}
+              >
+                {' '}
+                🎓 M.S Engineering
               </Text>
-              <Text style={styles.heroSubText}>{profile.religion}, {profile.community}</Text>
-              <Text style={styles.heroSubText}>📍 {profile.location}</Text>
+            </View>
+            <View style={styles.attrRow}>
+              <Text style={styles.detailLabel}>Occupation :</Text>
+              <Text
+                style={[
+                  styles.detailValue,
+                  { color: theme.colors.primary, fontWeight: 'bold' },
+                ]}
+              >
+                {' '}
+                💼 Service
+              </Text>
+            </View>
+            <View style={styles.attrRow}>
+              <Text style={styles.detailLabel}>Sector :</Text>
+              <Text
+                style={[
+                  styles.detailValue,
+                  { color: theme.colors.primary, fontWeight: 'bold' },
+                ]}
+              >
+                {' '}
+                🏢 IT Sector
+              </Text>
+            </View>
+            <View style={styles.attrRow}>
+              <Text style={styles.detailLabel}>Designation :</Text>
+              <Text
+                style={[
+                  styles.detailValue,
+                  { color: theme.colors.primary, fontWeight: 'bold' },
+                ]}
+              >
+                {' '}
+                💻 UI/UX Designer
+              </Text>
+            </View>
+            <View style={styles.attrRow}>
+              <Text style={styles.detailLabel}>Annual Income(Lpa) :</Text>
+              <Text
+                style={[
+                  styles.detailValue,
+                  { color: theme.colors.primary, fontWeight: 'bold' },
+                ]}
+              >
+                {' '}
+                💰 9lpa - 11lpa
+              </Text>
+            </View>
+          </View>
+        );
 
-              {/* Send Request & Message Buttons */}
-              <View style={styles.heroButtonRow}>
-                <TouchableOpacity style={[styles.heroActionBtn, { backgroundColor: theme.colors.surface }]}>
-                  <Text style={[styles.heroBtnText, { color: theme.colors.primary }]}>Send Request</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.heroActionBtn, { backgroundColor: theme.colors.surface }]}>
-                  <Text style={[styles.heroBtnText, { color: theme.colors.primary }]}>Message</Text>
-                </TouchableOpacity>
+      case 'Horoscope':
+        return (
+          <View style={styles.attributesContainer}>
+            <View style={styles.attrRow}>
+              <Text style={styles.detailLabel}>Zodiac :</Text>
+              <Text
+                style={[
+                  styles.detailValue,
+                  { color: theme.colors.primary, fontWeight: 'bold' },
+                ]}
+              >
+                {' '}
+                ♈ Aries
+              </Text>
+            </View>
+            <View style={styles.attrRow}>
+              <Text style={styles.detailLabel}>Date Of Birth :</Text>
+              <Text
+                style={[
+                  styles.detailValue,
+                  { color: theme.colors.primary, fontWeight: 'bold' },
+                ]}
+              >
+                {' '}
+                🎂 18 - 05 - 1991
+              </Text>
+            </View>
+            <View style={styles.attrRow}>
+              <Text style={styles.detailLabel}>Time Of Birth :</Text>
+              <Text
+                style={[
+                  styles.detailValue,
+                  { color: theme.colors.primary, fontWeight: 'bold' },
+                ]}
+              >
+                {' '}
+                ⏰ 09:05am
+              </Text>
+            </View>
+            <View style={styles.attrRow}>
+              <Text style={styles.detailLabel}>Manglika Dosha :</Text>
+              <Text style={styles.detailValue}> 📄 ****** 🔒</Text>
+            </View>
+          </View>
+        );
+
+      case 'Personal Details':
+      default:
+        return (
+          <>
+            {/* About Section */}
+            <View style={styles.sectionContainer}>
+              <Text
+                style={[
+                  styles.sectionTitle,
+                  { color: theme.colors.brandDarkest },
+                ]}
+              >
+                About
+              </Text>
+              <Text style={styles.aboutText}>
+                Amet Minim Mollit Non Deserunt Ullamco Est Sit Aliqua Dolor Do
+                Amet Sint. Velit Officia Consequ
+              </Text>
+
+              <View style={styles.religionRow}>
+                <Text style={styles.detailLabel}>Religion :</Text>
+                <Text style={styles.detailValue}> 🕉️ {profile.religion}</Text>
               </View>
             </View>
 
-          </View>
+            {/* Detailed Attributes Grid */}
+            <View style={styles.attributesContainer}>
+              <View style={styles.attrRow}>
+                <Text style={styles.detailLabel}>Sub - Community :</Text>
+                <Text style={styles.detailValue}>
+                  {' '}
+                  🌸 {profile.community.split(' ')[1] || 'Kashyap'}
+                </Text>
+              </View>
+              <View style={styles.attrRow}>
+                <Text style={styles.detailLabel}>Caste :</Text>
+                <Text style={styles.detailValue}> 📜 General</Text>
+              </View>
+              <View style={styles.attrRow}>
+                <Text style={styles.detailLabel}>Marital Status :</Text>
+                <Text style={styles.detailValue}>
+                  {' '}
+                  👤 Single & Never Married
+                </Text>
+              </View>
+              <View style={styles.attrRow}>
+                <Text style={styles.detailLabel}>Diet :</Text>
+                <Text style={styles.detailValue}> 🥗 Non- Veg</Text>
+              </View>
+              <View style={styles.attrRow}>
+                <Text style={styles.detailLabel}>Complexion :</Text>
+                <Text style={styles.detailValue}> 👤 Light Skin Tone</Text>
+              </View>
+            </View>
+
+            {/* Interests In Box */}
+            <View style={styles.sectionContainer}>
+              <Text
+                style={[
+                  styles.sectionTitle,
+                  { color: theme.colors.brandDarkest, marginBottom: 15 },
+                ]}
+              >
+                Interests In :
+              </Text>
+
+              <View style={styles.interestsBox}>
+                <View style={styles.interestsGrid}>
+                  {INTERESTS.map((interest, index) => (
+                    <View
+                      key={index}
+                      style={[
+                        styles.interestChip,
+                        { borderColor: theme.colors.primary },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.interestText,
+                          { color: theme.colors.brandDarkest },
+                        ]}
+                      >
+                        {interest}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            </View>
+          </>
+        );
+    }
+  };
+
+  return (
+    <SafeAreaView style={[styles.container, { backgroundColor: '#F8F9FA' }]}>
+      {/* Top Navigation Bar */}
+      <View style={styles.headerBar}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+        >
+          <Text style={[styles.backText, { color: theme.colors.brandDarkest }]}>
+            ←
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* 1. Top Profile Image Card Preview */}
+        <View style={styles.heroCard}>
+          <TouchableOpacity
+            activeOpacity={0.95}
+            onPress={() => navigation.navigate('FullScreenImageViewer')}
+          >
+            <View style={[styles.imagePlaceholder, { backgroundColor: '#888' }]}>
+              {/* Top Left: ID Code */}
+              <View style={styles.idBadge}>
+                <Text style={styles.idText}>ID Code - #{profile.idCode}</Text>
+              </View>
+
+              {/* Right Side Action Icons */}
+              <View style={styles.actionColumn}>
+                <TouchableOpacity style={styles.iconButton}>
+                  <Text style={styles.iconText}>⋮</Text>
+                </TouchableOpacity>
+
+                {/* Share Icon Button triggering bottom sheet */}
+                <TouchableOpacity 
+                  style={styles.iconButton}
+                  onPress={() => setShareModalVisible(true)}
+                >
+                  <Text style={styles.iconText}>🔗</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.iconButton}>
+                  <Text style={styles.iconText}>🤍</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.iconButton}>
+                  <Text style={styles.iconText}>🖼</Text>
+                </TouchableOpacity>
+              </View>
+
+              {/* Bottom Overlay Info */}
+              <View style={styles.heroBottomOverlay}>
+                <Text style={styles.heroNameText}>
+                  {profile.name}{' '}
+                  <Text style={{ fontWeight: 'normal' }}>
+                    | {profile.age}yrs | {profile.height}
+                  </Text>
+                </Text>
+                <Text style={styles.heroSubText}>
+                  {profile.religion}, {profile.community}
+                </Text>
+                <Text style={styles.heroSubText}>📍 {profile.location}</Text>
+
+                {/* Send Request & Message Buttons */}
+                <View style={styles.heroButtonRow}>
+                  <TouchableOpacity
+                    style={[
+                      styles.heroActionBtn,
+                      { backgroundColor: theme.colors.surface },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.heroBtnText,
+                        { color: theme.colors.primary },
+                      ]}
+                    >
+                      Send Request
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.heroActionBtn,
+                      { backgroundColor: theme.colors.surface },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.heroBtnText,
+                        { color: theme.colors.primary },
+                      ]}
+                    >
+                      Message
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </TouchableOpacity>
         </View>
 
-        {/* 2. Perfectly Aligned Masked Contact & Email Info Card */}
+        {/* 2. Masked Contact & Email Info Card */}
         <View style={styles.infoCard}>
           <View style={styles.infoRow}>
             <View style={styles.labelContainer}>
@@ -93,8 +407,17 @@ export default function ProfileDetailScreen({ route, navigation }) {
             <View style={styles.valueContainer}>
               <Text style={styles.infoMask}>📞 ****** 🔒</Text>
             </View>
-            <TouchableOpacity style={[styles.unlockSmallBtn, { backgroundColor: '#FFD1DC' }]}>
-              <Text style={[styles.unlockSmallText, { color: theme.colors.primary }]}>Unlock</Text>
+            <TouchableOpacity
+              style={[styles.unlockSmallBtn, { backgroundColor: '#FFD1DC' }]}
+            >
+              <Text
+                style={[
+                  styles.unlockSmallText,
+                  { color: theme.colors.primary },
+                ]}
+              >
+                Unlock
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -111,20 +434,31 @@ export default function ProfileDetailScreen({ route, navigation }) {
         </View>
 
         {/* 3. Tab Pills Scrollable Header */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tabScrollRow}>
-          {TABS.map((tab) => {
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.tabScrollRow}
+        >
+          {TABS.map(tab => {
             const isSelected = activeTab === tab;
             return (
               <TouchableOpacity
                 key={tab}
                 style={[
                   styles.tabPill,
-                  { borderColor: isSelected ? theme.colors.primary : '#E0E0E0' },
-                  isSelected && { backgroundColor: theme.colors.primary }
+                  {
+                    borderColor: isSelected ? theme.colors.primary : '#E0E0E0',
+                  },
+                  isSelected && { backgroundColor: theme.colors.primary },
                 ]}
                 onPress={() => setActiveTab(tab)}
               >
-                <Text style={[styles.tabText, { color: isSelected ? '#FFF' : '#666' }]}>
+                <Text
+                  style={[
+                    styles.tabText,
+                    { color: isSelected ? '#FFF' : '#666' },
+                  ]}
+                >
                   {tab}
                 </Text>
               </TouchableOpacity>
@@ -132,71 +466,31 @@ export default function ProfileDetailScreen({ route, navigation }) {
           })}
         </ScrollView>
 
-        {/* 4. About Section */}
-        <View style={styles.sectionContainer}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.brandDarkest }]}>About</Text>
-          <Text style={styles.aboutText}>
-            Amet Minim Mollit Non Deserunt Ullamco Est Sit Aliqua Dolor Do Amet Sint. Velit Officia Consequ
-          </Text>
-
-          <View style={styles.religionRow}>
-            <Text style={styles.detailLabel}>Religion :</Text>
-            <Text style={styles.detailValue}> 🕉️ {profile.religion}</Text>
-          </View>
-        </View>
-
-        {/* 5. Unlock Banner Callout */}
-        <View style={[styles.unlockBanner, { borderColor: theme.colors.primary }]}>
+        {/* 4. Unlock Banner Callout */}
+        <View
+          style={[styles.unlockBanner, { borderColor: theme.colors.primary }]}
+        >
           <Text style={styles.unlockBannerText}>To Unlock Profile</Text>
-          <TouchableOpacity style={[styles.buyNowBtn, { backgroundColor: theme.colors.primary }]}>
+          <TouchableOpacity
+            style={[
+              styles.buyNowBtn,
+              { backgroundColor: theme.colors.primary },
+            ]}
+          >
             <Text style={styles.buyNowText}>Go Buy Now</Text>
           </TouchableOpacity>
         </View>
 
-        {/* 6. Detailed Attributes Grid */}
-        <View style={styles.attributesContainer}>
-          <View style={styles.attrRow}>
-            <Text style={styles.detailLabel}>Sub - Community :</Text>
-            <Text style={styles.detailValue}> 🌸 {profile.community.split(' ')[1] || 'Kashyap'}</Text>
-          </View>
-          <View style={styles.attrRow}>
-            <Text style={styles.detailLabel}>Caste :</Text>
-            <Text style={styles.detailValue}> 📜 General</Text>
-          </View>
-          <View style={styles.attrRow}>
-            <Text style={styles.detailLabel}>Marital Status :</Text>
-            <Text style={styles.detailValue}> 👤 Single & Never Married</Text>
-          </View>
-          <View style={styles.attrRow}>
-            <Text style={styles.detailLabel}>Diet :</Text>
-            <Text style={styles.detailValue}> 🥗 Non- Veg</Text>
-          </View>
-          <View style={styles.attrRow}>
-            <Text style={styles.detailLabel}>Complexion :</Text>
-            <Text style={styles.detailValue}> 👤 Light Skin Tone</Text>
-          </View>
-        </View>
-
-        {/* 7. Interests In Box */}
-        <View style={styles.sectionContainer}>
-          <Text style={[styles.sectionTitle, { color: theme.colors.brandDarkest, marginBottom: 15 }]}>
-            Interests In :
-          </Text>
-          
-          <View style={styles.interestsBox}>
-            <View style={styles.interestsGrid}>
-              {INTERESTS.map((interest, index) => (
-                <View key={index} style={[styles.interestChip, { borderColor: theme.colors.primary }]}>
-                  <Text style={[styles.interestText, { color: theme.colors.brandDarkest }]}>
-                    {interest}
-                  </Text>
-                </View>
-              ))}
-            </View>
-          </View>
-        </View>
-
+        {/* 5. Dynamic Tab Content Rendering */}
+        {renderTabContent()}
       </ScrollView>
+
+      {/* Share Bottom Sheet Modal */}
+      <ShareBottomSheet 
+        visible={shareModalVisible} 
+        onClose={() => setShareModalVisible(false)} 
+        profile={profile} 
+      />
     </SafeAreaView>
   );
 }
@@ -318,7 +612,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   labelContainer: {
-    width: 130, // Fixed width ensures the masked values and icons align perfectly in a vertical column
+    width: 130,
   },
   valueContainer: {
     flex: 1,
