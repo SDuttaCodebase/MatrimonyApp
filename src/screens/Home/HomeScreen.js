@@ -5,7 +5,8 @@ import useThemeStore from '../../store/useThemeStore';
 import TopHeader from './components/TopHeader';
 import ProfileCompletion from './components/ProfileCompletion';
 import FeaturedProfileCard from './components/FeaturedProfileCard';
-import MatchesList from './components/MatchesList'; // 1. Import it
+import MatchesList from './components/MatchesList';
+import HundredPercentMatchesBanner from './components/HundredPercentMatchesBanner';
 
 export default function HomeScreen() {
   const { theme, isDarkMode } = useThemeStore();
@@ -30,6 +31,8 @@ export default function HomeScreen() {
           title="12 New Matches" 
           subtitle="Your New Recent Matches" 
         />
+
+        <HundredPercentMatchesBanner />
 
         {/* 3. Add the Recently Viewed Section */}
         <MatchesList 
