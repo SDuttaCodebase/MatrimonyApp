@@ -1,6 +1,14 @@
 // src/screens/Home/components/FeaturedProfileCard.js
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Dimensions,
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import useThemeStore from '../../../store/useThemeStore';
 
 const { width: windowWidth } = Dimensions.get('window');
@@ -8,36 +16,37 @@ const CARD_WIDTH = windowWidth - 30;
 
 const DEMO_PROFILES = [
   {
-    idCode: "MAW1230",
-    name: "Rahul Roy",
+    idCode: 'MAW1230',
+    name: 'Rahul Roy',
     age: 28,
-    height: "5ft 9in - 157cm",
-    religion: "Hindu",
-    community: "Bengali Kashyap",
-    location: "Kolkata, West Bengal, India",
+    height: '5ft 9in - 157cm',
+    religion: 'Hindu',
+    community: 'Bengali Kashyap',
+    location: 'Kolkata, West Bengal, India',
   },
   {
-    idCode: "MAW1231",
-    name: "Ananya Sharma",
+    idCode: 'MAW1231',
+    name: 'Ananya Sharma',
     age: 26,
-    height: "5ft 4in - 162cm",
-    religion: "Hindu",
-    community: "Punjabi Brahmin",
-    location: "Delhi, India",
+    height: '5ft 4in - 162cm',
+    religion: 'Hindu',
+    community: 'Punjabi Brahmin',
+    location: 'Delhi, India',
   },
   {
-    idCode: "MAW1232",
-    name: "Vikram Chatterjee",
+    idCode: 'MAW1232',
+    name: 'Vikram Chatterjee',
     age: 30,
-    height: "6ft 0in - 183cm",
-    religion: "Hindu",
-    community: "Bengali Rarh",
-    location: "Mumbai, Maharashtra, India",
+    height: '6ft 0in - 183cm',
+    religion: 'Hindu',
+    community: 'Bengali Rarh',
+    location: 'Mumbai, Maharashtra, India',
   },
 ];
 
 export default function FeaturedProfileCard() {
   const { theme } = useThemeStore();
+  const navigation = useNavigation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [activeMenuIndex, setActiveMenuIndex] = useState(null);
@@ -63,7 +72,8 @@ export default function FeaturedProfileCard() {
   const handlePrev = () => {
     setIsPaused(true);
     setActiveMenuIndex(null);
-    const prevIndex = currentIndex === 0 ? DEMO_PROFILES.length - 1 : currentIndex - 1;
+    const prevIndex =
+      currentIndex === 0 ? DEMO_PROFILES.length - 1 : currentIndex - 1;
     scrollViewRef.current?.scrollTo({
       x: prevIndex * windowWidth,
       animated: true,
@@ -84,7 +94,7 @@ export default function FeaturedProfileCard() {
   };
 
   // Track scroll position manually (Hand Swiping)
-  const handleScroll = (event) => {
+  const handleScroll = event => {
     const contentOffsetX = event.nativeEvent.contentOffset.x;
     const index = Math.round(contentOffsetX / windowWidth);
     if (index !== currentIndex && index >= 0 && index < DEMO_PROFILES.length) {
@@ -101,7 +111,7 @@ export default function FeaturedProfileCard() {
   };
 
   return (
-    <View 
+    <View
       style={styles.outerContainer}
       // Closes the menu if user clicks anywhere else on the card background
       onStartShouldSetResponder={() => {
@@ -125,9 +135,18 @@ export default function FeaturedProfileCard() {
         onTouchEnd={() => setIsPaused(false)}
       >
         {DEMO_PROFILES.map((profile, index) => (
-          <View key={profile.idCode} style={[styles.cardContainer, { width: CARD_WIDTH }]}>
-            <View style={[styles.imagePlaceholder, { backgroundColor: '#B0B0B0' }]}>
-              
+          <View
+            key={profile.idCode}
+            style={[styles.cardContainer, { width: CARD_WIDTH }]}
+          >
+            {/* Touchable wrapper to navigate to profile details */}
+            <TouchableOpacity
+              activeOpacity={0.95}
+              onPress={() =>
+                navigation.navigate('ProfileDetail', { profile })
+              }
+              style={[styles.imagePlaceholder, { backgroundColor: '#B0B0B0' }]}
+            >
               {/* Top Left: ID Code Badge */}
               <View style={styles.idBadge}>
                 <Text style={styles.idText}>ID Code - {profile.idCode}</Text>
@@ -135,31 +154,37 @@ export default function FeaturedProfileCard() {
 
               {/* Right Side: Action Icons & Dropdown Menu */}
               <View style={styles.actionColumn}>
-                <TouchableOpacity 
-                  style={styles.iconButton} 
-                  onPress={(e) => toggleMenu(index, e)}
+                <TouchableOpacity
+                  style={styles.iconButton}
+                  onPress={e => toggleMenu(index, e)}
                 >
                   <Text style={styles.iconText}>⋮</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.iconButton}><Text style={styles.iconText}>🔗</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.iconButton}><Text style={styles.iconText}>🤍</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.iconButton}><Text style={styles.iconText}>🖼</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.iconButton}>
+                  <Text style={styles.iconText}>🔗</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.iconButton}>
+                  <Text style={styles.iconText}>🤍</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.iconButton}>
+                  <Text style={styles.iconText}>🖼</Text>
+                </TouchableOpacity>
 
                 {/* Popover Menu Dropdown Box */}
                 {activeMenuIndex === index && (
                   <View style={styles.dropdownMenu}>
-                    <TouchableOpacity 
-                      style={styles.dropdownItem} 
+                    <TouchableOpacity
+                      style={styles.dropdownItem}
                       onPress={() => setActiveMenuIndex(null)}
                     >
                       <Text style={styles.dropdownText}>Not Interested</Text>
                     </TouchableOpacity>
-                    
+
                     <View style={styles.dropdownDivider} />
 
-                    <TouchableOpacity 
-                      style={styles.dropdownItem} 
+                    <TouchableOpacity
+                      style={styles.dropdownItem}
                       onPress={() => setActiveMenuIndex(null)}
                     >
                       <Text style={styles.dropdownText}>Block Account</Text>
@@ -171,32 +196,58 @@ export default function FeaturedProfileCard() {
               {/* Bottom Details Overlay */}
               <View style={styles.bottomOverlay}>
                 <Text style={styles.nameRow}>
-                  <Text style={styles.nameText}>{profile.name}</Text> | {profile.age}yrs | {profile.height}
+                  <Text style={styles.nameText}>{profile.name}</Text> |{' '}
+                  {profile.age}yrs | {profile.height}
                 </Text>
-                <Text style={styles.detailText}>{profile.religion}, {profile.community}</Text>
+                <Text style={styles.detailText}>
+                  {profile.religion}, {profile.community}
+                </Text>
                 <Text style={styles.detailText}>📍 {profile.location}</Text>
-                
+
                 {/* Action Buttons Row with Left & Right Arrow Buttons */}
                 <View style={styles.buttonRow}>
-                  <TouchableOpacity style={styles.arrowBtn} onPress={handlePrev}>
+                  <TouchableOpacity
+                    style={styles.arrowBtn}
+                    onPress={handlePrev}
+                  >
                     <Text style={styles.arrowText}>←</Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={[styles.actionBtn, { backgroundColor: theme.colors.surface }]}>
-                    <Text style={[styles.btnText, { color: theme.colors.primary }]}>Send Request</Text>
-                  </TouchableOpacity>
-                  
-                  <TouchableOpacity style={[styles.actionBtn, { backgroundColor: theme.colors.surface }]}>
-                    <Text style={[styles.btnText, { color: theme.colors.primary }]}>Message</Text>
+                  <TouchableOpacity
+                    style={[
+                      styles.actionBtn,
+                      { backgroundColor: theme.colors.surface },
+                    ]}
+                  >
+                    <Text
+                      style={[styles.btnText, { color: theme.colors.primary }]}
+                    >
+                      Send Request
+                    </Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={styles.arrowBtn} onPress={handleNext}>
+                  <TouchableOpacity
+                    style={[
+                      styles.actionBtn,
+                      { backgroundColor: theme.colors.surface },
+                    ]}
+                  >
+                    <Text
+                      style={[styles.btnText, { color: theme.colors.primary }]}
+                    >
+                      Message
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.arrowBtn}
+                    onPress={handleNext}
+                  >
                     <Text style={styles.arrowText}>→</Text>
                   </TouchableOpacity>
                 </View>
               </View>
-
-            </View>
+            </TouchableOpacity>
           </View>
         ))}
       </ScrollView>

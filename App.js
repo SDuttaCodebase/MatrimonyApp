@@ -17,6 +17,7 @@ import AddProfilePicScreen from './src/screens/Auth/AddProfilePicScreen';
 import VerificationPendingScreen from './src/screens/Auth/VerificationPendingScreen';     
 import RegistrationSuccessScreen from './src/screens/Auth/RegistrationSuccessScreen';
 import MainTabNavigator from './src/navigation/MainTabNavigator';
+import ProfileDetailScreen from './src/screens/Home/ProfileDetailScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,7 @@ export default function App() {
           <Stack.Screen name="VerificationPending" component={VerificationPendingScreen} />
           <Stack.Screen name="RegistrationSuccess" component={RegistrationSuccessScreen} />
           <Stack.Screen name="MainApp" component={MainTabNavigator} />
+          <Stack.Screen name="ProfileDetail" component={ProfileDetailScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
