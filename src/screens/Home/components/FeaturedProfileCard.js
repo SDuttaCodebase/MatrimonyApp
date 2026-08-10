@@ -4,7 +4,6 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from
 import useThemeStore from '../../../store/useThemeStore';
 
 const { width: windowWidth } = Dimensions.get('window');
-// Let's make the card take up a clean width, e.g., screen width minus side margins (30 total)
 const CARD_WIDTH = windowWidth - 30;
 
 const DEMO_PROFILES = [
@@ -41,27 +40,29 @@ export default function FeaturedProfileCard() {
   const { theme } = useThemeStore();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [activeMenuIndex, setActiveMenuIndex] = useState(null);
   const scrollViewRef = useRef(null);
 
-  // Auto-scroll effect every 3 seconds unless paused
+  // Auto-scroll effect every 3 seconds unless paused or menu is open
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || activeMenuIndex !== null) return;
 
     const timer = setInterval(() => {
       const nextIndex = (currentIndex + 1) % DEMO_PROFILES.length;
       scrollViewRef.current?.scrollTo({
-        x: nextIndex * windowWidth, // Snap using exact full windowWidth offset
+        x: nextIndex * windowWidth,
         animated: true,
       });
       setCurrentIndex(nextIndex);
     }, 3000);
 
     return () => clearInterval(timer);
-  }, [currentIndex, isPaused]);
+  }, [currentIndex, isPaused, activeMenuIndex]);
 
-  // Handle Manual Left Arrow Press
+  // Handle Left Arrow Press
   const handlePrev = () => {
     setIsPaused(true);
+    setActiveMenuIndex(null);
     const prevIndex = currentIndex === 0 ? DEMO_PROFILES.length - 1 : currentIndex - 1;
     scrollViewRef.current?.scrollTo({
       x: prevIndex * windowWidth,
@@ -70,9 +71,10 @@ export default function FeaturedProfileCard() {
     setCurrentIndex(prevIndex);
   };
 
-  // Handle Manual Right Arrow Press
+  // Handle Right Arrow Press
   const handleNext = () => {
     setIsPaused(true);
+    setActiveMenuIndex(null);
     const nextIndex = (currentIndex + 1) % DEMO_PROFILES.length;
     scrollViewRef.current?.scrollTo({
       x: nextIndex * windowWidth,
@@ -81,32 +83,48 @@ export default function FeaturedProfileCard() {
     setCurrentIndex(nextIndex);
   };
 
-  // Track scroll position manually
+  // Track scroll position manually (Hand Swiping)
   const handleScroll = (event) => {
     const contentOffsetX = event.nativeEvent.contentOffset.x;
     const index = Math.round(contentOffsetX / windowWidth);
-    if (index !== currentIndex) {
+    if (index !== currentIndex && index >= 0 && index < DEMO_PROFILES.length) {
       setCurrentIndex(index);
+      setActiveMenuIndex(null); // Close menu when swiping
     }
   };
 
+  // Toggle 3-dot menu dropdown
+  const toggleMenu = (index, event) => {
+    event.stopPropagation();
+    setIsPaused(true);
+    setActiveMenuIndex(activeMenuIndex === index ? null : index);
+  };
+
   return (
-    <View style={styles.outerContainer}>
+    <View 
+      style={styles.outerContainer}
+      // Closes the menu if user clicks anywhere else on the card background
+      onStartShouldSetResponder={() => {
+        if (activeMenuIndex !== null) {
+          setActiveMenuIndex(null);
+          return true;
+        }
+        return false;
+      }}
+    >
       <ScrollView
         ref={scrollViewRef}
         horizontal
         pagingEnabled
-        snapToInterval={windowWidth} // Forces crisp card-by-card snapping alignment
+        snapToInterval={windowWidth}
         decelerationRate="fast"
         showsHorizontalScrollIndicator={false}
         onScroll={handleScroll}
         scrollEventThrottle={16}
-        // Pause auto-scroll when user touches down
         onTouchStart={() => setIsPaused(true)}
-        // Resume auto-scroll when user lifts their finger
         onTouchEnd={() => setIsPaused(false)}
       >
-        {DEMO_PROFILES.map((profile) => (
+        {DEMO_PROFILES.map((profile, index) => (
           <View key={profile.idCode} style={[styles.cardContainer, { width: CARD_WIDTH }]}>
             <View style={[styles.imagePlaceholder, { backgroundColor: '#B0B0B0' }]}>
               
@@ -115,12 +133,39 @@ export default function FeaturedProfileCard() {
                 <Text style={styles.idText}>ID Code - {profile.idCode}</Text>
               </View>
 
-              {/* Right Side: Action Icons */}
+              {/* Right Side: Action Icons & Dropdown Menu */}
               <View style={styles.actionColumn}>
-                <TouchableOpacity style={styles.iconButton}><Text style={styles.iconText}>⋮</Text></TouchableOpacity>
+                <TouchableOpacity 
+                  style={styles.iconButton} 
+                  onPress={(e) => toggleMenu(index, e)}
+                >
+                  <Text style={styles.iconText}>⋮</Text>
+                </TouchableOpacity>
+
                 <TouchableOpacity style={styles.iconButton}><Text style={styles.iconText}>🔗</Text></TouchableOpacity>
                 <TouchableOpacity style={styles.iconButton}><Text style={styles.iconText}>🤍</Text></TouchableOpacity>
                 <TouchableOpacity style={styles.iconButton}><Text style={styles.iconText}>🖼</Text></TouchableOpacity>
+
+                {/* Popover Menu Dropdown Box */}
+                {activeMenuIndex === index && (
+                  <View style={styles.dropdownMenu}>
+                    <TouchableOpacity 
+                      style={styles.dropdownItem} 
+                      onPress={() => setActiveMenuIndex(null)}
+                    >
+                      <Text style={styles.dropdownText}>Not Interested</Text>
+                    </TouchableOpacity>
+                    
+                    <View style={styles.dropdownDivider} />
+
+                    <TouchableOpacity 
+                      style={styles.dropdownItem} 
+                      onPress={() => setActiveMenuIndex(null)}
+                    >
+                      <Text style={styles.dropdownText}>Block Account</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
               </View>
 
               {/* Bottom Details Overlay */}
@@ -196,7 +241,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 15,
     right: 10,
-    alignItems: 'center',
+    alignItems: 'flex-end',
+    zIndex: 10,
   },
   iconButton: {
     marginBottom: 15,
@@ -210,6 +256,33 @@ const styles = StyleSheet.create({
   iconText: {
     color: '#FFFFFF',
     fontSize: 18,
+  },
+  dropdownMenu: {
+    position: 'absolute',
+    top: 45,
+    right: 0,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    width: 140,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
+    overflow: 'hidden',
+  },
+  dropdownItem: {
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+  },
+  dropdownText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#333333',
+  },
+  dropdownDivider: {
+    height: 1,
+    backgroundColor: '#E0E0E0',
   },
   bottomOverlay: {
     position: 'absolute',
