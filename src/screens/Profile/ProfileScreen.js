@@ -11,6 +11,7 @@ import {
   Modal,
   Alert,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import useThemeStore from '../../store/useThemeStore';
@@ -52,21 +53,168 @@ const HEIGHT_LIST = [
   '5ft 10in - 170cm',
 ];
 
+const INCOME_LIST = [
+  'INR 4lpa-5lpa',
+  'INR 6lpa-7lpa',
+  'INR 7lpa-9lpa',
+  'INR 8lpa-9lpa',
+  'INR 10lpa-12lpa',
+];
+
 const COMPLEXION_LIST = [
   { label: 'Fair', emoji: '🧑' },
   { label: 'Medium', emoji: '🧑' },
   { label: 'Dark', emoji: '🧑' },
 ];
 
+const QUALIFICATION_LIST = [
+  'B.E / B.Tech',
+  'M.E / M.Tech',
+  'M.S Engineering',
+  'B.Eng (Hons)',
+  'M.Eng (Hons)',
+  'Engineering Diploma',
+  'AE',
+  'AET',
+  'B.S.C',
+  'M.S.C',
+];
+
+const OCCUPATION_LIST = ['Service', 'Business', 'Others'];
+const SERVICE_TYPE_LIST = ['Private', 'Government'];
+
+const SECTOR_LIST = [
+  'IT (Information Technology)',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+];
+
+const SUB_SECTOR_LIST = ['Central Government', 'State Government'];
+
+const RAILWAY_SECTOR_LIST = [
+  'Indian Railways',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+];
+
+const COMPANY_SUGGESTIONS = [
+  'Infosys',
+  'Tata Consultancy Services ( TCS )',
+  'PWC',
+  'Cognizant',
+  'Webhibe Technologies',
+  'Webskitters',
+  'Deloitte',
+];
+
+const DESIGNATION_SUGGESTIONS = [
+  'Admin Professional',
+  'UI/UX Designer',
+  'Human Resource Professional',
+  'App Developer',
+  'Accounting Professional',
+  'Advertising Professional',
+  'Digital Marketer',
+];
+
+const PLACE_SUGGESTIONS = [
+  'Abcd Private Hospital',
+  'Abcd Private Hospital',
+  'Abcd Private Hospital',
+  'Abcd Private Hospital',
+  'Abcd Private Hospital',
+  'Abcd Private Hospital',
+  'Abcd Private Hospital',
+];
+
+const CREATIVE_HOBBIES = [
+  { label: 'Cooking', icon: '🍲' },
+  { label: 'Dance', icon: '💃' },
+  { label: 'Singing', icon: '🎤' },
+  { label: 'Playing Instrument', icon: '🎸' },
+  { label: 'Photography', icon: '📷' },
+  { label: 'Writing', icon: '✍️' },
+];
+
+const FUN_HOBBIES = [
+  { label: 'Movie', icon: '🎬' },
+  { label: 'Reading', icon: '📖' },
+  { label: 'Football', icon: '⚽' },
+  { label: 'Travelling', icon: '🚆' },
+  { label: 'Skating', icon: '⛸️' },
+];
+
+const CREATIVITY_LIST = [
+  'Dance',
+  'Singing',
+  'Playing Instruments',
+  'Writing',
+  'Gardening',
+  'Fashion',
+  'Beauty',
+  'Ballerina',
+  'Makeup',
+  'Music',
+];
+
+const ENJOY_DOING_LIST = [
+  'Movie',
+  'Skating',
+  'Reading',
+  'Travelling',
+  'Football',
+  'Cricket',
+  'Swimming',
+  'Hiking',
+  'Riding',
+  'Scuba Diving',
+];
+
+const ZODIAC_LIST = [
+  'Aries',
+  'Taurus',
+  'Gemini',
+  'Cancer',
+  'Leo',
+  'Virgo',
+  'Libra',
+  'Scorpio',
+  'Sagittarius',
+  'Capricorn',
+  'Aquarius',
+  'Pisces',
+];
+
 export default function ProfileScreen({ navigation }) {
   const { theme } = useThemeStore();
 
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 8;
+  const totalSteps = 22;
 
   const [profilePic, setProfilePic] = useState(null);
   const [isPhotoModalVisible, setIsPhotoModalVisible] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Time Picker states
+  const [isTimePickerVisible, setIsTimePickerVisible] = useState(false);
+  const [tempHour, setTempHour] = useState('08');
+  const [tempMinute, setTempMinute] = useState('00');
+  const [tempAmPm, setTempAmPm] = useState('am');
 
   const [formData, setFormData] = useState({
     fullName: 'Sandipan Dutta',
@@ -74,7 +222,7 @@ export default function ProfileScreen({ navigation }) {
     email: 'sandipan.dev@gmail.com',
     phone: '+91 9876543210',
     location: 'Kolkata, West Bengal',
-    occupation: 'Software Engineer',
+    occupationText: 'Software Engineer',
     religion: 'Hindu',
     community: 'Bengali',
     subCommunity: 'Kashyap',
@@ -86,10 +234,54 @@ export default function ProfileScreen({ navigation }) {
     diet: 'Non - Veg',
     height: '5ft 8in - 160cm',
     complexion: 'Fair',
+
+    isJointFamily: 'No',
+    fathersName: '',
+    fathersOccupation: '',
+    mothersName: '',
+    mothersOccupation: '',
+    sistersName: '',
+    sistersMaritalStatus: 'Never Married',
+    brothersName: '',
+    brothersMaritalStatus: 'Never Married',
+
+    highestQualification: 'B.E / B.Tech',
+    occupationType: 'Service',
+    serviceType: 'Private',
+    sectorType: 'IT (Information Technology)',
+    subSectorType: 'Central Government',
+    railwaySectorType: 'Indian Railways',
+    companyName: 'Infosys',
+    designation: 'UI/UX Designer',
+    annualIncome: 'INR 7lpa-9lpa',
+
+    hobbies: ['Cooking', 'Movie'],
+    selectedCreativity: 'Dance',
+    enjoyDoing: 'Movie',
+
+    zodiacSign: 'Aries',
+    timeOfBirth: '8:00am',
+    placeOfBirth: 'Abcd Private Hospital',
+    manglikaDosha: 'No',
   });
+
+  const [showCompanySuggestions, setShowCompanySuggestions] = useState(false);
+  const [showDesignationSuggestions, setShowDesignationSuggestions] = useState(false);
+  const [showPlaceSuggestions, setShowPlaceSuggestions] = useState(false);
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const toggleHobby = (hobbyLabel) => {
+    setFormData((prev) => {
+      const exists = prev.hobbies.includes(hobbyLabel);
+      if (exists) {
+        return { ...prev, hobbies: prev.hobbies.filter((h) => h !== hobbyLabel) };
+      } else {
+        return { ...prev, hobbies: [...prev.hobbies, hobbyLabel] };
+      }
+    });
   };
 
   const handleCameraPick = () => {
@@ -108,10 +300,21 @@ export default function ProfileScreen({ navigation }) {
 
   const handleNext = () => {
     if (currentStep < totalSteps) {
-      setCurrentStep(currentStep + 1);
-      setActiveDropdown(null);
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
+        setCurrentStep(currentStep + 1);
+        setActiveDropdown(null);
+        setShowCompanySuggestions(false);
+        setShowDesignationSuggestions(false);
+        setShowPlaceSuggestions(false);
+      }, 600);
     } else {
-      Alert.alert('Profile Complete', 'All your profile details have been successfully saved!');
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
+        Alert.alert('Profile Complete', 'All your profile details have been successfully saved!');
+      }, 800);
     }
   };
 
@@ -119,6 +322,9 @@ export default function ProfileScreen({ navigation }) {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
       setActiveDropdown(null);
+      setShowCompanySuggestions(false);
+      setShowDesignationSuggestions(false);
+      setShowPlaceSuggestions(false);
     } else {
       navigation.goBack();
     }
@@ -126,6 +332,12 @@ export default function ProfileScreen({ navigation }) {
 
   const handleSkip = () => {
     handleNext();
+  };
+
+  const getClockRotation = (hour) => {
+    const numHour = parseInt(hour) || 0;
+    const normalizedHour = numHour === 12 ? 0 : numHour;
+    return `${normalizedHour * 30}deg`;
   };
 
   const renderDropdownField = (label, fieldKey, optionsList) => {
@@ -172,20 +384,49 @@ export default function ProfileScreen({ navigation }) {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: '#FFFFFF' }]}>
       
+      {/* Loading Overlay Screen */}
+      {isLoading && (
+        <View style={styles.loadingOverlay}>
+          <View style={styles.loadingBox}>
+            <ActivityIndicator size="large" color="#80001E" />
+            <Text style={styles.loadingText}>Saving & Processing...</Text>
+          </View>
+        </View>
+      )}
+
       {/* Top Header */}
       <View style={styles.headerBar}>
         <TouchableOpacity onPress={handlePrev} style={styles.backButton}>
           <Text style={styles.backText}>←</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: theme.colors.primary }]}>
-          {currentStep === 1 ? 'Personal Details' :
-           currentStep === 2 ? 'Background Preferences' :
-           currentStep === 3 ? 'Select Your State' :
-           currentStep === 4 ? 'Select Your City' :
-           currentStep === 5 ? 'Select Your Marital Status' :
-           currentStep === 6 ? 'Select Your Diet' :
-           currentStep === 7 ? 'Select Your Height' : 'Select Your Complexion'}
-        </Text>
+        <View style={styles.headerTitleContainer}>
+          <Text style={[styles.headerTitle, { color: theme.colors.primary }]}>
+            {currentStep === 1 ? 'Personal Details' :
+             currentStep === 2 ? 'Background Preferences' :
+             currentStep === 3 ? 'Select Your State' :
+             currentStep === 4 ? 'Select Your City' :
+             currentStep === 5 ? 'Select Your Marital Status' :
+             currentStep === 6 ? 'Select Your Diet' :
+             currentStep === 7 ? 'Select Your Height' :
+             currentStep === 8 ? 'Select Your Complexion' :
+             currentStep === 9 ? 'Mention Your Family Member' :
+             currentStep === 10 ? 'Select Your Highest Qualification' :
+             currentStep === 11 ? 'Select Your Occupation' :
+             currentStep === 12 ? 'Select Your Service Type' :
+             currentStep === 13 ? 'Select Your Sector Type' :
+             currentStep === 14 ? 'Select Your Sub - Sector Type' :
+             currentStep === 15 ? 'Select Your Sector Type' :
+             currentStep === 16 ? 'Type Your Company & Designation' :
+             currentStep === 17 ? 'Select Your Annual Income' :
+             currentStep === 18 ? 'Now Lets Add Your Hobbies & Interests' :
+             currentStep === 19 ? 'Select Your Creativity' :
+             currentStep === 20 ? 'Mention Things Which You Enjoy Doing' :
+             currentStep === 21 ? 'Select Your Zodiac Sign' : 'Type Your Horoscope Details'}
+          </Text>
+          {currentStep === 18 && (
+            <Text style={styles.headerSubtitle}>This Will Help You Find Better Matches</Text>
+          )}
+        </View>
         <View style={styles.spacer} />
       </View>
 
@@ -217,7 +458,7 @@ export default function ProfileScreen({ navigation }) {
         {currentStep === 1 && (
           <View style={styles.sectionContainer}>
             <Text style={styles.sectionHeading}>Personal Details</Text>
-            {['fullName', 'dob', 'email', 'phone', 'occupation'].map((field) => (
+            {['fullName', 'dob', 'email', 'phone', 'occupationText'].map((field) => (
               <View key={field} style={styles.standardInputGroup}>
                 <Text style={styles.standardLabel}>{field.toUpperCase()}</Text>
                 <TextInput style={styles.textInput} value={formData[field]} onChangeText={(text) => handleInputChange(field, text)} />
@@ -272,7 +513,7 @@ export default function ProfileScreen({ navigation }) {
           </View>
         )}
 
-        {/* Step 5: Marital Status (Exact Scaled-Up Grid Matching Reference Image) */}
+        {/* Step 5 */}
         {currentStep === 5 && (
           <View style={styles.largeGridContainer}>
             {MARITAL_STATUS_LIST.map((status) => {
@@ -282,10 +523,7 @@ export default function ProfileScreen({ navigation }) {
                   key={status}
                   activeOpacity={0.85}
                   onPress={() => handleInputChange('maritalStatus', status)}
-                  style={[
-                    styles.largeGridCard,
-                    isSelected ? styles.selectedLargeCard : styles.unselectedLargeCard
-                  ]}
+                  style={[styles.largeGridCard, isSelected ? styles.selectedLargeCard : styles.unselectedLargeCard]}
                 >
                   <Text style={[styles.largeGridCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
                     {status}
@@ -296,7 +534,7 @@ export default function ProfileScreen({ navigation }) {
           </View>
         )}
 
-        {/* Step 6: Diet (Proper Sized Cards Matching Screenshot) */}
+        {/* Step 6 */}
         {currentStep === 6 && (
           <View style={styles.cardsContainer}>
             {DIET_LIST.map((item) => {
@@ -323,7 +561,7 @@ export default function ProfileScreen({ navigation }) {
           </View>
         )}
 
-        {/* Step 7: Height Scroll Picker (Properly Spaced & Sized) */}
+        {/* Step 7 */}
         {currentStep === 7 && (
           <View style={styles.heightPickerContainer}>
             {HEIGHT_LIST.map((h, index) => {
@@ -345,7 +583,7 @@ export default function ProfileScreen({ navigation }) {
           </View>
         )}
 
-        {/* Step 8: Complexion (Properly Sized Vertical Cards) */}
+        {/* Step 8 */}
         {currentStep === 8 && (
           <View style={styles.complexionContainer}>
             {COMPLEXION_LIST.map((comp) => {
@@ -355,10 +593,7 @@ export default function ProfileScreen({ navigation }) {
                   key={comp.label}
                   activeOpacity={0.85}
                   onPress={() => handleInputChange('complexion', comp.label)}
-                  style={[
-                    styles.complexionCard,
-                    isSelected ? styles.selectedComplexionCard : styles.unselectedComplexionCard
-                  ]}
+                  style={[styles.complexionCard, isSelected ? styles.selectedComplexionCard : styles.unselectedComplexionCard]}
                 >
                   <View style={styles.avatarBox}><Text style={{fontSize: 32}}>👤</Text></View>
                   <Text style={[styles.complexionCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
@@ -367,6 +602,621 @@ export default function ProfileScreen({ navigation }) {
                 </TouchableOpacity>
               );
             })}
+          </View>
+        )}
+
+        {/* Step 9 */}
+        {currentStep === 9 && (
+          <View style={styles.familyContainer}>
+            <Text style={styles.familySectionTitle}>Joint Family</Text>
+            
+            <View style={styles.radioGroupRow}>
+              <TouchableOpacity style={styles.radioOption} onPress={() => handleInputChange('isJointFamily', 'Yes')}>
+                <View style={[styles.radioButton, formData.isJointFamily === 'Yes' && { borderColor: theme.colors.primary }]}>
+                  {formData.isJointFamily === 'Yes' && <View style={[styles.radioDot, { backgroundColor: theme.colors.primary }]} />}
+                </View>
+                <Text style={styles.radioLabelText}>Yes</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={[styles.radioOption, { marginLeft: 30 }]} onPress={() => handleInputChange('isJointFamily', 'No')}>
+                <View style={[styles.radioButton, formData.isJointFamily === 'No' && { borderColor: theme.colors.primary }]}>
+                  {formData.isJointFamily === 'No' && <View style={[styles.radioDot, { backgroundColor: theme.colors.primary }]} />}
+                </View>
+                <Text style={styles.radioLabelText}>No</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.dividerRow}>
+              <View style={styles.dividerLine} />
+              <Text style={styles.dividerText}>or</Text>
+              <View style={styles.dividerLine} />
+            </View>
+
+            <Text style={styles.familySectionTitle}>Type Your Family Details</Text>
+
+            <TextInput 
+              style={styles.familyInput} 
+              placeholder="Father’s Name" 
+              placeholderTextColor="#999"
+              value={formData.fathersName}
+              onChangeText={(text) => handleInputChange('fathersName', text)}
+            />
+
+            <TextInput 
+              style={styles.familyInput} 
+              placeholder="Father’s Occupation" 
+              placeholderTextColor="#999"
+              value={formData.fathersOccupation}
+              onChangeText={(text) => handleInputChange('fathersOccupation', text)}
+            />
+
+            <TextInput 
+              style={styles.familyInput} 
+              placeholder="Mother’s Name" 
+              placeholderTextColor="#999"
+              value={formData.mothersName}
+              onChangeText={(text) => handleInputChange('mothersName', text)}
+            />
+
+            <TextInput 
+              style={styles.familyInput} 
+              placeholder="Mother’s Occupation" 
+              placeholderTextColor="#999"
+              value={formData.mothersOccupation}
+              onChangeText={(text) => handleInputChange('mothersOccupation', text)}
+            />
+
+            <TextInput 
+              style={styles.familyInput} 
+              placeholder="Sister’s Name" 
+              placeholderTextColor="#999"
+              value={formData.sistersName}
+              onChangeText={(text) => handleInputChange('sistersName', text)}
+            />
+
+            {renderDropdownField("Sister’s Marital Status", "sistersMaritalStatus", MARITAL_STATUS_LIST)}
+
+            <TextInput 
+              style={styles.familyInput} 
+              placeholder="Brother’s Name" 
+              placeholderTextColor="#999"
+              value={formData.brothersName}
+              onChangeText={(text) => handleInputChange('brothersName', text)}
+            />
+
+            {renderDropdownField("Brother’s Marital Status", "brothersMaritalStatus", MARITAL_STATUS_LIST)}
+          </View>
+        )}
+
+        {/* Step 10 */}
+        {currentStep === 10 && (
+          <View style={styles.cardsContainer}>
+            {QUALIFICATION_LIST.map((qualification) => {
+              const isSelected = formData.highestQualification === qualification;
+              return (
+                <TouchableOpacity
+                  key={qualification}
+                  activeOpacity={0.9}
+                  onPress={() => handleInputChange('highestQualification', qualification)}
+                  style={[styles.qualificationCard, isSelected ? styles.selectedQualificationCard : styles.unselectedQualificationCard]}
+                >
+                  <Text style={[styles.qualificationCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                    {qualification}
+                  </Text>
+                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
+                    {isSelected && <View style={styles.innerRadioDot} />}
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        )}
+
+        {/* Step 11 */}
+        {currentStep === 11 && (
+          <View style={styles.cardsContainer}>
+            {OCCUPATION_LIST.map((occupation) => {
+              const isSelected = formData.occupationType === occupation;
+              return (
+                <TouchableOpacity
+                  key={occupation}
+                  activeOpacity={0.9}
+                  onPress={() => handleInputChange('occupationType', occupation)}
+                  style={[styles.qualificationCard, isSelected ? styles.selectedQualificationCard : styles.unselectedQualificationCard]}
+                >
+                  <Text style={[styles.qualificationCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                    {occupation}
+                  </Text>
+                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
+                    {isSelected && <View style={styles.innerRadioDot} />}
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        )}
+
+        {/* Step 12 */}
+        {currentStep === 12 && (
+          <View style={styles.cardsContainer}>
+            {SERVICE_TYPE_LIST.map((serviceType) => {
+              const isSelected = formData.serviceType === serviceType;
+              return (
+                <TouchableOpacity
+                  key={serviceType}
+                  activeOpacity={0.9}
+                  onPress={() => handleInputChange('serviceType', serviceType)}
+                  style={[styles.qualificationCard, isSelected ? styles.selectedQualificationCard : styles.unselectedQualificationCard]}
+                >
+                  <Text style={[styles.qualificationCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                    {serviceType}
+                  </Text>
+                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
+                    {isSelected && <View style={styles.innerRadioDot} />}
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        )}
+
+        {/* Step 13 */}
+        {currentStep === 13 && (
+          <View style={styles.cardsContainer}>
+            {SECTOR_LIST.map((sector, index) => {
+              const sectorName = index === 0 ? 'IT (Information Technology)' : `Lorem Ipsum`;
+              const isSelected = formData.sectorType === sectorName && (index === 0 || formData.sectorIndex === index);
+              return (
+                <TouchableOpacity
+                  key={index}
+                  activeOpacity={0.9}
+                  onPress={() => { handleInputChange('sectorType', sectorName); handleInputChange('sectorIndex', index); }}
+                  style={[styles.qualificationCard, isSelected ? styles.selectedQualificationCard : styles.unselectedQualificationCard]}
+                >
+                  <Text style={[styles.qualificationCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                    {sectorName}
+                  </Text>
+                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
+                    {isSelected && <View style={styles.innerRadioDot} />}
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        )}
+
+        {/* Step 14 */}
+        {currentStep === 14 && (
+          <View style={styles.cardsContainer}>
+            {SUB_SECTOR_LIST.map((subSector) => {
+              const isSelected = formData.subSectorType === subSector;
+              return (
+                <TouchableOpacity
+                  key={subSector}
+                  activeOpacity={0.9}
+                  onPress={() => handleInputChange('subSectorType', subSector)}
+                  style={[styles.qualificationCard, isSelected ? styles.selectedQualificationCard : styles.unselectedQualificationCard]}
+                >
+                  <Text style={[styles.qualificationCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                    {subSector}
+                  </Text>
+                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
+                    {isSelected && <View style={styles.innerRadioDot} />}
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        )}
+
+        {/* Step 15 */}
+        {currentStep === 15 && (
+          <View style={styles.cardsContainer}>
+            {RAILWAY_SECTOR_LIST.map((item, index) => {
+              const itemName = index === 0 ? 'Indian Railways' : `Lorem Ipsum`;
+              const isSelected = formData.railwaySectorType === itemName && (index === 0 || formData.railwaySectorIndex === index);
+              return (
+                <TouchableOpacity
+                  key={index}
+                  activeOpacity={0.9}
+                  onPress={() => { handleInputChange('railwaySectorType', itemName); handleInputChange('railwaySectorIndex', index); }}
+                  style={[styles.qualificationCard, isSelected ? styles.selectedQualificationCard : styles.unselectedQualificationCard]}
+                >
+                  <Text style={[styles.qualificationCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                    {itemName}
+                  </Text>
+                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
+                    {isSelected && <View style={styles.innerRadioDot} />}
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        )}
+
+        {/* Step 16 */}
+        {currentStep === 16 && (
+          <View style={styles.familyContainer}>
+            <View style={[styles.autocompleteWrapper, { zIndex: 20 }]}>
+              <TextInput 
+                style={styles.companyInput} 
+                placeholder="Type Your Company Name" 
+                placeholderTextColor="#999"
+                value={formData.companyName}
+                onChangeText={(text) => {
+                  handleInputChange('companyName', text);
+                  setShowCompanySuggestions(true);
+                  setShowDesignationSuggestions(false);
+                }}
+                onFocus={() => {
+                  setShowCompanySuggestions(true);
+                  setShowDesignationSuggestions(false);
+                }}
+              />
+              {showCompanySuggestions && (
+                <View style={styles.suggestionsBox}>
+                  {COMPANY_SUGGESTIONS.map((comp, idx) => (
+                    <TouchableOpacity
+                      key={idx}
+                      style={styles.suggestionRow}
+                      onPress={() => {
+                        handleInputChange('companyName', comp);
+                        setShowCompanySuggestions(false);
+                      }}
+                    >
+                      <Text style={styles.suggestionText}>{comp}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </View>
+
+            <View style={[styles.autocompleteWrapper, { marginTop: 15, zIndex: 10 }]}>
+              <TextInput 
+                style={styles.companyInput} 
+                placeholder="Type Your Designation" 
+                placeholderTextColor="#999"
+                value={formData.designation}
+                onChangeText={(text) => {
+                  handleInputChange('designation', text);
+                  setShowDesignationSuggestions(true);
+                  setShowCompanySuggestions(false);
+                }}
+                onFocus={() => {
+                  setShowDesignationSuggestions(true);
+                  setShowCompanySuggestions(false);
+                }}
+              />
+              {showDesignationSuggestions && (
+                <View style={styles.suggestionsBox}>
+                  {DESIGNATION_SUGGESTIONS.map((desig, idx) => (
+                    <TouchableOpacity
+                      key={idx}
+                      style={styles.suggestionRow}
+                      onPress={() => {
+                        handleInputChange('designation', desig);
+                        setShowDesignationSuggestions(false);
+                      }}
+                    >
+                      <Text style={styles.suggestionText}>{desig}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </View>
+          </View>
+        )}
+
+        {/* Step 17 */}
+        {currentStep === 17 && (
+          <View style={styles.heightPickerContainer}>
+            {INCOME_LIST.map((inc, index) => {
+              const isFocused = formData.annualIncome === inc;
+              return (
+                <TouchableOpacity 
+                  key={index} 
+                  onPress={() => handleInputChange('annualIncome', inc)}
+                  style={[styles.heightRow, isFocused && styles.heightRowFocused]}
+                >
+                  {isFocused && <Text style={styles.heightPointerLeft}>▶</Text>}
+                  <Text style={[styles.heightText, isFocused ? { color: '#333', fontSize: 22, fontWeight: 'bold' } : { color: '#B0B0B0', fontSize: 18 }]}>
+                    {inc}
+                  </Text>
+                  {isFocused && <Text style={styles.heightPointerRight}>◀</Text>}
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        )}
+
+        {/* Step 18 */}
+        {currentStep === 18 && (
+          <View style={styles.hobbiesContainer}>
+            <View style={styles.hobbyCategoryBox}>
+              <Text style={styles.hobbyCategoryTitle}>Creative</Text>
+              <View style={styles.tagsFlexRow}>
+                {CREATIVE_HOBBIES.map((hobby) => {
+                  const isSelected = formData.hobbies.includes(hobby.label);
+                  return (
+                    <TouchableOpacity
+                      key={hobby.label}
+                      style={[styles.hobbyTag, isSelected ? styles.selectedHobbyTag : styles.unselectedHobbyTag]}
+                      onPress={() => toggleHobby(hobby.label)}
+                    >
+                      <Text style={styles.hobbyTagIcon}>{hobby.icon}</Text>
+                      <Text style={[styles.hobbyTagText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                        {hobby.label}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+              <TouchableOpacity style={styles.viewAllButton} onPress={() => Alert.alert('View All', 'Showing all creative hobbies')}>
+                <Text style={[styles.viewAllText, { color: theme.colors.primary }]}>View All</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={[styles.hobbyCategoryBox, { marginTop: 20 }]}>
+              <Text style={styles.hobbyCategoryTitle}>Fun</Text>
+              <View style={styles.tagsFlexRow}>
+                {FUN_HOBBIES.map((hobby) => {
+                  const isSelected = formData.hobbies.includes(hobby.label);
+                  return (
+                    <TouchableOpacity
+                      key={hobby.label}
+                      style={[styles.hobbyTag, isSelected ? styles.selectedHobbyTag : styles.unselectedHobbyTag]}
+                      onPress={() => toggleHobby(hobby.label)}
+                    >
+                      <Text style={styles.hobbyTagIcon}>{hobby.icon}</Text>
+                      <Text style={[styles.hobbyTagText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                        {hobby.label}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+              <TouchableOpacity style={styles.viewAllButton} onPress={() => Alert.alert('View All', 'Showing all fun hobbies')}>
+                <Text style={[styles.viewAllText, { color: theme.colors.primary }]}>View All</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+
+        {/* Step 19 */}
+        {currentStep === 19 && (
+          <View style={styles.cardsContainer}>
+            {CREATIVITY_LIST.map((item) => {
+              const isSelected = formData.selectedCreativity === item;
+              return (
+                <TouchableOpacity
+                  key={item}
+                  activeOpacity={0.9}
+                  onPress={() => handleInputChange('selectedCreativity', item)}
+                  style={[styles.imageSelectionCard, isSelected ? styles.selectedQualificationCard : styles.unselectedQualificationCard]}
+                >
+                  <View style={styles.cardLeftRow}>
+                    <View style={styles.avatarCirclePlaceholder}><Text style={{ fontSize: 16 }}>🎨</Text></View>
+                    <Text style={[styles.qualificationCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                      {item}
+                    </Text>
+                  </View>
+                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
+                    {isSelected && <View style={styles.innerRadioDot} />}
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        )}
+
+        {/* Step 20 */}
+        {currentStep === 20 && (
+          <View style={styles.cardsContainer}>
+            {ENJOY_DOING_LIST.map((item) => {
+              const isSelected = formData.enjoyDoing === item;
+              return (
+                <TouchableOpacity
+                  key={item}
+                  activeOpacity={0.9}
+                  onPress={() => handleInputChange('enjoyDoing', item)}
+                  style={[styles.imageSelectionCard, isSelected ? styles.selectedQualificationCard : styles.unselectedQualificationCard]}
+                >
+                  <View style={styles.cardLeftRow}>
+                    <View style={styles.avatarCirclePlaceholder}><Text style={{ fontSize: 16 }}>⭐</Text></View>
+                    <Text style={[styles.qualificationCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                      {item}
+                    </Text>
+                  </View>
+                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
+                    {isSelected && <View style={styles.innerRadioDot} />}
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        )}
+
+        {/* Step 21: Select Your Zodiac Sign */}
+        {currentStep === 21 && (
+          <View style={styles.cardsContainer}>
+            {ZODIAC_LIST.map((zodiac) => {
+              const isSelected = formData.zodiacSign === zodiac;
+              return (
+                <TouchableOpacity
+                  key={zodiac}
+                  activeOpacity={0.9}
+                  onPress={() => handleInputChange('zodiacSign', zodiac)}
+                  style={[styles.imageSelectionCard, isSelected ? styles.selectedQualificationCard : styles.unselectedQualificationCard]}
+                >
+                  <View style={styles.cardLeftRow}>
+                    <View style={styles.avatarCirclePlaceholder}><Text style={{ fontSize: 16 }}>♈</Text></View>
+                    <Text style={[styles.qualificationCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                      {zodiac}
+                    </Text>
+                  </View>
+                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
+                    {isSelected && <View style={styles.innerRadioDot} />}
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        )}
+
+        {/* Step 22: Type Your Horoscope Details with Fully Fixed Clock & Place Autocomplete */}
+        {currentStep === 22 && (
+          <View style={styles.familyContainer}>
+            <Text style={[styles.label, { color: theme.colors.primary, marginBottom: 8 }]}>Time Of Birth</Text>
+            
+            <TouchableOpacity 
+              style={styles.dropdownHeader} 
+              activeOpacity={0.8} 
+              onPress={() => setIsTimePickerVisible(true)}
+            >
+              <Text style={styles.dropdownSelectedText}>{formData.timeOfBirth}</Text>
+              <Text style={styles.dropdownArrow}>▲</Text>
+            </TouchableOpacity>
+
+            <Modal
+              visible={isTimePickerVisible}
+              transparent={true}
+              animationType="fade"
+              onRequestClose={() => setIsTimePickerVisible(false)}
+            >
+              <View style={styles.timeModalOverlay}>
+                <View style={styles.timeModalContent}>
+                  <Text style={styles.timeModalTitle}>Select Time</Text>
+                  
+                  <View style={styles.digitalTimeRow}>
+                    <TouchableOpacity 
+                      style={[styles.timeBox, tempAmPm === 'am' && tempHour ? { backgroundColor: '#FDF2F2', borderColor: '#80001E' } : {}]}
+                      onPress={() => {}}
+                    >
+                      <Text style={[styles.timeBoxText, { color: '#80001E' }]}>{tempHour}</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.timeColon}>:</Text>
+                    <TouchableOpacity style={styles.timeBox}>
+                      <Text style={styles.timeBoxText}>{tempMinute}</Text>
+                    </TouchableOpacity>
+
+                    <View style={styles.amPmContainer}>
+                      <TouchableOpacity 
+                        style={[styles.amPmBtn, tempAmPm === 'am' && { backgroundColor: '#FFC0CB' }]}
+                        onPress={() => setTempAmPm('am')}
+                      >
+                        <Text style={[styles.amPmText, tempAmPm === 'am' && { color: '#80001E', fontWeight: 'bold' }]}>Am</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity 
+                        style={[styles.amPmBtn, tempAmPm === 'pm' && { backgroundColor: '#FFC0CB' }]}
+                        onPress={() => setTempAmPm('pm')}
+                      >
+                        <Text style={[styles.amPmText, tempAmPm === 'pm' && { color: '#80001E', fontWeight: 'bold' }]}>Pm</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+
+                  {/* Complete 12-Hour Circular Clock Face */}
+                  <View style={styles.clockFaceCircle}>
+                    <View style={styles.clockCenterDot} />
+                    <View style={[styles.clockHandLine, { transform: [{ rotate: getClockRotation(tempHour) }] }]} />
+
+                    {['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'].map((num, index) => {
+                      const angle = (index * 30) * (Math.PI / 180);
+                      const radius = 68; 
+                      const x = radius * Math.sin(angle);
+                      const y = -radius * Math.cos(angle);
+                      const isSelected = tempHour === num || (num === '12' && tempHour === '12');
+
+                      return (
+                        <TouchableOpacity
+                          key={num}
+                          style={[
+                            styles.clockNumberNode,
+                            { transform: [{ translateX: x }, { translateY: y }] },
+                            isSelected && styles.selectedClockNode
+                          ]}
+                          onPress={() => setTempHour(num.padStart(2, '0'))}
+                        >
+                          <Text style={[styles.clockNumText, isSelected && styles.selectedClockNumText]}>
+                            {num}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
+
+                  <View style={styles.timeModalButtonsRow}>
+                    <TouchableOpacity style={styles.keyboardIconBtn}>
+                      <Text style={{ fontSize: 18 }}>⌨️</Text>
+                    </TouchableOpacity>
+                    <View style={styles.modalRightActions}>
+                      <TouchableOpacity onPress={() => setIsTimePickerVisible(false)}>
+                        <Text style={styles.modalCancelText}>Cancel</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity 
+                        style={styles.modalOkBtn} 
+                        onPress={() => {
+                          handleInputChange('timeOfBirth', `${parseInt(tempHour)}:${tempMinute}${tempAmPm}`);
+                          setIsTimePickerVisible(false);
+                        }}
+                      >
+                        <Text style={styles.modalOkText}>Ok</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+
+                </View>
+              </View>
+            </Modal>
+
+            <Text style={[styles.label, { color: theme.colors.primary, marginTop: 20, marginBottom: 8 }]}>Place Of Birth</Text>
+            
+            <View style={[styles.autocompleteWrapper, { zIndex: 10 }]}>
+              <TextInput 
+                style={styles.companyInput} 
+                placeholder="Abcd Private Hospital" 
+                placeholderTextColor="#999"
+                value={formData.placeOfBirth}
+                onChangeText={(text) => {
+                  handleInputChange('placeOfBirth', text);
+                  setShowPlaceSuggestions(true);
+                }}
+                onFocus={() => setShowPlaceSuggestions(true)}
+              />
+              {showPlaceSuggestions && (
+                <View style={styles.suggestionsBox}>
+                  {PLACE_SUGGESTIONS.map((place, idx) => (
+                    <TouchableOpacity
+                      key={idx}
+                      style={styles.suggestionRow}
+                      onPress={() => {
+                        handleInputChange('placeOfBirth', place);
+                        setShowPlaceSuggestions(false);
+                      }}
+                    >
+                      <Text style={styles.suggestionText}>{place}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </View>
+
+            <Text style={[styles.label, { color: theme.colors.primary, marginTop: 25, marginBottom: 12 }]}>Manglika Dosha</Text>
+            <View style={styles.radioGroupRow}>
+              <TouchableOpacity style={styles.radioOption} onPress={() => handleInputChange('manglikaDosha', 'Yes')}>
+                <View style={[styles.radioButton, formData.manglikaDosha === 'Yes' && { borderColor: theme.colors.primary }]}>
+                  {formData.manglikaDosha === 'Yes' && <View style={[styles.radioDot, { backgroundColor: theme.colors.primary }]} />}
+                </View>
+                <Text style={styles.radioLabelText}>Yes</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={[styles.radioOption, { marginLeft: 40 }]} onPress={() => handleInputChange('manglikaDosha', 'No')}>
+                <View style={[styles.radioButton, formData.manglikaDosha === 'No' && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
+                  {formData.manglikaDosha === 'No' && <View style={styles.innerRadioDot} />}
+                </View>
+                <Text style={styles.radioLabelText}>No</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         )}
 
@@ -406,6 +1256,35 @@ export default function ProfileScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    zIndex: 9999,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingBox: {
+    backgroundColor: '#FFF',
+    paddingVertical: 24,
+    paddingHorizontal: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: '#80001E',
+  },
   headerBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -418,9 +1297,11 @@ const styles = StyleSheet.create({
   },
   backButton: { width: 40, height: 40, justifyContent: 'center' },
   backText: { fontSize: 24, color: '#333' },
-  headerTitle: { fontSize: 16, fontWeight: 'bold' },
+  headerTitleContainer: { flex: 1, alignItems: 'center' },
+  headerTitle: { fontSize: 16, fontWeight: 'bold', textAlign: 'center' },
+  headerSubtitle: { fontSize: 12, color: '#888', marginTop: 2, textAlign: 'center' },
   spacer: { width: 40 },
-  scrollContent: { paddingHorizontal: 20, paddingTop: 25, paddingBottom: 110 },
+  scrollContent: { paddingHorizontal: 20, paddingTop: 25, paddingBottom: 140 },
   
   pfpContainer: { alignItems: 'center', marginBottom: 25 },
   pfpWrapper: { width: 100, height: 100, borderRadius: 50, borderWidth: 2, padding: 3, marginBottom: 10 },
@@ -435,16 +1316,26 @@ const styles = StyleSheet.create({
   
   inputGroup: { marginBottom: 18 },
   label: { fontSize: 13, fontWeight: 'bold', marginBottom: 6 },
-  dropdownHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderWidth: 1, borderColor: '#E0E0E0', borderRadius: 8, paddingHorizontal: 12, paddingVertical: 12, backgroundColor: '#FAFAFA' },
-  dropdownSelectedText: { fontSize: 14, color: '#333' },
+  dropdownHeader: { 
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    alignItems: 'center', 
+    borderWidth: 1, 
+    borderColor: '#E0E0E0', 
+    borderRadius: 8, 
+    paddingHorizontal: 16, 
+    paddingVertical: 14, 
+    backgroundColor: '#EFEFEF' 
+  },
+  dropdownSelectedText: { fontSize: 15, color: '#333' },
   dropdownArrow: { fontSize: 12, color: '#666' },
   dropdownListContainer: { marginTop: 5, borderWidth: 1, borderColor: '#E0E0E0', borderRadius: 8, backgroundColor: '#FFF', paddingVertical: 5 },
-  dropdownOptionRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, paddingHorizontal: 12, borderBottomWidth: 0.5, borderBottomColor: '#F0F0F0' },
+  dropdownOptionRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12, paddingHorizontal: 16, borderBottomWidth: 0.5, borderBottomColor: '#F0F0F0' },
   
   radioButton: { width: 20, height: 20, borderRadius: 10, borderWidth: 1.5, borderColor: '#CCC', justifyContent: 'center', alignItems: 'center' },
   radioDot: { width: 10, height: 10, borderRadius: 5 },
   innerRadioDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#FFF' },
-  dropdownOptionText: { fontSize: 14, color: '#444' },
+  dropdownOptionText: { fontSize: 14, color: '#444', marginLeft: 12 },
 
   standardInputGroup: { marginBottom: 15 },
   standardLabel: { fontSize: 12, fontWeight: '600', color: '#666', marginBottom: 5 },
@@ -456,39 +1347,18 @@ const styles = StyleSheet.create({
   stateIconCircle: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#F0F0F0', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
   cardText: { fontSize: 15, color: '#333' },
 
-  // Step 5: Large Grid Layout Matching Screenshot 45 exactly
   largeGridContainer: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingHorizontal: 5 },
-  largeGridCard: {
-    width: '47%',
-    height: 135,
-    borderRadius: 16,
-    borderWidth: 1.5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-    paddingHorizontal: 12,
-  },
+  largeGridCard: { width: '47%', height: 135, borderRadius: 16, borderWidth: 1.5, justifyContent: 'center', alignItems: 'center', marginBottom: 20, paddingHorizontal: 12 },
   selectedLargeCard: { backgroundColor: '#FDF2F2', borderColor: '#80001E' },
   unselectedLargeCard: { backgroundColor: '#EFEFEF', borderColor: 'transparent' },
   largeGridCardText: { fontSize: 16, color: '#555', textAlign: 'center', fontWeight: '500' },
 
-  // Step 6: Diet Cards Matching Screenshot 46 exactly
-  dietCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 18,
-    paddingHorizontal: 18,
-    borderRadius: 16,
-    borderWidth: 1.5,
-    marginBottom: 16,
-  },
+  dietCard: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 18, paddingHorizontal: 18, borderRadius: 16, borderWidth: 1.5, marginBottom: 16 },
   selectedDietCard: { backgroundColor: '#FDF2F2', borderColor: '#80001E' },
   unselectedDietCard: { backgroundColor: '#EFEFEF', borderColor: 'transparent' },
   dietIconCircle: { width: 42, height: 42, borderRadius: 21, backgroundColor: '#FFF', justifyContent: 'center', alignItems: 'center', marginRight: 15, shadowColor: '#000', shadowOffset: {width:0, height:1}, shadowOpacity: 0.1, elevation: 2 },
   dietCardText: { fontSize: 17, color: '#333', fontWeight: '500' },
 
-  // Step 7: Height Picker Matching Screenshot 47 exactly
   heightPickerContainer: { width: '100%', alignItems: 'center', paddingVertical: 40 },
   heightRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 18, width: '100%' },
   heightRowFocused: { backgroundColor: '#FAFAFA', borderRadius: 12, borderTopWidth: 1, borderBottomWidth: 1, borderColor: '#E0E0E0' },
@@ -496,21 +1366,135 @@ const styles = StyleSheet.create({
   heightPointerLeft: { color: '#80001E', fontSize: 16, fontWeight: 'bold', marginRight: 10 },
   heightPointerRight: { color: '#80001E', fontSize: 16, fontWeight: 'bold', marginLeft: 10 },
 
-  // Step 8: Complexion Cards Matching Screenshot 48 exactly
   complexionContainer: { width: '100%', alignItems: 'center', paddingTop: 10 },
-  complexionCard: {
-    width: '65%',
-    height: 150,
-    borderRadius: 16,
-    borderWidth: 1.5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 25,
-  },
+  complexionCard: { width: '65%', height: 150, borderRadius: 16, borderWidth: 1.5, justifyContent: 'center', alignItems: 'center', marginBottom: 25 },
   selectedComplexionCard: { backgroundColor: '#FDF2F2', borderColor: '#80001E' },
   unselectedComplexionCard: { backgroundColor: '#EFEFEF', borderColor: 'transparent' },
   avatarBox: { width: 60, height: 60, borderRadius: 30, backgroundColor: '#FFF', justifyContent: 'center', alignItems: 'center', marginBottom: 12, shadowColor: '#000', shadowOffset: {width:0, height:1}, shadowOpacity: 0.1, elevation: 2 },
   complexionCardText: { fontSize: 16, color: '#444', fontWeight: '500' },
+
+  familyContainer: { width: '100%' },
+  familySectionTitle: { fontSize: 15, fontWeight: 'bold', color: '#333', marginBottom: 12 },
+  radioGroupRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
+  radioOption: { flexDirection: 'row', alignItems: 'center' },
+  radioLabelText: { fontSize: 15, color: '#333', marginLeft: 8 },
+  dividerRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 20 },
+  dividerLine: { flex: 1, height: 1, backgroundColor: '#E0E0E0' },
+  dividerText: { marginHorizontal: 15, color: '#888', fontSize: 14 },
+  familyInput: { backgroundColor: '#EFEFEF', borderRadius: 10, paddingHorizontal: 16, paddingVertical: 14, fontSize: 15, color: '#333', marginBottom: 18 },
+  companyInput: { backgroundColor: '#EFEFEF', borderRadius: 12, paddingHorizontal: 18, paddingVertical: 18, fontSize: 16, color: '#333' },
+
+  timeModalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center', alignItems: 'center' },
+  timeModalContent: { width: '85%', backgroundColor: '#FFF', borderRadius: 16, padding: 22, alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 8, elevation: 6 },
+  timeModalTitle: { fontSize: 15, color: '#666', alignSelf: 'flex-start', marginBottom: 15 },
+  digitalTimeRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
+  timeBox: { borderWidth: 1.5, borderColor: '#E0E0E0', borderRadius: 8, paddingVertical: 8, paddingHorizontal: 14, backgroundColor: '#FAFAFA' },
+  timeBoxText: { fontSize: 24, fontWeight: 'bold', color: '#333' },
+  timeColon: { fontSize: 24, fontWeight: 'bold', marginHorizontal: 8, color: '#333' },
+  amPmContainer: { marginLeft: 12, borderWidth: 1, borderColor: '#E0E0E0', borderRadius: 6, overflow: 'hidden' },
+  amPmBtn: { paddingVertical: 4, paddingHorizontal: 8, backgroundColor: '#FAFAFA', alignItems: 'center' },
+  amPmText: { fontSize: 12, color: '#888' },
+
+  clockFaceCircle: { width: 190, height: 190, borderRadius: 95, backgroundColor: '#F0F0F0', position: 'relative', justifyContent: 'center', alignItems: 'center', marginVertical: 10 },
+  clockHour12: { position: 'absolute', top: 10 },
+  clockHour3: { position: 'absolute', right: 15 },
+  clockHour6: { position: 'absolute', bottom: 10 },
+  clockHour9: { position: 'absolute', left: 15 },
+  clockNum: { fontSize: 14, color: '#666' },
+  clockHandLine: { position: 'absolute', width: 50, height: 2, backgroundColor: '#80001E', transform: [{ rotate: '-135deg' }], left: 45, top: 94 },
+  clockActiveDot: { position: 'absolute', left: 45, bottom: 42, width: 34, height: 34, borderRadius: 17, backgroundColor: '#80001E', justifyContent: 'center', alignItems: 'center' },
+  activeDotText: { color: '#FFF', fontWeight: 'bold', fontSize: 14 },
+
+  timeModalButtonsRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginTop: 20 },
+  keyboardIconBtn: { padding: 6 },
+  modalRightActions: { flexDirection: 'row', alignItems: 'center' },
+  modalCancelText: { fontSize: 15, color: '#666', marginRight: 20, fontWeight: '600' },
+  modalOkBtn: { backgroundColor: '#FFC0CB', paddingVertical: 8, paddingHorizontal: 20, borderRadius: 8 },
+  modalOkText: { fontSize: 15, color: '#80001E', fontWeight: 'bold' },
+
+  autocompleteWrapper: { position: 'relative' },
+  suggestionsBox: {
+    position: 'absolute',
+    top: 65,
+    left: 0,
+    right: 0,
+    backgroundColor: '#FFF',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 4,
+    maxHeight: 220,
+  },
+  suggestionRow: { paddingVertical: 12, paddingHorizontal: 16, borderBottomWidth: 0.5, borderBottomColor: '#F0F0F0' },
+  suggestionText: { fontSize: 15, color: '#333' },
+
+  hobbiesContainer: { width: '100%' },
+  hobbyCategoryBox: {
+    backgroundColor: '#FFF',
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: '#EFEFEF',
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  hobbyCategoryTitle: { fontSize: 15, fontWeight: 'bold', color: '#80001E', marginBottom: 14 },
+  tagsFlexRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  hobbyTag: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    borderRadius: 22,
+    borderWidth: 1.5,
+    marginBottom: 8,
+  },
+  selectedHobbyTag: { backgroundColor: '#FDF2F2', borderColor: '#80001E' },
+  unselectedHobbyTag: { backgroundColor: '#FAFAFA', borderColor: '#EFEFEF' },
+  hobbyTagIcon: { fontSize: 14, marginRight: 6 },
+  hobbyTagText: { fontSize: 14, color: '#444' },
+  viewAllButton: { alignSelf: 'center', marginTop: 8, paddingVertical: 4 },
+  viewAllText: { fontSize: 14, fontWeight: 'bold' },
+
+  qualificationCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderRadius: 14,
+    borderWidth: 1.5,
+    marginBottom: 14,
+  },
+  imageSelectionCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 35,
+    borderWidth: 1.5,
+    marginBottom: 12,
+  },
+  avatarCirclePlaceholder: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#E0E0E0',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 14,
+  },
+  selectedQualificationCard: { backgroundColor: '#FDF2F2', borderColor: '#80001E' },
+  unselectedQualificationCard: { backgroundColor: '#FAFAFA', borderColor: '#EFEFEF' },
+  qualificationCardText: { fontSize: 16, color: '#444', fontWeight: '500' },
 
   bottomButtonRow: { position: 'absolute', bottom: 0, left: 0, right: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 25, paddingVertical: 15, backgroundColor: '#FFF', borderTopWidth: 1, borderTopColor: '#EFEFEF' },
   skipButton: { paddingVertical: 10 },
