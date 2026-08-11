@@ -23,6 +23,7 @@ import ShortlistScreen from './src/screens/Home/ShortlistScreen';
 import SearchScreen from './src/screens/Home/SearchScreen';
 import VerifiedSoulmatesScreen from './src/screens/Home/VerifiedSoulmatesScreen';
 import FilterScreen from './src/screens/Home/FilterScreen';
+import ProfileScreen from './src/screens/Profile/ProfileScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +50,7 @@ export default function App() {
           <Stack.Screen name="Search" component={SearchScreen} />
           <Stack.Screen name="VerifiedSoulmates" component={VerifiedSoulmatesScreen} />
           <Stack.Screen name="Filter" component={FilterScreen} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
