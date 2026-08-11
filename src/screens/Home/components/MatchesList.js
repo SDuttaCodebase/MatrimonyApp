@@ -1,10 +1,18 @@
 // src/screens/Home/components/MatchesList.js
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import useThemeStore from '../../../store/useThemeStore';
+import { useNavigation } from '@react-navigation/native';
 import MatchCard from './MatchCard';
 
 export default function MatchesList({ title, subtitle, data = [1, 2, 3, 4] }) {
+  const navigation = useNavigation();
   const { theme } = useThemeStore();
 
   return (
@@ -12,19 +20,25 @@ export default function MatchesList({ title, subtitle, data = [1, 2, 3, 4] }) {
       {/* Header Row */}
       <View style={styles.headerRow}>
         <View style={styles.titleContainer}>
-          <Text style={[styles.title, { color: theme.colors.primary }]}>{title}</Text>
+          <Text style={[styles.title, { color: theme.colors.primary }]}>
+            {title}
+          </Text>
           {subtitle && (
-            <Text style={[styles.subtitle, { color: theme.colors.subtext }]}>{subtitle}</Text>
+            <Text style={[styles.subtitle, { color: theme.colors.subtext }]}>
+              {subtitle}
+            </Text>
           )}
         </View>
-        <TouchableOpacity>
-          <Text style={[styles.viewAll, { color: theme.colors.text }]}>View All</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Shortlist')}>
+          <Text style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
+            View All
+          </Text>
         </TouchableOpacity>
       </View>
 
       {/* Horizontal Scrolling List */}
-      <ScrollView 
-        horizontal 
+      <ScrollView
+        horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
