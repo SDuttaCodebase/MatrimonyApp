@@ -1,6 +1,7 @@
 // src/screens/Home/components/HundredPercentMatchesBanner.js
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; // 1. Imported useNavigation
 import useThemeStore from '../../../store/useThemeStore';
 
 const { width: windowWidth } = Dimensions.get('window');
@@ -26,6 +27,7 @@ const MATCH_BANNERS = [
 
 export default function HundredPercentMatchesBanner() {
   const { theme } = useThemeStore();
+  const navigation = useNavigation(); // 2. Initialized navigation
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollViewRef = useRef(null);
 
@@ -66,14 +68,20 @@ export default function HundredPercentMatchesBanner() {
         scrollEventThrottle={16}
       >
         {MATCH_BANNERS.map((banner) => (
-          <View key={banner.id} style={[styles.cardContainer, { width: BANNER_WIDTH }]}>
+          <TouchableOpacity 
+            key={banner.id} 
+            activeOpacity={0.9}
+            onPress={() => navigation.navigate('VerifiedSoulmates')}
+            style={[styles.cardContainer, { width: BANNER_WIDTH }]}
+          >
             <View style={[styles.imagePlaceholder, { backgroundColor: '#80001E' }]}>
               <View style={styles.overlay}>
                 <Text style={styles.bannerTitle}>{banner.title}</Text>
                 <Text style={styles.bannerSubtitle}>{banner.subtitle}</Text>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
+
         ))}
       </ScrollView>
 

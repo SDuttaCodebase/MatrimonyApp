@@ -21,6 +21,8 @@ import ProfileDetailScreen from './src/screens/Home/ProfileDetailScreen';
 import FullScreenImageViewer from './src/screens/Home/FullScreenImageViewer';
 import ShortlistScreen from './src/screens/Home/ShortlistScreen';
 import SearchScreen from './src/screens/Home/SearchScreen';
+import VerifiedSoulmatesScreen from './src/screens/Home/VerifiedSoulmatesScreen';
+import FilterScreen from './src/screens/Home/FilterScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -45,6 +47,8 @@ export default function App() {
           <Stack.Screen name="FullScreenImageViewer" component={FullScreenImageViewer} />
           <Stack.Screen name="Shortlist" component={ShortlistScreen} />
           <Stack.Screen name="Search" component={SearchScreen} />
+          <Stack.Screen name="VerifiedSoulmates" component={VerifiedSoulmatesScreen} />
+          <Stack.Screen name="Filter" component={FilterScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
