@@ -37,7 +37,17 @@ const FILTER_DATA = {
   'Height': [], 
   'Complexion': ['Fair', 'Medium', 'Dark'],
   'Family Type': ['Joint Family', 'Nuclear Family'],
-  'Annual Income': ['0 - 3L', '3L - 6L', '6L - 10L', '10L - 15L', '15L+'],
+  'Annual Income': [
+    '50 - 2 LPA', 
+    '03 - 5 LPA', 
+    '06 - 8 LPA', 
+    '09 - 11 LPA', 
+    '10 - 12 LPA', 
+    '13 - 14 LPA', 
+    '15 - 16 LPA', 
+    '17 - 18 LPA', 
+    '19 - 20 LPA'
+  ],
 };
 
 const CATEGORIES = Object.keys(FILTER_DATA);
