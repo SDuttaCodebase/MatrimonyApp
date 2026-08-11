@@ -20,6 +20,7 @@ import MainTabNavigator from './src/navigation/MainTabNavigator';
 import ProfileDetailScreen from './src/screens/Home/ProfileDetailScreen';
 import FullScreenImageViewer from './src/screens/Home/FullScreenImageViewer';
 import ShortlistScreen from './src/screens/Home/ShortlistScreen';
+import SearchScreen from './src/screens/Home/SearchScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,7 @@ export default function App() {
           <Stack.Screen name="ProfileDetail" component={ProfileDetailScreen} />
           <Stack.Screen name="FullScreenImageViewer" component={FullScreenImageViewer} />
           <Stack.Screen name="Shortlist" component={ShortlistScreen} />
+          <Stack.Screen name="Search" component={SearchScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

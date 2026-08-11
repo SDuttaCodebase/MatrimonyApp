@@ -1,10 +1,12 @@
 // src/screens/Home/components/TopHeader.js
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import useThemeStore from '../../../store/useThemeStore';
 
 export default function TopHeader() {
   const { theme } = useThemeStore();
+  const navigation = useNavigation();
 
   return (
     <View style={[styles.headerContainer, { backgroundColor: theme.colors.background }]}>
@@ -19,7 +21,7 @@ export default function TopHeader() {
       </Text>
 
       {/* Right Icon: Search */}
-      <TouchableOpacity style={styles.iconButton}>
+      <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Search')}>
         <Text style={[styles.iconText, { color: theme.colors.text }]}>🔍</Text>
       </TouchableOpacity>
     </View>
