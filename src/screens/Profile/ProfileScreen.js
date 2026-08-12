@@ -17,25 +17,60 @@ import ImagePicker from 'react-native-image-crop-picker';
 import useThemeStore from '../../store/useThemeStore';
 
 const DROPDOWN_OPTIONS = {
-  religion: ['Hindu', 'Muslim', 'Buddhist', 'Christian', 'Jain', 'Sikh', 'Parsi'],
-  community: ['Bengali', 'Hindi', 'Punjabi', 'Marathi', 'Gujrati', 'Urdu', 'Telegu', 'English'],
+  religion: [
+    'Hindu',
+    'Muslim',
+    'Buddhist',
+    'Christian',
+    'Jain',
+    'Sikh',
+    'Parsi',
+  ],
+  community: [
+    'Bengali',
+    'Hindi',
+    'Punjabi',
+    'Marathi',
+    'Gujrati',
+    'Urdu',
+    'Telegu',
+    'English',
+  ],
   subCommunity: ['Kashyap', 'Baidya', 'Brahmin', 'Kayastha'],
   caste: ['General', 'OBC', 'SC', 'ST'],
   country: ['India', 'USA', 'UK', 'Canada', 'Australia'],
 };
 
 const STATES_LIST = [
-  'West Bengal', 'Maharashtra', 'Delhi', 'Hyderabad', 
-  'Karnataka', 'Tamil Nadu', 'Himachal Pradesh', 'Uttarakhand', 'Sikkim', 'Chhattisgarh'
+  'West Bengal',
+  'Maharashtra',
+  'Delhi',
+  'Hyderabad',
+  'Karnataka',
+  'Tamil Nadu',
+  'Himachal Pradesh',
+  'Uttarakhand',
+  'Sikkim',
+  'Chhattisgarh',
 ];
 
 const CITIES_LIST = [
-  'Kolkata', 'Lorem Ipsum', 'Lorem Ipsum', 'Lorem Ipsum', 
-  'Lorem Ipsum', 'Lorem Ipsum', 'Lorem Ipsum', 'Lorem Ipsum'
+  'Kolkata',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
+  'Lorem Ipsum',
 ];
 
 const MARITAL_STATUS_LIST = [
-  'Never Married', 'Divorced', 'Widowed', 'Awaiting Divorced', 'Anulled'
+  'Never Married',
+  'Divorced',
+  'Widowed',
+  'Awaiting Divorced',
+  'Anulled',
 ];
 
 const DIET_LIST = [
@@ -266,18 +301,19 @@ export default function ProfileScreen({ navigation }) {
   });
 
   const [showCompanySuggestions, setShowCompanySuggestions] = useState(false);
-  const [showDesignationSuggestions, setShowDesignationSuggestions] = useState(false);
+  const [showDesignationSuggestions, setShowDesignationSuggestions] =
+    useState(false);
   const [showPlaceSuggestions, setShowPlaceSuggestions] = useState(false);
 
   const handleInputChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const toggleHobby = (hobbyLabel) => {
-    setFormData((prev) => {
+  const toggleHobby = hobbyLabel => {
+    setFormData(prev => {
       const exists = prev.hobbies.includes(hobbyLabel);
       if (exists) {
-        return { ...prev, hobbies: prev.hobbies.filter((h) => h !== hobbyLabel) };
+        return { ...prev, hobbies: prev.hobbies.filter(h => h !== hobbyLabel) };
       } else {
         return { ...prev, hobbies: [...prev.hobbies, hobbyLabel] };
       }
@@ -286,16 +322,30 @@ export default function ProfileScreen({ navigation }) {
 
   const handleCameraPick = () => {
     setIsPhotoModalVisible(false);
-    ImagePicker.openCamera({ width: 400, height: 400, cropping: true, freeStyleCropEnabled: true })
-      .then((image) => setProfilePic(image.path))
-      .catch((error) => { if (error.code !== 'E_PICKER_CANCELLED') console.log(error); });
+    ImagePicker.openCamera({
+      width: 400,
+      height: 400,
+      cropping: true,
+      freeStyleCropEnabled: true,
+    })
+      .then(image => setProfilePic(image.path))
+      .catch(error => {
+        if (error.code !== 'E_PICKER_CANCELLED') console.log(error);
+      });
   };
 
   const handleGalleryPick = () => {
     setIsPhotoModalVisible(false);
-    ImagePicker.openPicker({ width: 400, height: 400, cropping: true, freeStyleCropEnabled: true })
-      .then((image) => setProfilePic(image.path))
-      .catch((error) => { if (error.code !== 'E_PICKER_CANCELLED') console.log(error); });
+    ImagePicker.openPicker({
+      width: 400,
+      height: 400,
+      cropping: true,
+      freeStyleCropEnabled: true,
+    })
+      .then(image => setProfilePic(image.path))
+      .catch(error => {
+        if (error.code !== 'E_PICKER_CANCELLED') console.log(error);
+      });
   };
 
   const handleNext = () => {
@@ -313,7 +363,10 @@ export default function ProfileScreen({ navigation }) {
       setIsLoading(true);
       setTimeout(() => {
         setIsLoading(false);
-        Alert.alert('Profile Complete', 'All your profile details have been successfully saved!');
+        Alert.alert(
+          'Profile Complete',
+          'All your profile details have been successfully saved!',
+        );
       }, 800);
     }
   };
@@ -335,9 +388,59 @@ export default function ProfileScreen({ navigation }) {
   };
 
   const getClockRotation = (hour) => {
-    const numHour = parseInt(hour) || 0;
+    const numHour = parseInt(hour) || 12;
     const normalizedHour = numHour === 12 ? 0 : numHour;
-    return `${normalizedHour * 30}deg`;
+    // 12 o'clock is at -90 degrees, each hour is 30 degrees
+    return `${(normalizedHour * 30) - 90 + 180}deg`;
+  };
+
+  const renderClockNumbers = () => {
+    const radius = 68;
+    const numbers = [
+      '12',
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+      '10',
+      '11',
+    ];
+
+    return numbers.map((num, index) => {
+      const angle = index * 30 * (Math.PI / 180);
+      const x = Math.round(95 + radius * Math.sin(angle) - 15);
+      const y = Math.round(95 - radius * Math.cos(angle) - 15);
+
+      const formattedNum = num.padStart(2, '0');
+      const isSelected = tempHour === formattedNum;
+
+      if (isSelected) {
+        return (
+          <TouchableOpacity
+            key={num}
+            style={[styles.clockNodeBubble, { left: x, top: y }]}
+            onPress={() => setTempHour(formattedNum)}
+          >
+            <Text style={styles.clockNodeBubbleText}>{num}</Text>
+          </TouchableOpacity>
+        );
+      }
+
+      return (
+        <TouchableOpacity
+          key={num}
+          style={[styles.clockNodeTextContainer, { left: x, top: y }]}
+          onPress={() => setTempHour(formattedNum)}
+        >
+          <Text style={styles.clockNum}>{num}</Text>
+        </TouchableOpacity>
+      );
+    });
   };
 
   const renderDropdownField = (label, fieldKey, optionsList) => {
@@ -346,9 +449,14 @@ export default function ProfileScreen({ navigation }) {
 
     return (
       <View style={styles.inputGroup}>
-        <Text style={[styles.label, { color: theme.colors.primary }]}>{label}</Text>
-        <TouchableOpacity 
-          style={[styles.dropdownHeader, isOpen && { borderColor: theme.colors.primary }]}
+        <Text style={[styles.label, { color: theme.colors.primary }]}>
+          {label}
+        </Text>
+        <TouchableOpacity
+          style={[
+            styles.dropdownHeader,
+            isOpen && { borderColor: theme.colors.primary },
+          ]}
           activeOpacity={0.8}
           onPress={() => setActiveDropdown(isOpen ? null : fieldKey)}
         >
@@ -358,18 +466,41 @@ export default function ProfileScreen({ navigation }) {
 
         {isOpen && (
           <View style={styles.dropdownListContainer}>
-            {optionsList.map((option) => {
+            {optionsList.map(option => {
               const isSelected = selectedValue === option;
               return (
                 <TouchableOpacity
                   key={option}
                   style={styles.dropdownOptionRow}
-                  onPress={() => { handleInputChange(fieldKey, option); setActiveDropdown(null); }}
+                  onPress={() => {
+                    handleInputChange(fieldKey, option);
+                    setActiveDropdown(null);
+                  }}
                 >
-                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary }]}>
-                    {isSelected && <View style={[styles.radioDot, { backgroundColor: theme.colors.primary }]} />}
+                  <View
+                    style={[
+                      styles.radioButton,
+                      isSelected && { borderColor: theme.colors.primary },
+                    ]}
+                  >
+                    {isSelected && (
+                      <View
+                        style={[
+                          styles.radioDot,
+                          { backgroundColor: theme.colors.primary },
+                        ]}
+                      />
+                    )}
                   </View>
-                  <Text style={[styles.dropdownOptionText, isSelected && { fontWeight: 'bold', color: theme.colors.primary }]}>
+                  <Text
+                    style={[
+                      styles.dropdownOptionText,
+                      isSelected && {
+                        fontWeight: 'bold',
+                        color: theme.colors.primary,
+                      },
+                    ]}
+                  >
                     {option}
                   </Text>
                 </TouchableOpacity>
@@ -383,7 +514,6 @@ export default function ProfileScreen({ navigation }) {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: '#FFFFFF' }]}>
-      
       {/* Loading Overlay Screen */}
       {isLoading && (
         <View style={styles.loadingOverlay}>
@@ -401,52 +531,91 @@ export default function ProfileScreen({ navigation }) {
         </TouchableOpacity>
         <View style={styles.headerTitleContainer}>
           <Text style={[styles.headerTitle, { color: theme.colors.primary }]}>
-            {currentStep === 1 ? 'Personal Details' :
-             currentStep === 2 ? 'Background Preferences' :
-             currentStep === 3 ? 'Select Your State' :
-             currentStep === 4 ? 'Select Your City' :
-             currentStep === 5 ? 'Select Your Marital Status' :
-             currentStep === 6 ? 'Select Your Diet' :
-             currentStep === 7 ? 'Select Your Height' :
-             currentStep === 8 ? 'Select Your Complexion' :
-             currentStep === 9 ? 'Mention Your Family Member' :
-             currentStep === 10 ? 'Select Your Highest Qualification' :
-             currentStep === 11 ? 'Select Your Occupation' :
-             currentStep === 12 ? 'Select Your Service Type' :
-             currentStep === 13 ? 'Select Your Sector Type' :
-             currentStep === 14 ? 'Select Your Sub - Sector Type' :
-             currentStep === 15 ? 'Select Your Sector Type' :
-             currentStep === 16 ? 'Type Your Company & Designation' :
-             currentStep === 17 ? 'Select Your Annual Income' :
-             currentStep === 18 ? 'Now Lets Add Your Hobbies & Interests' :
-             currentStep === 19 ? 'Select Your Creativity' :
-             currentStep === 20 ? 'Mention Things Which You Enjoy Doing' :
-             currentStep === 21 ? 'Select Your Zodiac Sign' : 'Type Your Horoscope Details'}
+            {currentStep === 1
+              ? 'Personal Details'
+              : currentStep === 2
+              ? 'Background Preferences'
+              : currentStep === 3
+              ? 'Select Your State'
+              : currentStep === 4
+              ? 'Select Your City'
+              : currentStep === 5
+              ? 'Select Your Marital Status'
+              : currentStep === 6
+              ? 'Select Your Diet'
+              : currentStep === 7
+              ? 'Select Your Height'
+              : currentStep === 8
+              ? 'Select Your Complexion'
+              : currentStep === 9
+              ? 'Mention Your Family Member'
+              : currentStep === 10
+              ? 'Select Your Highest Qualification'
+              : currentStep === 11
+              ? 'Select Your Occupation'
+              : currentStep === 12
+              ? 'Select Your Service Type'
+              : currentStep === 13
+              ? 'Select Your Sector Type'
+              : currentStep === 14
+              ? 'Select Your Sub - Sector Type'
+              : currentStep === 15
+              ? 'Select Your Sector Type'
+              : currentStep === 16
+              ? 'Type Your Company & Designation'
+              : currentStep === 17
+              ? 'Select Your Annual Income'
+              : currentStep === 18
+              ? 'Now Lets Add Your Hobbies & Interests'
+              : currentStep === 19
+              ? 'Select Your Creativity'
+              : currentStep === 20
+              ? 'Mention Things Which You Enjoy Doing'
+              : currentStep === 21
+              ? 'Select Your Zodiac Sign'
+              : 'Type Your Horoscope Details'}
           </Text>
           {currentStep === 18 && (
-            <Text style={styles.headerSubtitle}>This Will Help You Find Better Matches</Text>
+            <Text style={styles.headerSubtitle}>
+              This Will Help You Find Better Matches
+            </Text>
           )}
         </View>
         <View style={styles.spacer} />
       </View>
 
       {/* Scrollable Form Content */}
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Profile Picture Section (Visible only on Step 1) */}
         {currentStep === 1 && (
           <View style={styles.pfpContainer}>
-            <View style={[styles.pfpWrapper, { borderColor: theme.colors.primary }]}>
+            <View
+              style={[styles.pfpWrapper, { borderColor: theme.colors.primary }]}
+            >
               {profilePic ? (
-                <Image source={{ uri: profilePic }} style={styles.actualPfpImage} />
+                <Image
+                  source={{ uri: profilePic }}
+                  style={styles.actualPfpImage}
+                />
               ) : (
-                <View style={[styles.pfpImagePlaceholder, { backgroundColor: '#DDD' }]}>
+                <View
+                  style={[
+                    styles.pfpImagePlaceholder,
+                    { backgroundColor: '#DDD' },
+                  ]}
+                >
                   <Text style={styles.pfpEmoji}>📷</Text>
                 </View>
               )}
             </View>
-            <TouchableOpacity 
-              style={[styles.changePhotoBtn, { backgroundColor: theme.colors.primary }]}
+            <TouchableOpacity
+              style={[
+                styles.changePhotoBtn,
+                { backgroundColor: theme.colors.primary },
+              ]}
               onPress={() => setIsPhotoModalVisible(true)}
             >
               <Text style={styles.changePhotoText}>Change Profile Picture</Text>
@@ -458,12 +627,20 @@ export default function ProfileScreen({ navigation }) {
         {currentStep === 1 && (
           <View style={styles.sectionContainer}>
             <Text style={styles.sectionHeading}>Personal Details</Text>
-            {['fullName', 'dob', 'email', 'phone', 'occupationText'].map((field) => (
-              <View key={field} style={styles.standardInputGroup}>
-                <Text style={styles.standardLabel}>{field.toUpperCase()}</Text>
-                <TextInput style={styles.textInput} value={formData[field]} onChangeText={(text) => handleInputChange(field, text)} />
-              </View>
-            ))}
+            {['fullName', 'dob', 'email', 'phone', 'occupationText'].map(
+              field => (
+                <View key={field} style={styles.standardInputGroup}>
+                  <Text style={styles.standardLabel}>
+                    {field.toUpperCase()}
+                  </Text>
+                  <TextInput
+                    style={styles.textInput}
+                    value={formData[field]}
+                    onChangeText={text => handleInputChange(field, text)}
+                  />
+                </View>
+              ),
+            )}
           </View>
         )}
 
@@ -471,26 +648,81 @@ export default function ProfileScreen({ navigation }) {
         {currentStep === 2 && (
           <View style={styles.sectionContainer}>
             <Text style={styles.sectionHeading}>Background Preferences</Text>
-            {renderDropdownField('Religion', 'religion', DROPDOWN_OPTIONS.religion)}
-            {renderDropdownField('Community', 'community', DROPDOWN_OPTIONS.community)}
-            {renderDropdownField('Sub-Community', 'subCommunity', DROPDOWN_OPTIONS.subCommunity)}
+            {renderDropdownField(
+              'Religion',
+              'religion',
+              DROPDOWN_OPTIONS.religion,
+            )}
+            {renderDropdownField(
+              'Community',
+              'community',
+              DROPDOWN_OPTIONS.community,
+            )}
+            {renderDropdownField(
+              'Sub-Community',
+              'subCommunity',
+              DROPDOWN_OPTIONS.subCommunity,
+            )}
             {renderDropdownField('Caste', 'caste', DROPDOWN_OPTIONS.caste)}
-            {renderDropdownField('Country Living In', 'country', DROPDOWN_OPTIONS.country)}
+            {renderDropdownField(
+              'Country Living In',
+              'country',
+              DROPDOWN_OPTIONS.country,
+            )}
           </View>
         )}
 
         {/* Step 3 */}
         {currentStep === 3 && (
           <View style={styles.cardsContainer}>
-            {STATES_LIST.map((state) => {
+            {STATES_LIST.map(state => {
               const isSelected = formData.state === state;
               return (
-                <TouchableOpacity key={state} activeOpacity={0.9} onPress={() => handleInputChange('state', state)} style={[styles.selectionCard, isSelected ? { backgroundColor: '#FDF2F2', borderColor: theme.colors.primary } : { backgroundColor: '#FFF', borderColor: '#EFEFEF' }]}>
+                <TouchableOpacity
+                  key={state}
+                  activeOpacity={0.9}
+                  onPress={() => handleInputChange('state', state)}
+                  style={[
+                    styles.selectionCard,
+                    isSelected
+                      ? {
+                          backgroundColor: '#FDF2F2',
+                          borderColor: theme.colors.primary,
+                        }
+                      : { backgroundColor: '#FFF', borderColor: '#EFEFEF' },
+                  ]}
+                >
                   <View style={styles.cardLeftRow}>
-                    <View style={styles.stateIconCircle}><Text>🌄</Text></View>
-                    <Text style={[styles.cardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>{state}</Text>
+                    <View style={styles.stateIconCircle}>
+                      <Text>🌄</Text>
+                    </View>
+                    <Text
+                      style={[
+                        styles.cardText,
+                        isSelected && {
+                          color: theme.colors.primary,
+                          fontWeight: 'bold',
+                        },
+                      ]}
+                    >
+                      {state}
+                    </Text>
                   </View>
-                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary }]}>{isSelected && <View style={[styles.radioDot, { backgroundColor: theme.colors.primary }]} />}</View>
+                  <View
+                    style={[
+                      styles.radioButton,
+                      isSelected && { borderColor: theme.colors.primary },
+                    ]}
+                  >
+                    {isSelected && (
+                      <View
+                        style={[
+                          styles.radioDot,
+                          { backgroundColor: theme.colors.primary },
+                        ]}
+                      />
+                    )}
+                  </View>
                 </TouchableOpacity>
               );
             })}
@@ -504,9 +736,46 @@ export default function ProfileScreen({ navigation }) {
               const cityName = index === 0 ? 'Kolkata' : `${city} ${index}`;
               const isSelected = formData.city === cityName;
               return (
-                <TouchableOpacity key={index} activeOpacity={0.9} onPress={() => handleInputChange('city', cityName)} style={[styles.selectionCard, isSelected ? { backgroundColor: '#FDF2F2', borderColor: theme.colors.primary } : { backgroundColor: '#FFF', borderColor: '#EFEFEF' }]}>
-                  <Text style={[styles.cardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>{cityName}</Text>
-                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary }]}>{isSelected && <View style={[styles.radioDot, { backgroundColor: theme.colors.primary }]} />}</View>
+                <TouchableOpacity
+                  key={index}
+                  activeOpacity={0.9}
+                  onPress={() => handleInputChange('city', cityName)}
+                  style={[
+                    styles.selectionCard,
+                    isSelected
+                      ? {
+                          backgroundColor: '#FDF2F2',
+                          borderColor: theme.colors.primary,
+                        }
+                      : { backgroundColor: '#FFF', borderColor: '#EFEFEF' },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.cardText,
+                      isSelected && {
+                        color: theme.colors.primary,
+                        fontWeight: 'bold',
+                      },
+                    ]}
+                  >
+                    {cityName}
+                  </Text>
+                  <View
+                    style={[
+                      styles.radioButton,
+                      isSelected && { borderColor: theme.colors.primary },
+                    ]}
+                  >
+                    {isSelected && (
+                      <View
+                        style={[
+                          styles.radioDot,
+                          { backgroundColor: theme.colors.primary },
+                        ]}
+                      />
+                    )}
+                  </View>
                 </TouchableOpacity>
               );
             })}
@@ -516,16 +785,29 @@ export default function ProfileScreen({ navigation }) {
         {/* Step 5 */}
         {currentStep === 5 && (
           <View style={styles.largeGridContainer}>
-            {MARITAL_STATUS_LIST.map((status) => {
+            {MARITAL_STATUS_LIST.map(status => {
               const isSelected = formData.maritalStatus === status;
               return (
                 <TouchableOpacity
                   key={status}
                   activeOpacity={0.85}
                   onPress={() => handleInputChange('maritalStatus', status)}
-                  style={[styles.largeGridCard, isSelected ? styles.selectedLargeCard : styles.unselectedLargeCard]}
+                  style={[
+                    styles.largeGridCard,
+                    isSelected
+                      ? styles.selectedLargeCard
+                      : styles.unselectedLargeCard,
+                  ]}
                 >
-                  <Text style={[styles.largeGridCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                  <Text
+                    style={[
+                      styles.largeGridCardText,
+                      isSelected && {
+                        color: theme.colors.primary,
+                        fontWeight: 'bold',
+                      },
+                    ]}
+                  >
                     {status}
                   </Text>
                 </TouchableOpacity>
@@ -537,22 +819,45 @@ export default function ProfileScreen({ navigation }) {
         {/* Step 6 */}
         {currentStep === 6 && (
           <View style={styles.cardsContainer}>
-            {DIET_LIST.map((item) => {
+            {DIET_LIST.map(item => {
               const isSelected = formData.diet === item.label;
               return (
-                <TouchableOpacity 
-                  key={item.label} 
-                  activeOpacity={0.9} 
-                  onPress={() => handleInputChange('diet', item.label)} 
-                  style={[styles.dietCard, isSelected ? styles.selectedDietCard : styles.unselectedDietCard]}
+                <TouchableOpacity
+                  key={item.label}
+                  activeOpacity={0.9}
+                  onPress={() => handleInputChange('diet', item.label)}
+                  style={[
+                    styles.dietCard,
+                    isSelected
+                      ? styles.selectedDietCard
+                      : styles.unselectedDietCard,
+                  ]}
                 >
                   <View style={styles.cardLeftRow}>
-                    <View style={styles.dietIconCircle}><Text style={{fontSize: 20}}>{item.icon}</Text></View>
-                    <Text style={[styles.dietCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                    <View style={styles.dietIconCircle}>
+                      <Text style={{ fontSize: 20 }}>{item.icon}</Text>
+                    </View>
+                    <Text
+                      style={[
+                        styles.dietCardText,
+                        isSelected && {
+                          color: theme.colors.primary,
+                          fontWeight: 'bold',
+                        },
+                      ]}
+                    >
                       {item.label}
                     </Text>
                   </View>
-                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
+                  <View
+                    style={[
+                      styles.radioButton,
+                      isSelected && {
+                        borderColor: theme.colors.primary,
+                        backgroundColor: theme.colors.primary,
+                      },
+                    ]}
+                  >
                     {isSelected && <View style={styles.innerRadioDot} />}
                   </View>
                 </TouchableOpacity>
@@ -567,16 +872,28 @@ export default function ProfileScreen({ navigation }) {
             {HEIGHT_LIST.map((h, index) => {
               const isFocused = formData.height === h;
               return (
-                <TouchableOpacity 
-                  key={index} 
+                <TouchableOpacity
+                  key={index}
                   onPress={() => handleInputChange('height', h)}
-                  style={[styles.heightRow, isFocused && styles.heightRowFocused]}
+                  style={[
+                    styles.heightRow,
+                    isFocused && styles.heightRowFocused,
+                  ]}
                 >
                   {isFocused && <Text style={styles.heightPointerLeft}>▶</Text>}
-                  <Text style={[styles.heightText, isFocused ? { color: '#333', fontSize: 22, fontWeight: 'bold' } : { color: '#B0B0B0', fontSize: 18 }]}>
+                  <Text
+                    style={[
+                      styles.heightText,
+                      isFocused
+                        ? { color: '#333', fontSize: 22, fontWeight: 'bold' }
+                        : { color: '#B0B0B0', fontSize: 18 },
+                    ]}
+                  >
                     {h}
                   </Text>
-                  {isFocused && <Text style={styles.heightPointerRight}>◀</Text>}
+                  {isFocused && (
+                    <Text style={styles.heightPointerRight}>◀</Text>
+                  )}
                 </TouchableOpacity>
               );
             })}
@@ -586,17 +903,32 @@ export default function ProfileScreen({ navigation }) {
         {/* Step 8 */}
         {currentStep === 8 && (
           <View style={styles.complexionContainer}>
-            {COMPLEXION_LIST.map((comp) => {
+            {COMPLEXION_LIST.map(comp => {
               const isSelected = formData.complexion === comp.label;
               return (
                 <TouchableOpacity
                   key={comp.label}
                   activeOpacity={0.85}
                   onPress={() => handleInputChange('complexion', comp.label)}
-                  style={[styles.complexionCard, isSelected ? styles.selectedComplexionCard : styles.unselectedComplexionCard]}
+                  style={[
+                    styles.complexionCard,
+                    isSelected
+                      ? styles.selectedComplexionCard
+                      : styles.unselectedComplexionCard,
+                  ]}
                 >
-                  <View style={styles.avatarBox}><Text style={{fontSize: 32}}>👤</Text></View>
-                  <Text style={[styles.complexionCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                  <View style={styles.avatarBox}>
+                    <Text style={{ fontSize: 32 }}>👤</Text>
+                  </View>
+                  <Text
+                    style={[
+                      styles.complexionCardText,
+                      isSelected && {
+                        color: theme.colors.primary,
+                        fontWeight: 'bold',
+                      },
+                    ]}
+                  >
                     {comp.label}
                   </Text>
                 </TouchableOpacity>
@@ -609,18 +941,52 @@ export default function ProfileScreen({ navigation }) {
         {currentStep === 9 && (
           <View style={styles.familyContainer}>
             <Text style={styles.familySectionTitle}>Joint Family</Text>
-            
+
             <View style={styles.radioGroupRow}>
-              <TouchableOpacity style={styles.radioOption} onPress={() => handleInputChange('isJointFamily', 'Yes')}>
-                <View style={[styles.radioButton, formData.isJointFamily === 'Yes' && { borderColor: theme.colors.primary }]}>
-                  {formData.isJointFamily === 'Yes' && <View style={[styles.radioDot, { backgroundColor: theme.colors.primary }]} />}
+              <TouchableOpacity
+                style={styles.radioOption}
+                onPress={() => handleInputChange('isJointFamily', 'Yes')}
+              >
+                <View
+                  style={[
+                    styles.radioButton,
+                    formData.isJointFamily === 'Yes' && {
+                      borderColor: theme.colors.primary,
+                    },
+                  ]}
+                >
+                  {formData.isJointFamily === 'Yes' && (
+                    <View
+                      style={[
+                        styles.radioDot,
+                        { backgroundColor: theme.colors.primary },
+                      ]}
+                    />
+                  )}
                 </View>
                 <Text style={styles.radioLabelText}>Yes</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={[styles.radioOption, { marginLeft: 30 }]} onPress={() => handleInputChange('isJointFamily', 'No')}>
-                <View style={[styles.radioButton, formData.isJointFamily === 'No' && { borderColor: theme.colors.primary }]}>
-                  {formData.isJointFamily === 'No' && <View style={[styles.radioDot, { backgroundColor: theme.colors.primary }]} />}
+              <TouchableOpacity
+                style={[styles.radioOption, { marginLeft: 30 }]}
+                onPress={() => handleInputChange('isJointFamily', 'No')}
+              >
+                <View
+                  style={[
+                    styles.radioButton,
+                    formData.isJointFamily === 'No' && {
+                      borderColor: theme.colors.primary,
+                    },
+                  ]}
+                >
+                  {formData.isJointFamily === 'No' && (
+                    <View
+                      style={[
+                        styles.radioDot,
+                        { backgroundColor: theme.colors.primary },
+                      ]}
+                    />
+                  )}
                 </View>
                 <Text style={styles.radioLabelText}>No</Text>
               </TouchableOpacity>
@@ -632,78 +998,116 @@ export default function ProfileScreen({ navigation }) {
               <View style={styles.dividerLine} />
             </View>
 
-            <Text style={styles.familySectionTitle}>Type Your Family Details</Text>
+            <Text style={styles.familySectionTitle}>
+              Type Your Family Details
+            </Text>
 
-            <TextInput 
-              style={styles.familyInput} 
-              placeholder="Father’s Name" 
+            <TextInput
+              style={styles.familyInput}
+              placeholder="Father’s Name"
               placeholderTextColor="#999"
               value={formData.fathersName}
-              onChangeText={(text) => handleInputChange('fathersName', text)}
+              onChangeText={text => handleInputChange('fathersName', text)}
             />
 
-            <TextInput 
-              style={styles.familyInput} 
-              placeholder="Father’s Occupation" 
+            <TextInput
+              style={styles.familyInput}
+              placeholder="Father’s Occupation"
               placeholderTextColor="#999"
               value={formData.fathersOccupation}
-              onChangeText={(text) => handleInputChange('fathersOccupation', text)}
+              onChangeText={text =>
+                handleInputChange('fathersOccupation', text)
+              }
             />
 
-            <TextInput 
-              style={styles.familyInput} 
-              placeholder="Mother’s Name" 
+            <TextInput
+              style={styles.familyInput}
+              placeholder="Mother’s Name"
               placeholderTextColor="#999"
               value={formData.mothersName}
-              onChangeText={(text) => handleInputChange('mothersName', text)}
+              onChangeText={text => handleInputChange('mothersName', text)}
             />
 
-            <TextInput 
-              style={styles.familyInput} 
-              placeholder="Mother’s Occupation" 
+            <TextInput
+              style={styles.familyInput}
+              placeholder="Mother’s Occupation"
               placeholderTextColor="#999"
               value={formData.mothersOccupation}
-              onChangeText={(text) => handleInputChange('mothersOccupation', text)}
+              onChangeText={text =>
+                handleInputChange('mothersOccupation', text)
+              }
             />
 
-            <TextInput 
-              style={styles.familyInput} 
-              placeholder="Sister’s Name" 
+            <TextInput
+              style={styles.familyInput}
+              placeholder="Sister’s Name"
               placeholderTextColor="#999"
               value={formData.sistersName}
-              onChangeText={(text) => handleInputChange('sistersName', text)}
+              onChangeText={text => handleInputChange('sistersName', text)}
             />
 
-            {renderDropdownField("Sister’s Marital Status", "sistersMaritalStatus", MARITAL_STATUS_LIST)}
+            {renderDropdownField(
+              'Sister’s Marital Status',
+              'sistersMaritalStatus',
+              MARITAL_STATUS_LIST,
+            )}
 
-            <TextInput 
-              style={styles.familyInput} 
-              placeholder="Brother’s Name" 
+            <TextInput
+              style={styles.familyInput}
+              placeholder="Brother’s Name"
               placeholderTextColor="#999"
               value={formData.brothersName}
-              onChangeText={(text) => handleInputChange('brothersName', text)}
+              onChangeText={text => handleInputChange('brothersName', text)}
             />
 
-            {renderDropdownField("Brother’s Marital Status", "brothersMaritalStatus", MARITAL_STATUS_LIST)}
+            {renderDropdownField(
+              'Brother’s Marital Status',
+              'brothersMaritalStatus',
+              MARITAL_STATUS_LIST,
+            )}
           </View>
         )}
 
         {/* Step 10 */}
         {currentStep === 10 && (
           <View style={styles.cardsContainer}>
-            {QUALIFICATION_LIST.map((qualification) => {
-              const isSelected = formData.highestQualification === qualification;
+            {QUALIFICATION_LIST.map(qualification => {
+              const isSelected =
+                formData.highestQualification === qualification;
               return (
                 <TouchableOpacity
                   key={qualification}
                   activeOpacity={0.9}
-                  onPress={() => handleInputChange('highestQualification', qualification)}
-                  style={[styles.qualificationCard, isSelected ? styles.selectedQualificationCard : styles.unselectedQualificationCard]}
+                  onPress={() =>
+                    handleInputChange('highestQualification', qualification)
+                  }
+                  style={[
+                    styles.qualificationCard,
+                    isSelected
+                      ? styles.selectedQualificationCard
+                      : styles.unselectedQualificationCard,
+                  ]}
                 >
-                  <Text style={[styles.qualificationCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                  <Text
+                    style={[
+                      styles.qualificationCardText,
+                      isSelected && {
+                        color: theme.colors.primary,
+                        fontWeight: 'bold',
+                      },
+                    ]}
+                  >
                     {qualification}
                   </Text>
-                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
+                  <View
+                    style={[
+                      styles.radioButton,
+                      isSelected && {
+                        borderColor: theme.colors.primary,
+                        backgroundColor: theme.colors.primary,
+                      },
+                    ]}
+                  >
                     {isSelected && <View style={styles.innerRadioDot} />}
                   </View>
                 </TouchableOpacity>
@@ -715,19 +1119,42 @@ export default function ProfileScreen({ navigation }) {
         {/* Step 11 */}
         {currentStep === 11 && (
           <View style={styles.cardsContainer}>
-            {OCCUPATION_LIST.map((occupation) => {
+            {OCCUPATION_LIST.map(occupation => {
               const isSelected = formData.occupationType === occupation;
               return (
                 <TouchableOpacity
                   key={occupation}
                   activeOpacity={0.9}
-                  onPress={() => handleInputChange('occupationType', occupation)}
-                  style={[styles.qualificationCard, isSelected ? styles.selectedQualificationCard : styles.unselectedQualificationCard]}
+                  onPress={() =>
+                    handleInputChange('occupationType', occupation)
+                  }
+                  style={[
+                    styles.qualificationCard,
+                    isSelected
+                      ? styles.selectedQualificationCard
+                      : styles.unselectedQualificationCard,
+                  ]}
                 >
-                  <Text style={[styles.qualificationCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                  <Text
+                    style={[
+                      styles.qualificationCardText,
+                      isSelected && {
+                        color: theme.colors.primary,
+                        fontWeight: 'bold',
+                      },
+                    ]}
+                  >
                     {occupation}
                   </Text>
-                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
+                  <View
+                    style={[
+                      styles.radioButton,
+                      isSelected && {
+                        borderColor: theme.colors.primary,
+                        backgroundColor: theme.colors.primary,
+                      },
+                    ]}
+                  >
                     {isSelected && <View style={styles.innerRadioDot} />}
                   </View>
                 </TouchableOpacity>
@@ -739,19 +1166,40 @@ export default function ProfileScreen({ navigation }) {
         {/* Step 12 */}
         {currentStep === 12 && (
           <View style={styles.cardsContainer}>
-            {SERVICE_TYPE_LIST.map((serviceType) => {
+            {SERVICE_TYPE_LIST.map(serviceType => {
               const isSelected = formData.serviceType === serviceType;
               return (
                 <TouchableOpacity
                   key={serviceType}
                   activeOpacity={0.9}
                   onPress={() => handleInputChange('serviceType', serviceType)}
-                  style={[styles.qualificationCard, isSelected ? styles.selectedQualificationCard : styles.unselectedQualificationCard]}
+                  style={[
+                    styles.qualificationCard,
+                    isSelected
+                      ? styles.selectedQualificationCard
+                      : styles.unselectedQualificationCard,
+                  ]}
                 >
-                  <Text style={[styles.qualificationCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                  <Text
+                    style={[
+                      styles.qualificationCardText,
+                      isSelected && {
+                        color: theme.colors.primary,
+                        fontWeight: 'bold',
+                      },
+                    ]}
+                  >
                     {serviceType}
                   </Text>
-                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
+                  <View
+                    style={[
+                      styles.radioButton,
+                      isSelected && {
+                        borderColor: theme.colors.primary,
+                        backgroundColor: theme.colors.primary,
+                      },
+                    ]}
+                  >
                     {isSelected && <View style={styles.innerRadioDot} />}
                   </View>
                 </TouchableOpacity>
@@ -764,19 +1212,46 @@ export default function ProfileScreen({ navigation }) {
         {currentStep === 13 && (
           <View style={styles.cardsContainer}>
             {SECTOR_LIST.map((sector, index) => {
-              const sectorName = index === 0 ? 'IT (Information Technology)' : `Lorem Ipsum`;
-              const isSelected = formData.sectorType === sectorName && (index === 0 || formData.sectorIndex === index);
+              const sectorName =
+                index === 0 ? 'IT (Information Technology)' : `Lorem Ipsum`;
+              const isSelected =
+                formData.sectorType === sectorName &&
+                (index === 0 || formData.sectorIndex === index);
               return (
                 <TouchableOpacity
                   key={index}
                   activeOpacity={0.9}
-                  onPress={() => { handleInputChange('sectorType', sectorName); handleInputChange('sectorIndex', index); }}
-                  style={[styles.qualificationCard, isSelected ? styles.selectedQualificationCard : styles.unselectedQualificationCard]}
+                  onPress={() => {
+                    handleInputChange('sectorType', sectorName);
+                    handleInputChange('sectorIndex', index);
+                  }}
+                  style={[
+                    styles.qualificationCard,
+                    isSelected
+                      ? styles.selectedQualificationCard
+                      : styles.unselectedQualificationCard,
+                  ]}
                 >
-                  <Text style={[styles.qualificationCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                  <Text
+                    style={[
+                      styles.qualificationCardText,
+                      isSelected && {
+                        color: theme.colors.primary,
+                        fontWeight: 'bold',
+                      },
+                    ]}
+                  >
                     {sectorName}
                   </Text>
-                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
+                  <View
+                    style={[
+                      styles.radioButton,
+                      isSelected && {
+                        borderColor: theme.colors.primary,
+                        backgroundColor: theme.colors.primary,
+                      },
+                    ]}
+                  >
                     {isSelected && <View style={styles.innerRadioDot} />}
                   </View>
                 </TouchableOpacity>
@@ -788,19 +1263,40 @@ export default function ProfileScreen({ navigation }) {
         {/* Step 14 */}
         {currentStep === 14 && (
           <View style={styles.cardsContainer}>
-            {SUB_SECTOR_LIST.map((subSector) => {
+            {SUB_SECTOR_LIST.map(subSector => {
               const isSelected = formData.subSectorType === subSector;
               return (
                 <TouchableOpacity
                   key={subSector}
                   activeOpacity={0.9}
                   onPress={() => handleInputChange('subSectorType', subSector)}
-                  style={[styles.qualificationCard, isSelected ? styles.selectedQualificationCard : styles.unselectedQualificationCard]}
+                  style={[
+                    styles.qualificationCard,
+                    isSelected
+                      ? styles.selectedQualificationCard
+                      : styles.unselectedQualificationCard,
+                  ]}
                 >
-                  <Text style={[styles.qualificationCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                  <Text
+                    style={[
+                      styles.qualificationCardText,
+                      isSelected && {
+                        color: theme.colors.primary,
+                        fontWeight: 'bold',
+                      },
+                    ]}
+                  >
                     {subSector}
                   </Text>
-                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
+                  <View
+                    style={[
+                      styles.radioButton,
+                      isSelected && {
+                        borderColor: theme.colors.primary,
+                        backgroundColor: theme.colors.primary,
+                      },
+                    ]}
+                  >
                     {isSelected && <View style={styles.innerRadioDot} />}
                   </View>
                 </TouchableOpacity>
@@ -814,18 +1310,44 @@ export default function ProfileScreen({ navigation }) {
           <View style={styles.cardsContainer}>
             {RAILWAY_SECTOR_LIST.map((item, index) => {
               const itemName = index === 0 ? 'Indian Railways' : `Lorem Ipsum`;
-              const isSelected = formData.railwaySectorType === itemName && (index === 0 || formData.railwaySectorIndex === index);
+              const isSelected =
+                formData.railwaySectorType === itemName &&
+                (index === 0 || formData.railwaySectorIndex === index);
               return (
                 <TouchableOpacity
                   key={index}
                   activeOpacity={0.9}
-                  onPress={() => { handleInputChange('railwaySectorType', itemName); handleInputChange('railwaySectorIndex', index); }}
-                  style={[styles.qualificationCard, isSelected ? styles.selectedQualificationCard : styles.unselectedQualificationCard]}
+                  onPress={() => {
+                    handleInputChange('railwaySectorType', itemName);
+                    handleInputChange('railwaySectorIndex', index);
+                  }}
+                  style={[
+                    styles.qualificationCard,
+                    isSelected
+                      ? styles.selectedQualificationCard
+                      : styles.unselectedQualificationCard,
+                  ]}
                 >
-                  <Text style={[styles.qualificationCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                  <Text
+                    style={[
+                      styles.qualificationCardText,
+                      isSelected && {
+                        color: theme.colors.primary,
+                        fontWeight: 'bold',
+                      },
+                    ]}
+                  >
                     {itemName}
                   </Text>
-                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
+                  <View
+                    style={[
+                      styles.radioButton,
+                      isSelected && {
+                        borderColor: theme.colors.primary,
+                        backgroundColor: theme.colors.primary,
+                      },
+                    ]}
+                  >
                     {isSelected && <View style={styles.innerRadioDot} />}
                   </View>
                 </TouchableOpacity>
@@ -838,12 +1360,12 @@ export default function ProfileScreen({ navigation }) {
         {currentStep === 16 && (
           <View style={styles.familyContainer}>
             <View style={[styles.autocompleteWrapper, { zIndex: 20 }]}>
-              <TextInput 
-                style={styles.companyInput} 
-                placeholder="Type Your Company Name" 
+              <TextInput
+                style={styles.companyInput}
+                placeholder="Type Your Company Name"
                 placeholderTextColor="#999"
                 value={formData.companyName}
-                onChangeText={(text) => {
+                onChangeText={text => {
                   handleInputChange('companyName', text);
                   setShowCompanySuggestions(true);
                   setShowDesignationSuggestions(false);
@@ -871,13 +1393,18 @@ export default function ProfileScreen({ navigation }) {
               )}
             </View>
 
-            <View style={[styles.autocompleteWrapper, { marginTop: 15, zIndex: 10 }]}>
-              <TextInput 
-                style={styles.companyInput} 
-                placeholder="Type Your Designation" 
+            <View
+              style={[
+                styles.autocompleteWrapper,
+                { marginTop: 15, zIndex: 10 },
+              ]}
+            >
+              <TextInput
+                style={styles.companyInput}
+                placeholder="Type Your Designation"
                 placeholderTextColor="#999"
                 value={formData.designation}
-                onChangeText={(text) => {
+                onChangeText={text => {
                   handleInputChange('designation', text);
                   setShowDesignationSuggestions(true);
                   setShowCompanySuggestions(false);
@@ -913,16 +1440,28 @@ export default function ProfileScreen({ navigation }) {
             {INCOME_LIST.map((inc, index) => {
               const isFocused = formData.annualIncome === inc;
               return (
-                <TouchableOpacity 
-                  key={index} 
+                <TouchableOpacity
+                  key={index}
                   onPress={() => handleInputChange('annualIncome', inc)}
-                  style={[styles.heightRow, isFocused && styles.heightRowFocused]}
+                  style={[
+                    styles.heightRow,
+                    isFocused && styles.heightRowFocused,
+                  ]}
                 >
                   {isFocused && <Text style={styles.heightPointerLeft}>▶</Text>}
-                  <Text style={[styles.heightText, isFocused ? { color: '#333', fontSize: 22, fontWeight: 'bold' } : { color: '#B0B0B0', fontSize: 18 }]}>
+                  <Text
+                    style={[
+                      styles.heightText,
+                      isFocused
+                        ? { color: '#333', fontSize: 22, fontWeight: 'bold' }
+                        : { color: '#B0B0B0', fontSize: 18 },
+                    ]}
+                  >
                     {inc}
                   </Text>
-                  {isFocused && <Text style={styles.heightPointerRight}>◀</Text>}
+                  {isFocused && (
+                    <Text style={styles.heightPointerRight}>◀</Text>
+                  )}
                 </TouchableOpacity>
               );
             })}
@@ -935,48 +1474,92 @@ export default function ProfileScreen({ navigation }) {
             <View style={styles.hobbyCategoryBox}>
               <Text style={styles.hobbyCategoryTitle}>Creative</Text>
               <View style={styles.tagsFlexRow}>
-                {CREATIVE_HOBBIES.map((hobby) => {
+                {CREATIVE_HOBBIES.map(hobby => {
                   const isSelected = formData.hobbies.includes(hobby.label);
                   return (
                     <TouchableOpacity
                       key={hobby.label}
-                      style={[styles.hobbyTag, isSelected ? styles.selectedHobbyTag : styles.unselectedHobbyTag]}
+                      style={[
+                        styles.hobbyTag,
+                        isSelected
+                          ? styles.selectedHobbyTag
+                          : styles.unselectedHobbyTag,
+                      ]}
                       onPress={() => toggleHobby(hobby.label)}
                     >
                       <Text style={styles.hobbyTagIcon}>{hobby.icon}</Text>
-                      <Text style={[styles.hobbyTagText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                      <Text
+                        style={[
+                          styles.hobbyTagText,
+                          isSelected && {
+                            color: theme.colors.primary,
+                            fontWeight: 'bold',
+                          },
+                        ]}
+                      >
                         {hobby.label}
                       </Text>
                     </TouchableOpacity>
                   );
                 })}
               </View>
-              <TouchableOpacity style={styles.viewAllButton} onPress={() => Alert.alert('View All', 'Showing all creative hobbies')}>
-                <Text style={[styles.viewAllText, { color: theme.colors.primary }]}>View All</Text>
+              <TouchableOpacity
+                style={styles.viewAllButton}
+                onPress={() =>
+                  Alert.alert('View All', 'Showing all creative hobbies')
+                }
+              >
+                <Text
+                  style={[styles.viewAllText, { color: theme.colors.primary }]}
+                >
+                  View All
+                </Text>
               </TouchableOpacity>
             </View>
 
             <View style={[styles.hobbyCategoryBox, { marginTop: 20 }]}>
               <Text style={styles.hobbyCategoryTitle}>Fun</Text>
               <View style={styles.tagsFlexRow}>
-                {FUN_HOBBIES.map((hobby) => {
+                {FUN_HOBBIES.map(hobby => {
                   const isSelected = formData.hobbies.includes(hobby.label);
                   return (
                     <TouchableOpacity
                       key={hobby.label}
-                      style={[styles.hobbyTag, isSelected ? styles.selectedHobbyTag : styles.unselectedHobbyTag]}
+                      style={[
+                        styles.hobbyTag,
+                        isSelected
+                          ? styles.selectedHobbyTag
+                          : styles.unselectedHobbyTag,
+                      ]}
                       onPress={() => toggleHobby(hobby.label)}
                     >
                       <Text style={styles.hobbyTagIcon}>{hobby.icon}</Text>
-                      <Text style={[styles.hobbyTagText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                      <Text
+                        style={[
+                          styles.hobbyTagText,
+                          isSelected && {
+                            color: theme.colors.primary,
+                            fontWeight: 'bold',
+                          },
+                        ]}
+                      >
                         {hobby.label}
                       </Text>
                     </TouchableOpacity>
                   );
                 })}
               </View>
-              <TouchableOpacity style={styles.viewAllButton} onPress={() => Alert.alert('View All', 'Showing all fun hobbies')}>
-                <Text style={[styles.viewAllText, { color: theme.colors.primary }]}>View All</Text>
+              <TouchableOpacity
+                style={styles.viewAllButton}
+                onPress={() =>
+                  Alert.alert('View All', 'Showing all fun hobbies')
+                }
+              >
+                <Text
+                  style={[styles.viewAllText, { color: theme.colors.primary }]}
+                >
+                  View All
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -985,22 +1568,45 @@ export default function ProfileScreen({ navigation }) {
         {/* Step 19 */}
         {currentStep === 19 && (
           <View style={styles.cardsContainer}>
-            {CREATIVITY_LIST.map((item) => {
+            {CREATIVITY_LIST.map(item => {
               const isSelected = formData.selectedCreativity === item;
               return (
                 <TouchableOpacity
                   key={item}
                   activeOpacity={0.9}
                   onPress={() => handleInputChange('selectedCreativity', item)}
-                  style={[styles.imageSelectionCard, isSelected ? styles.selectedQualificationCard : styles.unselectedQualificationCard]}
+                  style={[
+                    styles.imageSelectionCard,
+                    isSelected
+                      ? styles.selectedQualificationCard
+                      : styles.unselectedQualificationCard,
+                  ]}
                 >
                   <View style={styles.cardLeftRow}>
-                    <View style={styles.avatarCirclePlaceholder}><Text style={{ fontSize: 16 }}>🎨</Text></View>
-                    <Text style={[styles.qualificationCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                    <View style={styles.avatarCirclePlaceholder}>
+                      <Text style={{ fontSize: 16 }}>🎨</Text>
+                    </View>
+                    <Text
+                      style={[
+                        styles.qualificationCardText,
+                        isSelected && {
+                          color: theme.colors.primary,
+                          fontWeight: 'bold',
+                        },
+                      ]}
+                    >
                       {item}
                     </Text>
                   </View>
-                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
+                  <View
+                    style={[
+                      styles.radioButton,
+                      isSelected && {
+                        borderColor: theme.colors.primary,
+                        backgroundColor: theme.colors.primary,
+                      },
+                    ]}
+                  >
                     {isSelected && <View style={styles.innerRadioDot} />}
                   </View>
                 </TouchableOpacity>
@@ -1012,22 +1618,45 @@ export default function ProfileScreen({ navigation }) {
         {/* Step 20 */}
         {currentStep === 20 && (
           <View style={styles.cardsContainer}>
-            {ENJOY_DOING_LIST.map((item) => {
+            {ENJOY_DOING_LIST.map(item => {
               const isSelected = formData.enjoyDoing === item;
               return (
                 <TouchableOpacity
                   key={item}
                   activeOpacity={0.9}
                   onPress={() => handleInputChange('enjoyDoing', item)}
-                  style={[styles.imageSelectionCard, isSelected ? styles.selectedQualificationCard : styles.unselectedQualificationCard]}
+                  style={[
+                    styles.imageSelectionCard,
+                    isSelected
+                      ? styles.selectedQualificationCard
+                      : styles.unselectedQualificationCard,
+                  ]}
                 >
                   <View style={styles.cardLeftRow}>
-                    <View style={styles.avatarCirclePlaceholder}><Text style={{ fontSize: 16 }}>⭐</Text></View>
-                    <Text style={[styles.qualificationCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                    <View style={styles.avatarCirclePlaceholder}>
+                      <Text style={{ fontSize: 16 }}>⭐</Text>
+                    </View>
+                    <Text
+                      style={[
+                        styles.qualificationCardText,
+                        isSelected && {
+                          color: theme.colors.primary,
+                          fontWeight: 'bold',
+                        },
+                      ]}
+                    >
                       {item}
                     </Text>
                   </View>
-                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
+                  <View
+                    style={[
+                      styles.radioButton,
+                      isSelected && {
+                        borderColor: theme.colors.primary,
+                        backgroundColor: theme.colors.primary,
+                      },
+                    ]}
+                  >
                     {isSelected && <View style={styles.innerRadioDot} />}
                   </View>
                 </TouchableOpacity>
@@ -1039,22 +1668,45 @@ export default function ProfileScreen({ navigation }) {
         {/* Step 21: Select Your Zodiac Sign */}
         {currentStep === 21 && (
           <View style={styles.cardsContainer}>
-            {ZODIAC_LIST.map((zodiac) => {
+            {ZODIAC_LIST.map(zodiac => {
               const isSelected = formData.zodiacSign === zodiac;
               return (
                 <TouchableOpacity
                   key={zodiac}
                   activeOpacity={0.9}
                   onPress={() => handleInputChange('zodiacSign', zodiac)}
-                  style={[styles.imageSelectionCard, isSelected ? styles.selectedQualificationCard : styles.unselectedQualificationCard]}
+                  style={[
+                    styles.imageSelectionCard,
+                    isSelected
+                      ? styles.selectedQualificationCard
+                      : styles.unselectedQualificationCard,
+                  ]}
                 >
                   <View style={styles.cardLeftRow}>
-                    <View style={styles.avatarCirclePlaceholder}><Text style={{ fontSize: 16 }}>♈</Text></View>
-                    <Text style={[styles.qualificationCardText, isSelected && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+                    <View style={styles.avatarCirclePlaceholder}>
+                      <Text style={{ fontSize: 16 }}>♈</Text>
+                    </View>
+                    <Text
+                      style={[
+                        styles.qualificationCardText,
+                        isSelected && {
+                          color: theme.colors.primary,
+                          fontWeight: 'bold',
+                        },
+                      ]}
+                    >
                       {zodiac}
                     </Text>
                   </View>
-                  <View style={[styles.radioButton, isSelected && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
+                  <View
+                    style={[
+                      styles.radioButton,
+                      isSelected && {
+                        borderColor: theme.colors.primary,
+                        backgroundColor: theme.colors.primary,
+                      },
+                    ]}
+                  >
                     {isSelected && <View style={styles.innerRadioDot} />}
                   </View>
                 </TouchableOpacity>
@@ -1066,14 +1718,23 @@ export default function ProfileScreen({ navigation }) {
         {/* Step 22: Type Your Horoscope Details with Fully Fixed Clock & Place Autocomplete */}
         {currentStep === 22 && (
           <View style={styles.familyContainer}>
-            <Text style={[styles.label, { color: theme.colors.primary, marginBottom: 8 }]}>Time Of Birth</Text>
-            
-            <TouchableOpacity 
-              style={styles.dropdownHeader} 
-              activeOpacity={0.8} 
+            <Text
+              style={[
+                styles.label,
+                { color: theme.colors.primary, marginBottom: 8 },
+              ]}
+            >
+              Time Of Birth
+            </Text>
+
+            <TouchableOpacity
+              style={styles.dropdownHeader}
+              activeOpacity={0.8}
               onPress={() => setIsTimePickerVisible(true)}
             >
-              <Text style={styles.dropdownSelectedText}>{formData.timeOfBirth}</Text>
+              <Text style={styles.dropdownSelectedText}>
+                {formData.timeOfBirth}
+              </Text>
               <Text style={styles.dropdownArrow}>▲</Text>
             </TouchableOpacity>
 
@@ -1086,13 +1747,23 @@ export default function ProfileScreen({ navigation }) {
               <View style={styles.timeModalOverlay}>
                 <View style={styles.timeModalContent}>
                   <Text style={styles.timeModalTitle}>Select Time</Text>
-                  
+
                   <View style={styles.digitalTimeRow}>
-                    <TouchableOpacity 
-                      style={[styles.timeBox, tempAmPm === 'am' && tempHour ? { backgroundColor: '#FDF2F2', borderColor: '#80001E' } : {}]}
+                    <TouchableOpacity
+                      style={[
+                        styles.timeBox,
+                        tempAmPm === 'am' && tempHour
+                          ? {
+                              backgroundColor: '#FDF2F2',
+                              borderColor: '#80001E',
+                            }
+                          : {},
+                      ]}
                       onPress={() => {}}
                     >
-                      <Text style={[styles.timeBoxText, { color: '#80001E' }]}>{tempHour}</Text>
+                      <Text style={[styles.timeBoxText, { color: '#80001E' }]}>
+                        {tempHour}
+                      </Text>
                     </TouchableOpacity>
                     <Text style={styles.timeColon}>:</Text>
                     <TouchableOpacity style={styles.timeBox}>
@@ -1100,17 +1771,43 @@ export default function ProfileScreen({ navigation }) {
                     </TouchableOpacity>
 
                     <View style={styles.amPmContainer}>
-                      <TouchableOpacity 
-                        style={[styles.amPmBtn, tempAmPm === 'am' && { backgroundColor: '#FFC0CB' }]}
+                      <TouchableOpacity
+                        style={[
+                          styles.amPmBtn,
+                          tempAmPm === 'am' && { backgroundColor: '#FFC0CB' },
+                        ]}
                         onPress={() => setTempAmPm('am')}
                       >
-                        <Text style={[styles.amPmText, tempAmPm === 'am' && { color: '#80001E', fontWeight: 'bold' }]}>Am</Text>
+                        <Text
+                          style={[
+                            styles.amPmText,
+                            tempAmPm === 'am' && {
+                              color: '#80001E',
+                              fontWeight: 'bold',
+                            },
+                          ]}
+                        >
+                          Am
+                        </Text>
                       </TouchableOpacity>
-                      <TouchableOpacity 
-                        style={[styles.amPmBtn, tempAmPm === 'pm' && { backgroundColor: '#FFC0CB' }]}
+                      <TouchableOpacity
+                        style={[
+                          styles.amPmBtn,
+                          tempAmPm === 'pm' && { backgroundColor: '#FFC0CB' },
+                        ]}
                         onPress={() => setTempAmPm('pm')}
                       >
-                        <Text style={[styles.amPmText, tempAmPm === 'pm' && { color: '#80001E', fontWeight: 'bold' }]}>Pm</Text>
+                        <Text
+                          style={[
+                            styles.amPmText,
+                            tempAmPm === 'pm' && {
+                              color: '#80001E',
+                              fontWeight: 'bold',
+                            },
+                          ]}
+                        >
+                          Pm
+                        </Text>
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -1118,31 +1815,19 @@ export default function ProfileScreen({ navigation }) {
                   {/* Complete 12-Hour Circular Clock Face */}
                   <View style={styles.clockFaceCircle}>
                     <View style={styles.clockCenterDot} />
-                    <View style={[styles.clockHandLine, { transform: [{ rotate: getClockRotation(tempHour) }] }]} />
-
-                    {['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'].map((num, index) => {
-                      const angle = (index * 30) * (Math.PI / 180);
-                      const radius = 68; 
-                      const x = radius * Math.sin(angle);
-                      const y = -radius * Math.cos(angle);
-                      const isSelected = tempHour === num || (num === '12' && tempHour === '12');
-
-                      return (
-                        <TouchableOpacity
-                          key={num}
-                          style={[
-                            styles.clockNumberNode,
-                            { transform: [{ translateX: x }, { translateY: y }] },
-                            isSelected && styles.selectedClockNode
-                          ]}
-                          onPress={() => setTempHour(num.padStart(2, '0'))}
-                        >
-                          <Text style={[styles.clockNumText, isSelected && styles.selectedClockNumText]}>
-                            {num}
-                          </Text>
-                        </TouchableOpacity>
-                      );
-                    })}
+                    <View 
+                      style={[
+                        styles.clockHandLine, 
+                        { 
+                          transform: [
+                            { translateX: 29 }, // Shift right so left edge is at center pin
+                            { rotate: getClockRotation(tempHour) },
+                            { translateX: -29 }  // Shift back
+                          ] 
+                        }
+                      ]} 
+                    />
+                    {renderClockNumbers()}
                   </View>
 
                   <View style={styles.timeModalButtonsRow}>
@@ -1150,13 +1835,18 @@ export default function ProfileScreen({ navigation }) {
                       <Text style={{ fontSize: 18 }}>⌨️</Text>
                     </TouchableOpacity>
                     <View style={styles.modalRightActions}>
-                      <TouchableOpacity onPress={() => setIsTimePickerVisible(false)}>
+                      <TouchableOpacity
+                        onPress={() => setIsTimePickerVisible(false)}
+                      >
                         <Text style={styles.modalCancelText}>Cancel</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity 
-                        style={styles.modalOkBtn} 
+                      <TouchableOpacity
+                        style={styles.modalOkBtn}
                         onPress={() => {
-                          handleInputChange('timeOfBirth', `${parseInt(tempHour)}:${tempMinute}${tempAmPm}`);
+                          handleInputChange(
+                            'timeOfBirth',
+                            `${parseInt(tempHour)}:${tempMinute}${tempAmPm}`,
+                          );
                           setIsTimePickerVisible(false);
                         }}
                       >
@@ -1164,20 +1854,26 @@ export default function ProfileScreen({ navigation }) {
                       </TouchableOpacity>
                     </View>
                   </View>
-
                 </View>
               </View>
             </Modal>
 
-            <Text style={[styles.label, { color: theme.colors.primary, marginTop: 20, marginBottom: 8 }]}>Place Of Birth</Text>
-            
+            <Text
+              style={[
+                styles.label,
+                { color: theme.colors.primary, marginTop: 20, marginBottom: 8 },
+              ]}
+            >
+              Place Of Birth
+            </Text>
+
             <View style={[styles.autocompleteWrapper, { zIndex: 10 }]}>
-              <TextInput 
-                style={styles.companyInput} 
-                placeholder="Abcd Private Hospital" 
+              <TextInput
+                style={styles.companyInput}
+                placeholder="Abcd Private Hospital"
                 placeholderTextColor="#999"
                 value={formData.placeOfBirth}
-                onChangeText={(text) => {
+                onChangeText={text => {
                   handleInputChange('placeOfBirth', text);
                   setShowPlaceSuggestions(true);
                 }}
@@ -1201,25 +1897,65 @@ export default function ProfileScreen({ navigation }) {
               )}
             </View>
 
-            <Text style={[styles.label, { color: theme.colors.primary, marginTop: 25, marginBottom: 12 }]}>Manglika Dosha</Text>
+            <Text
+              style={[
+                styles.label,
+                {
+                  color: theme.colors.primary,
+                  marginTop: 25,
+                  marginBottom: 12,
+                },
+              ]}
+            >
+              Manglika Dosha
+            </Text>
             <View style={styles.radioGroupRow}>
-              <TouchableOpacity style={styles.radioOption} onPress={() => handleInputChange('manglikaDosha', 'Yes')}>
-                <View style={[styles.radioButton, formData.manglikaDosha === 'Yes' && { borderColor: theme.colors.primary }]}>
-                  {formData.manglikaDosha === 'Yes' && <View style={[styles.radioDot, { backgroundColor: theme.colors.primary }]} />}
+              <TouchableOpacity
+                style={styles.radioOption}
+                onPress={() => handleInputChange('manglikaDosha', 'Yes')}
+              >
+                <View
+                  style={[
+                    styles.radioButton,
+                    formData.manglikaDosha === 'Yes' && {
+                      borderColor: theme.colors.primary,
+                    },
+                  ]}
+                >
+                  {formData.manglikaDosha === 'Yes' && (
+                    <View
+                      style={[
+                        styles.radioDot,
+                        { backgroundColor: theme.colors.primary },
+                      ]}
+                    />
+                  )}
                 </View>
                 <Text style={styles.radioLabelText}>Yes</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={[styles.radioOption, { marginLeft: 40 }]} onPress={() => handleInputChange('manglikaDosha', 'No')}>
-                <View style={[styles.radioButton, formData.manglikaDosha === 'No' && { borderColor: theme.colors.primary, backgroundColor: theme.colors.primary }]}>
-                  {formData.manglikaDosha === 'No' && <View style={styles.innerRadioDot} />}
+              <TouchableOpacity
+                style={[styles.radioOption, { marginLeft: 40 }]}
+                onPress={() => handleInputChange('manglikaDosha', 'No')}
+              >
+                <View
+                  style={[
+                    styles.radioButton,
+                    formData.manglikaDosha === 'No' && {
+                      borderColor: theme.colors.primary,
+                      backgroundColor: theme.colors.primary,
+                    },
+                  ]}
+                >
+                  {formData.manglikaDosha === 'No' && (
+                    <View style={styles.innerRadioDot} />
+                  )}
                 </View>
                 <Text style={styles.radioLabelText}>No</Text>
               </TouchableOpacity>
             </View>
           </View>
         )}
-
       </ScrollView>
 
       {/* Bottom Sticky Navigation */}
@@ -1228,8 +1964,11 @@ export default function ProfileScreen({ navigation }) {
           <Text style={styles.skipButtonText}>Skip</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={[styles.nextButtonFixed, { backgroundColor: theme.colors.primary }]} 
+        <TouchableOpacity
+          style={[
+            styles.nextButtonFixed,
+            { backgroundColor: theme.colors.primary },
+          ]}
           onPress={handleNext}
         >
           <Text style={styles.nextButtonText}>
@@ -1239,17 +1978,38 @@ export default function ProfileScreen({ navigation }) {
       </View>
 
       {/* Camera / Gallery Modal */}
-      <Modal visible={isPhotoModalVisible} transparent={true} animationType="fade" onRequestClose={() => setIsPhotoModalVisible(false)}>
+      <Modal
+        visible={isPhotoModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setIsPhotoModalVisible(false)}
+      >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Choose Profile Picture</Text>
-            <TouchableOpacity style={styles.modalOption} onPress={handleCameraPick}><Text style={styles.modalOptionText}>📷 Open Camera</Text></TouchableOpacity>
-            <TouchableOpacity style={styles.modalOption} onPress={handleGalleryPick}><Text style={styles.modalOptionText}>🖼️ Choose from Gallery</Text></TouchableOpacity>
-            <TouchableOpacity style={[styles.modalOption, styles.cancelOption]} onPress={() => setIsPhotoModalVisible(false)}><Text style={[styles.modalOptionText, { color: '#FF3B30' }]}>Cancel</Text></TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalOption}
+              onPress={handleCameraPick}
+            >
+              <Text style={styles.modalOptionText}>📷 Open Camera</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalOption}
+              onPress={handleGalleryPick}
+            >
+              <Text style={styles.modalOptionText}>🖼️ Choose from Gallery</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.modalOption, styles.cancelOption]}
+              onPress={() => setIsPhotoModalVisible(false)}
+            >
+              <Text style={[styles.modalOptionText, { color: '#FF3B30' }]}>
+                Cancel
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
-
     </SafeAreaView>
   );
 }
@@ -1299,117 +2059,450 @@ const styles = StyleSheet.create({
   backText: { fontSize: 24, color: '#333' },
   headerTitleContainer: { flex: 1, alignItems: 'center' },
   headerTitle: { fontSize: 16, fontWeight: 'bold', textAlign: 'center' },
-  headerSubtitle: { fontSize: 12, color: '#888', marginTop: 2, textAlign: 'center' },
+  headerSubtitle: {
+    fontSize: 12,
+    color: '#888',
+    marginTop: 2,
+    textAlign: 'center',
+  },
   spacer: { width: 40 },
   scrollContent: { paddingHorizontal: 20, paddingTop: 25, paddingBottom: 140 },
-  
+
   pfpContainer: { alignItems: 'center', marginBottom: 25 },
-  pfpWrapper: { width: 100, height: 100, borderRadius: 50, borderWidth: 2, padding: 3, marginBottom: 10 },
-  pfpImagePlaceholder: { width: '100%', height: '100%', borderRadius: 45, justifyContent: 'center', alignItems: 'center' },
+  pfpWrapper: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 2,
+    padding: 3,
+    marginBottom: 10,
+  },
+  pfpImagePlaceholder: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   actualPfpImage: { width: '100%', height: '100%', borderRadius: 45 },
   pfpEmoji: { fontSize: 35 },
-  changePhotoBtn: { paddingVertical: 6, paddingHorizontal: 16, borderRadius: 20 },
+  changePhotoBtn: {
+    paddingVertical: 6,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+  },
   changePhotoText: { color: '#FFF', fontSize: 12, fontWeight: 'bold' },
 
-  sectionContainer: { backgroundColor: '#FFF', borderRadius: 12, padding: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 3, elevation: 2 },
-  sectionHeading: { fontSize: 16, fontWeight: 'bold', color: '#333', marginBottom: 15 },
-  
+  sectionContainer: {
+    backgroundColor: '#FFF',
+    borderRadius: 12,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  sectionHeading: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 15,
+  },
+
   inputGroup: { marginBottom: 18 },
   label: { fontSize: 13, fontWeight: 'bold', marginBottom: 6 },
-  dropdownHeader: { 
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    alignItems: 'center', 
-    borderWidth: 1, 
-    borderColor: '#E0E0E0', 
-    borderRadius: 8, 
-    paddingHorizontal: 16, 
-    paddingVertical: 14, 
-    backgroundColor: '#EFEFEF' 
+  dropdownHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    backgroundColor: '#EFEFEF',
   },
   dropdownSelectedText: { fontSize: 15, color: '#333' },
   dropdownArrow: { fontSize: 12, color: '#666' },
-  dropdownListContainer: { marginTop: 5, borderWidth: 1, borderColor: '#E0E0E0', borderRadius: 8, backgroundColor: '#FFF', paddingVertical: 5 },
-  dropdownOptionRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12, paddingHorizontal: 16, borderBottomWidth: 0.5, borderBottomColor: '#F0F0F0' },
-  
-  radioButton: { width: 20, height: 20, borderRadius: 10, borderWidth: 1.5, borderColor: '#CCC', justifyContent: 'center', alignItems: 'center' },
+  dropdownListContainer: {
+    marginTop: 5,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    borderRadius: 8,
+    backgroundColor: '#FFF',
+    paddingVertical: 5,
+  },
+  dropdownOptionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#F0F0F0',
+  },
+
+  radioButton: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 1.5,
+    borderColor: '#CCC',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   radioDot: { width: 10, height: 10, borderRadius: 5 },
-  innerRadioDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#FFF' },
+  innerRadioDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#FFF',
+  },
   dropdownOptionText: { fontSize: 14, color: '#444', marginLeft: 12 },
 
   standardInputGroup: { marginBottom: 15 },
-  standardLabel: { fontSize: 12, fontWeight: '600', color: '#666', marginBottom: 5 },
-  textInput: { borderWidth: 1, borderColor: '#E0E0E0', borderRadius: 8, paddingHorizontal: 12, paddingVertical: 10, fontSize: 14, color: '#333', backgroundColor: '#FAFAFA' },
+  standardLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#666',
+    marginBottom: 5,
+  },
+  textInput: {
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    fontSize: 14,
+    color: '#333',
+    backgroundColor: '#FAFAFA',
+  },
 
   cardsContainer: { width: '100%' },
-  selectionCard: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 14, borderRadius: 12, borderWidth: 1.5, marginBottom: 12 },
+  selectionCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 14,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    marginBottom: 12,
+  },
   cardLeftRow: { flexDirection: 'row', alignItems: 'center' },
-  stateIconCircle: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#F0F0F0', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
+  stateIconCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#F0F0F0',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
   cardText: { fontSize: 15, color: '#333' },
 
-  largeGridContainer: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingHorizontal: 5 },
-  largeGridCard: { width: '47%', height: 135, borderRadius: 16, borderWidth: 1.5, justifyContent: 'center', alignItems: 'center', marginBottom: 20, paddingHorizontal: 12 },
+  largeGridContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    paddingHorizontal: 5,
+  },
+  largeGridCard: {
+    width: '47%',
+    height: 135,
+    borderRadius: 16,
+    borderWidth: 1.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+    paddingHorizontal: 12,
+  },
   selectedLargeCard: { backgroundColor: '#FDF2F2', borderColor: '#80001E' },
-  unselectedLargeCard: { backgroundColor: '#EFEFEF', borderColor: 'transparent' },
-  largeGridCardText: { fontSize: 16, color: '#555', textAlign: 'center', fontWeight: '500' },
+  unselectedLargeCard: {
+    backgroundColor: '#EFEFEF',
+    borderColor: 'transparent',
+  },
+  largeGridCardText: {
+    fontSize: 16,
+    color: '#555',
+    textAlign: 'center',
+    fontWeight: '500',
+  },
 
-  dietCard: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 18, paddingHorizontal: 18, borderRadius: 16, borderWidth: 1.5, marginBottom: 16 },
+  dietCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 18,
+    paddingHorizontal: 18,
+    borderRadius: 16,
+    borderWidth: 1.5,
+    marginBottom: 16,
+  },
   selectedDietCard: { backgroundColor: '#FDF2F2', borderColor: '#80001E' },
-  unselectedDietCard: { backgroundColor: '#EFEFEF', borderColor: 'transparent' },
-  dietIconCircle: { width: 42, height: 42, borderRadius: 21, backgroundColor: '#FFF', justifyContent: 'center', alignItems: 'center', marginRight: 15, shadowColor: '#000', shadowOffset: {width:0, height:1}, shadowOpacity: 0.1, elevation: 2 },
+  unselectedDietCard: {
+    backgroundColor: '#EFEFEF',
+    borderColor: 'transparent',
+  },
+  dietIconCircle: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: '#FFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    elevation: 2,
+  },
   dietCardText: { fontSize: 17, color: '#333', fontWeight: '500' },
 
-  heightPickerContainer: { width: '100%', alignItems: 'center', paddingVertical: 40 },
-  heightRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 18, width: '100%' },
-  heightRowFocused: { backgroundColor: '#FAFAFA', borderRadius: 12, borderTopWidth: 1, borderBottomWidth: 1, borderColor: '#E0E0E0' },
+  heightPickerContainer: {
+    width: '100%',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  heightRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 18,
+    width: '100%',
+  },
+  heightRowFocused: {
+    backgroundColor: '#FAFAFA',
+    borderRadius: 12,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: '#E0E0E0',
+  },
   heightText: { textAlign: 'center', marginHorizontal: 20 },
-  heightPointerLeft: { color: '#80001E', fontSize: 16, fontWeight: 'bold', marginRight: 10 },
-  heightPointerRight: { color: '#80001E', fontSize: 16, fontWeight: 'bold', marginLeft: 10 },
+  heightPointerLeft: {
+    color: '#80001E',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginRight: 10,
+  },
+  heightPointerRight: {
+    color: '#80001E',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 10,
+  },
 
   complexionContainer: { width: '100%', alignItems: 'center', paddingTop: 10 },
-  complexionCard: { width: '65%', height: 150, borderRadius: 16, borderWidth: 1.5, justifyContent: 'center', alignItems: 'center', marginBottom: 25 },
-  selectedComplexionCard: { backgroundColor: '#FDF2F2', borderColor: '#80001E' },
-  unselectedComplexionCard: { backgroundColor: '#EFEFEF', borderColor: 'transparent' },
-  avatarBox: { width: 60, height: 60, borderRadius: 30, backgroundColor: '#FFF', justifyContent: 'center', alignItems: 'center', marginBottom: 12, shadowColor: '#000', shadowOffset: {width:0, height:1}, shadowOpacity: 0.1, elevation: 2 },
+  complexionCard: {
+    width: '65%',
+    height: 150,
+    borderRadius: 16,
+    borderWidth: 1.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 25,
+  },
+  selectedComplexionCard: {
+    backgroundColor: '#FDF2F2',
+    borderColor: '#80001E',
+  },
+  unselectedComplexionCard: {
+    backgroundColor: '#EFEFEF',
+    borderColor: 'transparent',
+  },
+  avatarBox: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#FFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    elevation: 2,
+  },
   complexionCardText: { fontSize: 16, color: '#444', fontWeight: '500' },
 
   familyContainer: { width: '100%' },
-  familySectionTitle: { fontSize: 15, fontWeight: 'bold', color: '#333', marginBottom: 12 },
-  radioGroupRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
+  familySectionTitle: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 12,
+  },
+  radioGroupRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
   radioOption: { flexDirection: 'row', alignItems: 'center' },
   radioLabelText: { fontSize: 15, color: '#333', marginLeft: 8 },
-  dividerRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 20 },
+  dividerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
   dividerLine: { flex: 1, height: 1, backgroundColor: '#E0E0E0' },
   dividerText: { marginHorizontal: 15, color: '#888', fontSize: 14 },
-  familyInput: { backgroundColor: '#EFEFEF', borderRadius: 10, paddingHorizontal: 16, paddingVertical: 14, fontSize: 15, color: '#333', marginBottom: 18 },
-  companyInput: { backgroundColor: '#EFEFEF', borderRadius: 12, paddingHorizontal: 18, paddingVertical: 18, fontSize: 16, color: '#333' },
+  familyInput: {
+    backgroundColor: '#EFEFEF',
+    borderRadius: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    fontSize: 15,
+    color: '#333',
+    marginBottom: 18,
+  },
+  companyInput: {
+    backgroundColor: '#EFEFEF',
+    borderRadius: 12,
+    paddingHorizontal: 18,
+    paddingVertical: 18,
+    fontSize: 16,
+    color: '#333',
+  },
 
-  timeModalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center', alignItems: 'center' },
-  timeModalContent: { width: '85%', backgroundColor: '#FFF', borderRadius: 16, padding: 22, alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 8, elevation: 6 },
-  timeModalTitle: { fontSize: 15, color: '#666', alignSelf: 'flex-start', marginBottom: 15 },
-  digitalTimeRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
-  timeBox: { borderWidth: 1.5, borderColor: '#E0E0E0', borderRadius: 8, paddingVertical: 8, paddingHorizontal: 14, backgroundColor: '#FAFAFA' },
+  timeModalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  timeModalContent: {
+    width: '90%',
+    maxHeight: '90%',
+    backgroundColor: '#FFF',
+    borderRadius: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  timeModalTitle: {
+    fontSize: 15,
+    color: '#666',
+    alignSelf: 'flex-start',
+    marginBottom: 15,
+  },
+  digitalTimeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  timeBox: {
+    borderWidth: 1.5,
+    borderColor: '#E0E0E0',
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    backgroundColor: '#FAFAFA',
+  },
   timeBoxText: { fontSize: 24, fontWeight: 'bold', color: '#333' },
-  timeColon: { fontSize: 24, fontWeight: 'bold', marginHorizontal: 8, color: '#333' },
-  amPmContainer: { marginLeft: 12, borderWidth: 1, borderColor: '#E0E0E0', borderRadius: 6, overflow: 'hidden' },
-  amPmBtn: { paddingVertical: 4, paddingHorizontal: 8, backgroundColor: '#FAFAFA', alignItems: 'center' },
+  timeColon: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginHorizontal: 8,
+    color: '#333',
+  },
+  amPmContainer: {
+    marginLeft: 12,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    borderRadius: 6,
+    overflow: 'hidden',
+  },
+  amPmBtn: {
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    backgroundColor: '#FAFAFA',
+    alignItems: 'center',
+  },
   amPmText: { fontSize: 12, color: '#888' },
 
-  clockFaceCircle: { width: 190, height: 190, borderRadius: 95, backgroundColor: '#F0F0F0', position: 'relative', justifyContent: 'center', alignItems: 'center', marginVertical: 10 },
-  clockHour12: { position: 'absolute', top: 10 },
-  clockHour3: { position: 'absolute', right: 15 },
-  clockHour6: { position: 'absolute', bottom: 10 },
-  clockHour9: { position: 'absolute', left: 15 },
-  clockNum: { fontSize: 14, color: '#666' },
-  clockHandLine: { position: 'absolute', width: 50, height: 2, backgroundColor: '#80001E', transform: [{ rotate: '-135deg' }], left: 45, top: 94 },
-  clockActiveDot: { position: 'absolute', left: 45, bottom: 42, width: 34, height: 34, borderRadius: 17, backgroundColor: '#80001E', justifyContent: 'center', alignItems: 'center' },
+  clockFaceCircle: { 
+    width: 170, 
+    height: 170, 
+    borderRadius: 85, 
+    backgroundColor: '#F0F0F0', 
+    position: 'relative', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    marginVertical: 8 
+  },
+
+  clockCenterDot: { 
+    position: 'absolute', 
+    width: 8, 
+    height: 8, 
+    borderRadius: 4, 
+    backgroundColor: '#80001E', 
+    left: 83, 
+    top: 81, 
+    zIndex: 5 
+  },
+  clockHandLine: { 
+    position: 'absolute', 
+    width: 58, // Matches the radius length from center to numbers
+    height: 2, 
+    backgroundColor: '#80001E', 
+    left: 28,  // Center X of the 170x170 circle
+    top: 84,   // Center Y of the 170x170 circle
+  },
+  clockNodeTextContainer: {
+    position: 'absolute',
+    width: 10,
+    height: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  clockNum: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+  },
+  clockNodeBubble: {
+    position: 'absolute',
+    width: 10,
+    height: 14,
+    borderRadius: 17,
+    backgroundColor: '#80001E',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  clockNodeBubbleText: {
+    color: '#FFF',
+    fontWeight: 'bold',
+    fontSize: 14,
+    textAlign: 'center',
+  },
   activeDotText: { color: '#FFF', fontWeight: 'bold', fontSize: 14 },
 
-  timeModalButtonsRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginTop: 20 },
+  timeModalButtonsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    marginTop: 20,
+  },
   keyboardIconBtn: { padding: 6 },
   modalRightActions: { flexDirection: 'row', alignItems: 'center' },
-  modalCancelText: { fontSize: 15, color: '#666', marginRight: 20, fontWeight: '600' },
-  modalOkBtn: { backgroundColor: '#FFC0CB', paddingVertical: 8, paddingHorizontal: 20, borderRadius: 8 },
+  modalCancelText: {
+    fontSize: 15,
+    color: '#666',
+    marginRight: 20,
+    fontWeight: '600',
+  },
+  modalOkBtn: {
+    backgroundColor: '#FFC0CB',
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+  },
   modalOkText: { fontSize: 15, color: '#80001E', fontWeight: 'bold' },
 
   autocompleteWrapper: { position: 'relative' },
@@ -1429,7 +2522,12 @@ const styles = StyleSheet.create({
     elevation: 4,
     maxHeight: 220,
   },
-  suggestionRow: { paddingVertical: 12, paddingHorizontal: 16, borderBottomWidth: 0.5, borderBottomColor: '#F0F0F0' },
+  suggestionRow: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#F0F0F0',
+  },
   suggestionText: { fontSize: 15, color: '#333' },
 
   hobbiesContainer: { width: '100%' },
@@ -1445,7 +2543,12 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 1,
   },
-  hobbyCategoryTitle: { fontSize: 15, fontWeight: 'bold', color: '#80001E', marginBottom: 14 },
+  hobbyCategoryTitle: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: '#80001E',
+    marginBottom: 14,
+  },
   tagsFlexRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   hobbyTag: {
     flexDirection: 'row',
@@ -1492,20 +2595,67 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 14,
   },
-  selectedQualificationCard: { backgroundColor: '#FDF2F2', borderColor: '#80001E' },
-  unselectedQualificationCard: { backgroundColor: '#FAFAFA', borderColor: '#EFEFEF' },
+  selectedQualificationCard: {
+    backgroundColor: '#FDF2F2',
+    borderColor: '#80001E',
+  },
+  unselectedQualificationCard: {
+    backgroundColor: '#FAFAFA',
+    borderColor: '#EFEFEF',
+  },
   qualificationCardText: { fontSize: 16, color: '#444', fontWeight: '500' },
 
-  bottomButtonRow: { position: 'absolute', bottom: 0, left: 0, right: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 25, paddingVertical: 15, backgroundColor: '#FFF', borderTopWidth: 1, borderTopColor: '#EFEFEF' },
+  bottomButtonRow: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 25,
+    paddingVertical: 15,
+    backgroundColor: '#FFF',
+    borderTopWidth: 1,
+    borderTopColor: '#EFEFEF',
+  },
   skipButton: { paddingVertical: 10 },
   skipButtonText: { color: '#FF3B30', fontSize: 15, fontWeight: 'bold' },
-  nextButtonFixed: { width: 130, height: 45, borderRadius: 8, alignItems: 'center', justifyContent: 'center' },
+  nextButtonFixed: {
+    width: 130,
+    height: 45,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   nextButtonText: { color: '#FFF', fontSize: 15, fontWeight: 'bold' },
 
-  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' },
-  modalContent: { width: '80%', backgroundColor: '#FFF', borderRadius: 12, padding: 20, alignItems: 'center' },
-  modalTitle: { fontSize: 16, fontWeight: 'bold', marginBottom: 20, color: '#333' },
-  modalOption: { width: '100%', paddingVertical: 12, alignItems: 'center', borderBottomWidth: 1, borderBottomColor: '#F0F0F0' },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: '#FFF',
+    borderRadius: 12,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#333',
+  },
+  modalOption: {
+    width: '100%',
+    paddingVertical: 12,
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#F0F0F0',
+  },
   cancelOption: { borderBottomWidth: 0, marginTop: 5 },
   modalOptionText: { fontSize: 15, color: '#333', fontWeight: '500' },
 });
