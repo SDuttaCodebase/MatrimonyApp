@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import useThemeStore from '../../../store/useThemeStore';
 
 export default function TopHeader() {
@@ -9,10 +10,15 @@ export default function TopHeader() {
   const navigation = useNavigation();
 
   return (
-    <View style={[styles.headerContainer, { backgroundColor: theme.colors.background }]}>
+    <View
+      style={[
+        styles.headerContainer,
+        { backgroundColor: theme.colors.background },
+      ]}
+    >
       {/* Left Icon: Hamburger Menu */}
-      <TouchableOpacity style={styles.iconButton}>
-        <Text style={[styles.iconText, { color: theme.colors.text }]}>☰</Text>
+      <TouchableOpacity onPress={() => navigation.openDrawer()}>
+        <Icon name="menu" size={28} color="#000" /> {/* Your 3-line icon */}
       </TouchableOpacity>
 
       {/* Center Title: App Brand Name using custom font */}
@@ -21,7 +27,10 @@ export default function TopHeader() {
       </Text>
 
       {/* Right Icon: Search */}
-      <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Search')}>
+      <TouchableOpacity
+        style={styles.iconButton}
+        onPress={() => navigation.navigate('Search')}
+      >
         <Text style={[styles.iconText, { color: theme.colors.text }]}>🔍</Text>
       </TouchableOpacity>
     </View>

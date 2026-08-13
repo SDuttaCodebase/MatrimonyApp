@@ -1,5 +1,7 @@
 // App.js
 import React from 'react';
+import 'react-native-gesture-handler';
+import 'react-native-reanimated';
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -24,6 +26,8 @@ import SearchScreen from './src/screens/Home/SearchScreen';
 import VerifiedSoulmatesScreen from './src/screens/Home/VerifiedSoulmatesScreen';
 import FilterScreen from './src/screens/Home/FilterScreen';
 import ProfileScreen from './src/screens/Profile/ProfileScreen';
+import NotificationScreen from './src/screens/Home/NotificationScreen';
+import SettingsScreen from './src/screens/Home/SettingsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -46,11 +50,13 @@ export default function App() {
           <Stack.Screen name="MainApp" component={MainTabNavigator} />
           <Stack.Screen name="ProfileDetail" component={ProfileDetailScreen} />
           <Stack.Screen name="FullScreenImageViewer" component={FullScreenImageViewer} />
-          <Stack.Screen name="Shortlist" component={ShortlistScreen} />
           <Stack.Screen name="Search" component={SearchScreen} />
           <Stack.Screen name="VerifiedSoulmates" component={VerifiedSoulmatesScreen} />
           <Stack.Screen name="Filter" component={FilterScreen} />
           <Stack.Screen name="Profile" component={ProfileScreen} />
+          <Stack.Screen name="Shortlist" component={ShortlistScreen} />
+          <Stack.Screen name="NotificationScreen" component={NotificationScreen} />
+          <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

@@ -1,24 +1,28 @@
 // src/navigation/MainTabNavigator.js
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Text } from 'react-native';
 import useThemeStore from '../store/useThemeStore';
 
-// Import our screens
+// Import our screens and components
+import HamburgerMenu from '../components/HamburgerMenu';
 import HomeScreen from '../screens/Home/HomeScreen';
 import NetworkScreen from '../screens/Network/NetworkScreen';
 import ChatScreen from '../screens/Chat/ChatScreen';
 import ProfileScreen from '../screens/Profile/ProfileScreen';
 
 const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 
-export default function MainTabNavigator() {
+// 1. We move your existing Tab Navigator into its own functional component
+function BottomTabs() {
   const { theme } = useThemeStore();
 
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        headerShown: false, // We already built a custom TopHeader in HomeScreen!
+        headerShown: false,
         tabBarActiveTintColor: theme.colors.primary,
         tabBarInactiveTintColor: theme.colors.subtext,
         tabBarStyle: {
@@ -29,9 +33,7 @@ export default function MainTabNavigator() {
           paddingBottom: 10,
           paddingTop: 10,
         },
-        tabBarShowLabel: false, // Hides the text under the icons to match your design
-        
-        // This function dynamically renders the correct icon for each tab
+        tabBarShowLabel: false,
         tabBarIcon: ({ color, size }) => {
           let icon;
           if (route.name === 'Home') icon = '🏠';
@@ -48,5 +50,18 @@ export default function MainTabNavigator() {
       <Tab.Screen name="Chat" component={ChatScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
+  );
+}
+
+// 2. We export the Drawer as the main navigator, injecting your custom HamburgerMenu,
+// and setting the BottomTabs as the primary screen inside the drawer.
+export default function MainTabNavigator() {
+  return (
+    <Drawer.Navigator
+      drawerContent={props => <HamburgerMenu {...props} />}
+      screenOptions={{ headerShown: false }}
+    >
+      <Drawer.Screen name="MainTabs" component={BottomTabs} />
+    </Drawer.Navigator>
   );
 }
