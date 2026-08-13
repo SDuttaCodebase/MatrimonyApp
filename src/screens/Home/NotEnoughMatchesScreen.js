@@ -15,8 +15,7 @@ export default function NotEnoughMatchesScreen({ navigation }) {
   };
 
   const handleFinalDelete = () => {
-    console.log('Account finally deleted!');
-    // Execute API call for deletion here, then redirect to login/splash
+    navigation.navigate('ConfirmDeletePasswordScreen');
   };
 
   return (

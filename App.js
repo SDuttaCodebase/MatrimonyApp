@@ -16,7 +16,7 @@ import RegisterStep2Screen from './src/screens/Auth/RegisterStep2Screen';
 import RegisterStep3Screen from './src/screens/Auth/RegisterStep3Screen';
 import RegisterStep4Screen from './src/screens/Auth/RegisterStep4Screen';
 import AddProfilePicScreen from './src/screens/Auth/AddProfilePicScreen';
-import VerificationPendingScreen from './src/screens/Auth/VerificationPendingScreen';     
+import VerificationPendingScreen from './src/screens/Auth/VerificationPendingScreen';
 import RegistrationSuccessScreen from './src/screens/Auth/RegistrationSuccessScreen';
 import MainTabNavigator from './src/navigation/MainTabNavigator';
 import ProfileDetailScreen from './src/screens/Home/ProfileDetailScreen';
@@ -36,6 +36,10 @@ import DeleteAccountScreen from './src/screens/Home/DeleteAccountScreen';
 import MarriageFixedSuccessScreen from './src/screens/Home/MarriageFixedSuccessScreen';
 import NotEnoughMatchesScreen from './src/screens/Home/NotEnoughMatchesScreen';
 import PartnerPreferencesScreen from './src/screens/Home/PartnerPreferencesScreen';
+import ConfirmDeletePasswordScreen from './src/screens/Home/ConfirmDeletePasswordScreen';
+import AccountDeletedSuccessScreen from './src/screens/Home/AccountDeletedSuccessScreen';
+import PreferToSearchLaterScreen from './src/screens/Home/PreferToSearchLaterScreen';
+import OtherReasonScreen from './src/screens/Home/OtherReasonScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,7 +47,10 @@ export default function App() {
   return (
     <SafeAreaProvider style={styles.safeArea}>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Splash">
+        <Stack.Navigator
+          screenOptions={{ headerShown: false }}
+          initialRouteName="Splash"
+        >
           <Stack.Screen name="Splash" component={SplashScreen} />
           <Stack.Screen name="Onboarding" component={OnboardingScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
@@ -53,26 +60,75 @@ export default function App() {
           <Stack.Screen name="RegisterStep3" component={RegisterStep3Screen} />
           <Stack.Screen name="RegisterStep4" component={RegisterStep4Screen} />
           <Stack.Screen name="AddProfilePic" component={AddProfilePicScreen} />
-          <Stack.Screen name="VerificationPending" component={VerificationPendingScreen} />
-          <Stack.Screen name="RegistrationSuccess" component={RegistrationSuccessScreen} />
+          <Stack.Screen
+            name="VerificationPending"
+            component={VerificationPendingScreen}
+          />
+          <Stack.Screen
+            name="RegistrationSuccess"
+            component={RegistrationSuccessScreen}
+          />
           <Stack.Screen name="MainApp" component={MainTabNavigator} />
           <Stack.Screen name="ProfileDetail" component={ProfileDetailScreen} />
-          <Stack.Screen name="FullScreenImageViewer" component={FullScreenImageViewer} />
+          <Stack.Screen
+            name="FullScreenImageViewer"
+            component={FullScreenImageViewer}
+          />
           <Stack.Screen name="Search" component={SearchScreen} />
-          <Stack.Screen name="VerifiedSoulmates" component={VerifiedSoulmatesScreen} />
+          <Stack.Screen
+            name="VerifiedSoulmates"
+            component={VerifiedSoulmatesScreen}
+          />
           <Stack.Screen name="Filter" component={FilterScreen} />
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="Shortlist" component={ShortlistScreen} />
-          <Stack.Screen name="NotificationScreen" component={NotificationScreen} />
+          <Stack.Screen
+            name="NotificationScreen"
+            component={NotificationScreen}
+          />
           <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
           <Stack.Screen name="AccountScreen" component={AccountScreen} />
-          <Stack.Screen name="ChangePasswordScreen" component={ChangePasswordScreen} />
+          <Stack.Screen
+            name="ChangePasswordScreen"
+            component={ChangePasswordScreen}
+          />
           <Stack.Screen name="ChangePassOTP" component={ChangePassOTPScreen} />
-          <Stack.Screen name="NewPasswordScreen" component={NewPasswordScreen} />
-          <Stack.Screen name="DeleteAccountScreen" component={DeleteAccountScreen} />
-          <Stack.Screen name="MarriageFixedSuccessScreen" component={MarriageFixedSuccessScreen} />
-          <Stack.Screen name="NotEnoughMatchesScreen" component={NotEnoughMatchesScreen} />
-          <Stack.Screen name="PartnerPreferencesScreen" component={PartnerPreferencesScreen} />
+          <Stack.Screen
+            name="NewPasswordScreen"
+            component={NewPasswordScreen}
+          />
+          <Stack.Screen
+            name="DeleteAccountScreen"
+            component={DeleteAccountScreen}
+          />
+          <Stack.Screen
+            name="MarriageFixedSuccessScreen"
+            component={MarriageFixedSuccessScreen}
+          />
+          <Stack.Screen
+            name="NotEnoughMatchesScreen"
+            component={NotEnoughMatchesScreen}
+          />
+          <Stack.Screen
+            name="PartnerPreferencesScreen"
+            component={PartnerPreferencesScreen}
+          />
+          <Stack.Screen
+            name="ConfirmDeletePasswordScreen"
+            component={ConfirmDeletePasswordScreen}
+          />
+          <Stack.Screen
+            name="AccountDeletedSuccessScreen"
+            component={AccountDeletedSuccessScreen}
+          />
+          <Stack.Screen
+            name="PreferToSearchLaterScreen"
+            component={PreferToSearchLaterScreen}
+          /> 
+          <Stack.Screen
+            name="OtherReasonScreen"
+            component={OtherReasonScreen}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

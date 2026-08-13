@@ -32,8 +32,11 @@ export default function DeleteAccountScreen({ navigation }) {
     if (selectedReason === 'Marriage Fixed') {
       navigation.navigate('MarriageFixedSuccessScreen');
     } else if (selectedReason === 'Not Getting Enough Matches') {
-      // Add this new else-if block!
       navigation.navigate('NotEnoughMatchesScreen');
+    } else if (selectedReason === 'Prefer To Search Later') {
+      navigation.navigate('PreferToSearchLaterScreen');
+    } else if (selectedReason === 'Other Reason') {
+      navigation.navigate('OtherReasonScreen');
     } else {
       console.log('Other reason selected:', selectedReason);
     }
