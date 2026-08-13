@@ -28,6 +28,10 @@ import FilterScreen from './src/screens/Home/FilterScreen';
 import ProfileScreen from './src/screens/Profile/ProfileScreen';
 import NotificationScreen from './src/screens/Home/NotificationScreen';
 import SettingsScreen from './src/screens/Home/SettingsScreen';
+import AccountScreen from './src/screens/Home/AccountScreen';
+import ChangePasswordScreen from './src/screens/Home/ChangePasswordScreen';
+import ChangePassOTPScreen from './src/screens/Home/ChangePassOTPScreen';
+import NewPasswordScreen from './src/screens/Home/NewPasswordScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -57,6 +61,10 @@ export default function App() {
           <Stack.Screen name="Shortlist" component={ShortlistScreen} />
           <Stack.Screen name="NotificationScreen" component={NotificationScreen} />
           <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+          <Stack.Screen name="AccountScreen" component={AccountScreen} />
+          <Stack.Screen name="ChangePasswordScreen" component={ChangePasswordScreen} />
+          <Stack.Screen name="ChangePassOTP" component={ChangePassOTPScreen} />
+          <Stack.Screen name="NewPasswordScreen" component={NewPasswordScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

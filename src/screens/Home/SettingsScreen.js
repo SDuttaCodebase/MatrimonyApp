@@ -29,7 +29,7 @@ export default function SettingsScreen({ navigation }) {
         <SettingsItem 
           icon="person-outline" 
           title="Account" 
-          onPress={() => console.log('Navigate to Account')} 
+          onPress={() => navigation.navigate('AccountScreen')} 
         />
         
         <SettingsItem 
