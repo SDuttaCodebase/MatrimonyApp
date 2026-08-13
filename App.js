@@ -32,6 +32,10 @@ import AccountScreen from './src/screens/Home/AccountScreen';
 import ChangePasswordScreen from './src/screens/Home/ChangePasswordScreen';
 import ChangePassOTPScreen from './src/screens/Home/ChangePassOTPScreen';
 import NewPasswordScreen from './src/screens/Home/NewPasswordScreen';
+import DeleteAccountScreen from './src/screens/Home/DeleteAccountScreen';
+import MarriageFixedSuccessScreen from './src/screens/Home/MarriageFixedSuccessScreen';
+import NotEnoughMatchesScreen from './src/screens/Home/NotEnoughMatchesScreen';
+import PartnerPreferencesScreen from './src/screens/Home/PartnerPreferencesScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -65,6 +69,10 @@ export default function App() {
           <Stack.Screen name="ChangePasswordScreen" component={ChangePasswordScreen} />
           <Stack.Screen name="ChangePassOTP" component={ChangePassOTPScreen} />
           <Stack.Screen name="NewPasswordScreen" component={NewPasswordScreen} />
+          <Stack.Screen name="DeleteAccountScreen" component={DeleteAccountScreen} />
+          <Stack.Screen name="MarriageFixedSuccessScreen" component={MarriageFixedSuccessScreen} />
+          <Stack.Screen name="NotEnoughMatchesScreen" component={NotEnoughMatchesScreen} />
+          <Stack.Screen name="PartnerPreferencesScreen" component={PartnerPreferencesScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

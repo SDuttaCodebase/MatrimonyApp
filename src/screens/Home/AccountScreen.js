@@ -30,7 +30,7 @@ export default function AccountScreen({ navigation }) {
         
         <AccountOption 
           title="Delete My Account" 
-          onPress={() => console.log('Trigger Delete Account flow')} 
+          onPress={() => navigation.navigate('DeleteAccountScreen')} 
         />
         
         <AccountOption 
