@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'; // Using MaterialIcons for perfect icon matches
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'; 
+import { useTranslation } from 'react-i18next'; // 1. Import the translation hook
 
 // Reusable component for each setting option
 const SettingsItem = ({ icon, title, onPress }) => (
@@ -12,6 +13,8 @@ const SettingsItem = ({ icon, title, onPress }) => (
 );
 
 export default function SettingsScreen({ navigation }) {
+  const { t } = useTranslation(); // 2. Initialize the hook
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
@@ -19,7 +22,8 @@ export default function SettingsScreen({ navigation }) {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color="#555" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Settings</Text>
+        {/* 3. Wrap hardcoded text with the translation function */}
+        <Text style={styles.headerTitle}>{t('Settings')}</Text>
         <View style={{ width: 24 }} /> {/* Empty view for flex alignment */}
       </View>
 
@@ -28,25 +32,25 @@ export default function SettingsScreen({ navigation }) {
         
         <SettingsItem 
           icon="person-outline" 
-          title="Account" 
+          title={t('Account')} 
           onPress={() => navigation.navigate('AccountScreen')} 
         />
         
         <SettingsItem 
           icon="security" 
-          title="Privacy" 
+          title={t('Privacy')} 
           onPress={() => navigation.navigate('PrivacyMenuScreen')} 
         />
         
         <SettingsItem 
           icon="g-translate" 
-          title="App Language" 
+          title={t('App Language')} 
           onPress={() => navigation.navigate('AppLanguageScreen')} 
         />
         
         <SettingsItem 
           icon="people-outline" 
-          title="Refer A Friend" 
+          title={t('Refer A Friend')} 
           onPress={() => console.log('Navigate to Refer A Friend')} 
         />
 

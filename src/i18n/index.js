@@ -1,29 +1,25 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-// This is where you will eventually add all your app's text!
 const resources = {
   en: {
     translation: {
-      "app_language": "App Language",
       "settings": "Settings",
-      // Add more English words here later
+      "account": "Account",
+      "privacy": "Privacy",
+      "app_language": "App Language",
+      "refer_friend": "Refer A Friend"
     }
   },
   bn: {
     translation: {
-      "app_language": "অ্যাপের ভাষা",
       "settings": "সেটিংস",
-      // Add more Bengali words here later
-    }
-  },
-  hi: {
-    translation: {
-      "app_language": "ऐप की भाषा",
-      "settings": "सेटिंग्स",
+      "account": "অ্যাকাউন্ট",
+      "privacy": "গোপনীয়তা",
+      "app_language": "অ্যাপের ভাষা",
+      "refer_friend": "বন্ধুকে রেফার করুন"
     }
   }
-  // You can add mr (Marathi), gu (Gujrati), etc., following this pattern
 };
 
 i18n
