@@ -44,6 +44,9 @@ import BlockedAccountsScreen from './src/screens/Home/BlockedAccountsScreen';
 import AboutScreen from './src/screens/Home/AboutScreen';
 import HelpSupportScreen from './src/screens/Home/HelpSupportScreen';
 import PrivacyPolicyScreen from './src/screens/Home/PrivacyPolicyScreen';
+import PrivacyMenuScreen from './src/screens/Home/PrivacyMenuScreen';
+import ContactPrivacyScreen from './src/screens/Home/ContactPrivacyScreen';
+import PhotoPrivacyScreen from './src/screens/Home/PhotoPrivacyScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -145,6 +148,18 @@ export default function App() {
           <Stack.Screen
             name="PrivacyPolicyScreen"
             component={PrivacyPolicyScreen}
+          />
+          <Stack.Screen
+            name="PrivacyMenuScreen"
+            component={PrivacyMenuScreen}
+          />
+          <Stack.Screen
+            name="ContactPrivacyScreen"
+            component={ContactPrivacyScreen}
+          />
+          <Stack.Screen
+            name="PhotoPrivacyScreen"
+            component={PhotoPrivacyScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>

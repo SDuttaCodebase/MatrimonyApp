@@ -35,7 +35,7 @@ export default function SettingsScreen({ navigation }) {
         <SettingsItem 
           icon="security" 
           title="Privacy" 
-          onPress={() => console.log('Navigate to Privacy')} 
+          onPress={() => navigation.navigate('PrivacyMenuScreen')} 
         />
         
         <SettingsItem 
