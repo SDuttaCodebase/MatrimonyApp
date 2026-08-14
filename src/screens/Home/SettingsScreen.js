@@ -51,7 +51,7 @@ export default function SettingsScreen({ navigation }) {
         <SettingsItem 
           icon="people-outline" 
           title={t('Refer A Friend')} 
-          onPress={() => console.log('Navigate to Refer A Friend')} 
+          onPress={() => navigation.navigate('ReferFriendScreen')} 
         />
 
       </ScrollView>

@@ -50,6 +50,7 @@ import ContactPrivacyScreen from './src/screens/Home/ContactPrivacyScreen';
 import PhotoPrivacyScreen from './src/screens/Home/PhotoPrivacyScreen';
 import PrivacySuccessScreen from './src/screens/Home/PrivacySuccessScreen';
 import AppLanguageScreen from './src/screens/Home/AppLanguageScreen';
+import ReferFriendScreen from './src/screens/Home/ReferFriendScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -171,6 +172,10 @@ export default function App() {
           <Stack.Screen
             name="AppLanguageScreen"
             component={AppLanguageScreen}
+          />
+          <Stack.Screen
+            name="ReferFriendScreen"
+            component={ReferFriendScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>

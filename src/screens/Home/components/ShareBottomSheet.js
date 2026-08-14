@@ -9,12 +9,28 @@ import {
   TouchableWithoutFeedback, 
   Dimensions 
 } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const { height: windowHeight } = Dimensions.get('window');
 
+// Reusable Share Option Item matching the Refer A Friend page style
+const ShareOption = ({ iconFamily, iconName, label, color, onPress }) => (
+  <TouchableOpacity style={styles.optionItem} onPress={onPress}>
+    <View style={[styles.iconCircle, { backgroundColor: '#FFFFFF' }]}>
+      {iconFamily === 'MaterialCommunityIcons' ? (
+        <MaterialCommunityIcons name={iconName} size={30} color={color} />
+      ) : (
+        <FontAwesome name={iconName} size={30} color={color} />
+      )}
+    </View>
+    <Text style={styles.optionLabel}>{label}</Text>
+  </TouchableOpacity>
+);
+
 export default function ShareBottomSheet({ visible, onClose, profile }) {
   const handleShareOption = (platform) => {
-    // You can hook up native sharing or deep links here later
+    console.log(`Sharing to ${platform}...`);
     onClose();
   };
 
@@ -41,43 +57,45 @@ export default function ShareBottomSheet({ visible, onClose, profile }) {
                 
                 {/* Row 1 */}
                 <View style={styles.row}>
-                  <TouchableOpacity style={styles.optionItem} onPress={() => handleShareOption('Message')}>
-                    <View style={[styles.iconCircle, { backgroundColor: '#007AFF' }]}>
-                      <Text style={styles.iconEmoji}>💬</Text>
-                    </View>
-                    <Text style={styles.optionLabel}>Message</Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity style={styles.optionItem} onPress={() => handleShareOption('Gmail')}>
-                    <View style={[styles.iconCircle, { backgroundColor: '#EA4335' }]}>
-                      <Text style={styles.iconEmoji}>✉️</Text>
-                    </View>
-                    <Text style={styles.optionLabel}>Gmail</Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity style={styles.optionItem} onPress={() => handleShareOption('Whatsapp')}>
-                    <View style={[styles.iconCircle, { backgroundColor: '#25D366' }]}>
-                      <Text style={styles.iconEmoji}>🟢</Text>
-                    </View>
-                    <Text style={styles.optionLabel}>Whatsapp</Text>
-                  </TouchableOpacity>
+                  <ShareOption 
+                    iconFamily="MaterialCommunityIcons" 
+                    iconName="message-processing" 
+                    label="Message" 
+                    color="#00A8FF" 
+                    onPress={() => handleShareOption('Message')}
+                  />
+                  <ShareOption 
+                    iconFamily="MaterialCommunityIcons" 
+                    iconName="gmail" 
+                    label="Gmail" 
+                    color="#EA4335" 
+                    onPress={() => handleShareOption('Gmail')}
+                  />
+                  <ShareOption 
+                    iconFamily="FontAwesome" 
+                    iconName="whatsapp" 
+                    label="Whatsapp" 
+                    color="#25D366" 
+                    onPress={() => handleShareOption('Whatsapp')}
+                  />
                 </View>
 
                 {/* Row 2 */}
                 <View style={styles.row}>
-                  <TouchableOpacity style={styles.optionItem} onPress={() => handleShareOption('Facebook')}>
-                    <View style={[styles.iconCircle, { backgroundColor: '#1877F2' }]}>
-                      <Text style={styles.iconEmoji}>👥</Text>
-                    </View>
-                    <Text style={styles.optionLabel}>Facebook</Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity style={styles.optionItem} onPress={() => handleShareOption('Instagram')}>
-                    <View style={[styles.iconCircle, { backgroundColor: '#E1306C' }]}>
-                      <Text style={styles.iconEmoji}>📸</Text>
-                    </View>
-                    <Text style={styles.optionLabel}>Instagram</Text>
-                  </TouchableOpacity>
+                  <ShareOption 
+                    iconFamily="FontAwesome" 
+                    iconName="facebook-square" 
+                    label="Facebook" 
+                    color="#1877F2" 
+                    onPress={() => handleShareOption('Facebook')}
+                  />
+                  <ShareOption 
+                    iconFamily="MaterialCommunityIcons" 
+                    iconName="instagram" 
+                    label="Instagram" 
+                    color="#E1306C" 
+                    onPress={() => handleShareOption('Instagram')}
+                  />
                 </View>
 
               </View>
@@ -94,15 +112,15 @@ export default function ShareBottomSheet({ visible, onClose, profile }) {
 const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
     justifyContent: 'flex-end',
   },
   sheetContainer: {
     backgroundColor: '#FFFFFF',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
     paddingHorizontal: 25,
-    paddingTop: 12,
+    paddingTop: 15,
     paddingBottom: 40,
     maxHeight: windowHeight * 0.45,
     shadowColor: '#000',
@@ -113,9 +131,9 @@ const styles = StyleSheet.create({
   },
   dragHandle: {
     width: 40,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: '#D0D0D0',
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: '#D3D3D3',
     alignSelf: 'center',
     marginBottom: 25,
   },
@@ -132,25 +150,22 @@ const styles = StyleSheet.create({
     width: 80,
   },
   iconCircle: {
-    width: 55,
-    height: 55,
-    borderRadius: 27.5,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  iconEmoji: {
-    fontSize: 24,
+    shadowRadius: 4,
+    elevation: 3,
   },
   optionLabel: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#333333',
+    color: '#666666',
     textAlign: 'center',
   },
 });
