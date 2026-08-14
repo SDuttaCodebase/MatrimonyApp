@@ -41,7 +41,7 @@ export default function SettingsScreen({ navigation }) {
         <SettingsItem 
           icon="g-translate" 
           title="App Language" 
-          onPress={() => console.log('Navigate to App Language')} 
+          onPress={() => navigation.navigate('AppLanguageScreen')} 
         />
         
         <SettingsItem 

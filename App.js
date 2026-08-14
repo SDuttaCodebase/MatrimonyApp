@@ -1,5 +1,6 @@
 // App.js
 import React from 'react';
+import './src/i18n';
 import 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import { StyleSheet } from 'react-native';
@@ -48,6 +49,7 @@ import PrivacyMenuScreen from './src/screens/Home/PrivacyMenuScreen';
 import ContactPrivacyScreen from './src/screens/Home/ContactPrivacyScreen';
 import PhotoPrivacyScreen from './src/screens/Home/PhotoPrivacyScreen';
 import PrivacySuccessScreen from './src/screens/Home/PrivacySuccessScreen';
+import AppLanguageScreen from './src/screens/Home/AppLanguageScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -165,6 +167,10 @@ export default function App() {
           <Stack.Screen
             name="PrivacySuccessScreen"
             component={PrivacySuccessScreen}
+          />
+          <Stack.Screen
+            name="AppLanguageScreen"
+            component={AppLanguageScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>
