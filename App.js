@@ -47,6 +47,7 @@ import PrivacyPolicyScreen from './src/screens/Home/PrivacyPolicyScreen';
 import PrivacyMenuScreen from './src/screens/Home/PrivacyMenuScreen';
 import ContactPrivacyScreen from './src/screens/Home/ContactPrivacyScreen';
 import PhotoPrivacyScreen from './src/screens/Home/PhotoPrivacyScreen';
+import PrivacySuccessScreen from './src/screens/Home/PrivacySuccessScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -160,6 +161,10 @@ export default function App() {
           <Stack.Screen
             name="PhotoPrivacyScreen"
             component={PhotoPrivacyScreen}
+          />
+          <Stack.Screen
+            name="PrivacySuccessScreen"
+            component={PrivacySuccessScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>

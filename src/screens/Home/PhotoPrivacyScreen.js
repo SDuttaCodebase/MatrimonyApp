@@ -21,8 +21,17 @@ export default function PhotoPrivacyScreen({ navigation }) {
   ];
 
   const handleSave = () => {
-    console.log('Photo Privacy saved:', selectedPrivacy);
-    navigation.goBack();
+    let dynamicMessage = '';
+
+    // Format the text based on the selection
+    if (selectedPrivacy === 'Visible To All') {
+      dynamicMessage = 'Photo is now visible to All Members.';
+    } else {
+      dynamicMessage = `Photo is now visible to ${selectedPrivacy}.`;
+    }
+
+    // Navigate to the success screen and pass the message
+    navigation.navigate('PrivacySuccessScreen', { message: dynamicMessage });
   };
 
   return (
