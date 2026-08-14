@@ -40,6 +40,10 @@ import ConfirmDeletePasswordScreen from './src/screens/Home/ConfirmDeletePasswor
 import AccountDeletedSuccessScreen from './src/screens/Home/AccountDeletedSuccessScreen';
 import PreferToSearchLaterScreen from './src/screens/Home/PreferToSearchLaterScreen';
 import OtherReasonScreen from './src/screens/Home/OtherReasonScreen';
+import BlockedAccountsScreen from './src/screens/Home/BlockedAccountsScreen';
+import AboutScreen from './src/screens/Home/AboutScreen';
+import HelpSupportScreen from './src/screens/Home/HelpSupportScreen';
+import PrivacyPolicyScreen from './src/screens/Home/PrivacyPolicyScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -124,10 +128,23 @@ export default function App() {
           <Stack.Screen
             name="PreferToSearchLaterScreen"
             component={PreferToSearchLaterScreen}
-          /> 
+          />
           <Stack.Screen
             name="OtherReasonScreen"
             component={OtherReasonScreen}
+          />
+          <Stack.Screen
+            name="BlockedAccountsScreen"
+            component={BlockedAccountsScreen}
+          />
+          <Stack.Screen name="AboutScreen" component={AboutScreen} />
+          <Stack.Screen
+            name="HelpSupportScreen"
+            component={HelpSupportScreen}
+          />
+          <Stack.Screen
+            name="PrivacyPolicyScreen"
+            component={PrivacyPolicyScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>

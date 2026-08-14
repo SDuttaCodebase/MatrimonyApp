@@ -14,10 +14,10 @@ export default function HamburgerMenu({ navigation }) {
     { id: 'NotificationScreen', title: 'Notification', icon: 'bell-outline', library: 'MaterialCommunityIcons' },
     { id: 'Shortlist', title: 'Shortlist', icon: 'heart-outline', library: 'MaterialCommunityIcons' },
     { id: 'SettingsScreen', title: 'Settings', icon: 'cog-outline', library: 'MaterialCommunityIcons' },
-    { id: 'BlockAccountsPage', title: 'Block Accounts', icon: 'account-cancel-outline', library: 'MaterialCommunityIcons' },
-    { id: 'AboutPage', title: 'About', icon: 'information-outline', library: 'MaterialCommunityIcons' },
-    { id: 'HelpSupportPage', title: 'Help & Support', icon: 'headset', library: 'MaterialCommunityIcons' },
-    { id: 'PrivacyPolicyPage', title: 'Privacy & Policy', icon: 'shield-check-outline', library: 'MaterialCommunityIcons' },
+    { id: 'BlockedAccountsScreen', title: 'Block Accounts', icon: 'account-cancel-outline', library: 'MaterialCommunityIcons' },
+    { id: 'AboutScreen', title: 'About', icon: 'information-outline', library: 'MaterialCommunityIcons' },
+    { id: 'HelpSupportScreen', title: 'Help & Support', icon: 'headset', library: 'MaterialCommunityIcons' },
+    { id: 'PrivacyPolicyScreen', title: 'Privacy & Policy', icon: 'shield-check-outline', library: 'MaterialCommunityIcons' },
   ];
 
   const handleMenuPress = (item) => {
