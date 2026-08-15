@@ -377,7 +377,7 @@ const styles = StyleSheet.create({
   complexionEmoji: { fontSize: 32, marginBottom: 8 },
   complexionText: { fontSize: 14, color: '#555' },
 
-  footer: { flexDirection: 'row', height: 60, borderTopWidth: 1, borderTopColor: '#F0F0F0', backgroundColor: '#FFFFFF' },
+  footer: { flexDirection: 'row', height: 60, borderTopWidth: 1, borderTopColor: '#e2d8d8', backgroundColor: '#FFFFFF' },
   footerBtnLeft: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   footerBtnRight: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   footerDivider: { width: 1, height: '60%', backgroundColor: '#E0E0E0', alignSelf: 'center' },

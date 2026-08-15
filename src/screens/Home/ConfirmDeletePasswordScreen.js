@@ -7,38 +7,50 @@ import {
   SafeAreaView, 
   TextInput 
 } from 'react-native';
+import useThemeStore from '../../store/useThemeStore';
 
 export default function ConfirmDeletePasswordScreen({ navigation }) {
+  const { theme } = useThemeStore();
   const [password, setPassword] = useState('');
 
   const handleDeleteProfile = () => {
     console.log('Password entered, proceeding to delete account...');
-    // Navigate to the final deletion success screen
     navigation.replace('AccountDeletedSuccessScreen');
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Semi-transparent dark overlay background mimicking a popup modal */}
       <View style={styles.modalOverlay}>
-        <View style={styles.popupCard}>
+        <View style={[styles.popupCard, { backgroundColor: theme.colors.surface }]}>
           
-          <Text style={styles.popupTitle}>Confirm Your Account Deletion</Text>
+          <Text style={[styles.popupTitle, { color: theme.colors.primary }]}>
+            Confirm Your Account Deletion
+          </Text>
           
-          <Text style={styles.popupSubtitle}>
+          <Text style={[styles.popupSubtitle, { color: theme.colors.subtext }]}>
             For Confirming Your Account Deletion{'\n'}We Need To Have Your Password First
           </Text>
 
           <TextInput
-            style={styles.passwordInput}
+            style={[
+              styles.passwordInput,
+              {
+                backgroundColor: theme.mode === 'dark' ? '#2A2A35' : '#F9F9F9',
+                borderColor: theme.colors.border,
+                color: theme.colors.text
+              }
+            ]}
             placeholder="Type Your Password"
-            placeholderTextColor="#999"
+            placeholderTextColor={theme.mode === 'dark' ? '#c8c7c7' : '#999999'}
             secureTextEntry={true}
             value={password}
             onChangeText={setPassword}
           />
 
-          <TouchableOpacity style={styles.deleteProfileButton} onPress={handleDeleteProfile}>
+          <TouchableOpacity 
+            style={[styles.deleteProfileButton, { backgroundColor: theme.colors.primary }]} 
+            onPress={handleDeleteProfile}
+          >
             <Text style={styles.deleteProfileButtonText}>Delete Profile</Text>
           </TouchableOpacity>
 
@@ -51,7 +63,7 @@ export default function ConfirmDeletePasswordScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)', // Dimmed background look
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
   modalOverlay: {
     flex: 1,
@@ -61,7 +73,6 @@ const styles = StyleSheet.create({
   },
   popupCard: {
     width: '100%',
-    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     paddingVertical: 30,
     paddingHorizontal: 24,
@@ -75,32 +86,26 @@ const styles = StyleSheet.create({
   popupTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#C2183D', // Maroon title
     marginBottom: 20,
     textAlign: 'center',
   },
   popupSubtitle: {
     fontSize: 13,
-    color: '#555555',
     textAlign: 'center',
     lineHeight: 20,
     marginBottom: 25,
   },
   passwordInput: {
     width: '100%',
-    backgroundColor: '#F9F9F9',
     borderWidth: 1,
-    borderColor: '#EAEAEA',
     borderRadius: 8,
     paddingVertical: 14,
     paddingHorizontal: 15,
     fontSize: 14,
-    color: '#333333',
     marginBottom: 25,
   },
   deleteProfileButton: {
     width: '100%',
-    backgroundColor: '#C2183D',
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',

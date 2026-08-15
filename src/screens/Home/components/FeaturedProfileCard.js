@@ -159,7 +159,7 @@ export default function FeaturedProfileCard() {
               onPress={() =>
                 navigation.navigate('ProfileDetail', { profile })
               }
-              style={[styles.imagePlaceholder, { backgroundColor: '#B0B0B0' }]}
+              style={[styles.imagePlaceholder, { backgroundColor: theme.mode === 'dark' ? '#2A2A35' : '#B0B0B0' }]}
             >
               {/* Top Left: ID Code Badge */}
               <View style={styles.idBadge}>
@@ -192,21 +192,21 @@ export default function FeaturedProfileCard() {
 
                 {/* Popover Menu Dropdown Box */}
                 {activeMenuIndex === index && (
-                  <View style={styles.dropdownMenu}>
+                  <View style={[styles.dropdownMenu, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
                     <TouchableOpacity
                       style={styles.dropdownItem}
                       onPress={() => setActiveMenuIndex(null)}
                     >
-                      <Text style={styles.dropdownText}>Not Interested</Text>
+                      <Text style={[styles.dropdownText, { color: theme.colors.text }]}>Not Interested</Text>
                     </TouchableOpacity>
 
-                    <View style={styles.dropdownDivider} />
+                    <View style={[styles.dropdownDivider, { backgroundColor: theme.colors.border }]} />
 
                     <TouchableOpacity
                       style={styles.dropdownItem}
                       onPress={() => setActiveMenuIndex(null)}
                     >
-                      <Text style={styles.dropdownText}>Block Account</Text>
+                      <Text style={[styles.dropdownText, { color: theme.colors.text }]}>Block Account</Text>
                     </TouchableOpacity>
                   </View>
                 )}
@@ -226,10 +226,10 @@ export default function FeaturedProfileCard() {
                 {/* Action Buttons Row with Left & Right Arrow Buttons */}
                 <View style={styles.buttonRow}>
                   <TouchableOpacity
-                    style={styles.arrowBtn}
+                    style={[styles.arrowBtn, { backgroundColor: theme.colors.surface }]}
                     onPress={handlePrev}
                   >
-                    <Text style={styles.arrowText}>←</Text>
+                    <Text style={[styles.arrowText, { color: theme.colors.text }]}>←</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
@@ -259,10 +259,10 @@ export default function FeaturedProfileCard() {
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                    style={styles.arrowBtn}
+                    style={[styles.arrowBtn, { backgroundColor: theme.colors.surface }]}
                     onPress={handleNext}
                   >
-                    <Text style={styles.arrowText}>→</Text>
+                    <Text style={[styles.arrowText, { color: theme.colors.text }]}>→</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -338,7 +338,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 45,
     right: 0,
-    backgroundColor: '#FFFFFF',
     borderRadius: 8,
     width: 140,
     shadowColor: '#000',
@@ -347,6 +346,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     overflow: 'hidden',
+    borderWidth: 1,
   },
   dropdownItem: {
     paddingVertical: 12,
@@ -355,11 +355,9 @@ const styles = StyleSheet.create({
   dropdownText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#333333',
   },
   dropdownDivider: {
     height: 1,
-    backgroundColor: '#E0E0E0',
   },
   bottomOverlay: {
     position: 'absolute',
@@ -403,13 +401,11 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
   },
   arrowText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333333',
   },
 });

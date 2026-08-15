@@ -10,9 +10,12 @@ import {
   Modal
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import useThemeStore from '../../store/useThemeStore';
 
 export default function BlockedAccountsScreen({ navigation }) {
-  // Mock data - Notice "Sandy" is added here to test the dynamic popup
+  const { theme } = useThemeStore();
+
+  // Mock data
   const [blockedUsers, setBlockedUsers] = useState([
     { id: '1', name: 'Rahul Roy', avatar: 'https://i.pravatar.cc/150?img=11' },
     { id: '2', name: 'Sandy', avatar: 'https://i.pravatar.cc/150?img=12' },
@@ -22,59 +25,52 @@ export default function BlockedAccountsScreen({ navigation }) {
     { id: '6', name: 'Rahul Roy', avatar: 'https://i.pravatar.cc/150?img=16' },
   ]);
 
-  // State to handle the modal visibility and track which user is selected
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
-  // Triggered when "Unblock" is pressed on a list item
   const handleOpenModal = (user) => {
     setSelectedUser(user);
     setIsModalVisible(true);
   };
 
-  // Triggered when "Unblock" is pressed inside the modal
   const handleConfirmUnblock = () => {
     if (selectedUser) {
-      // Remove the unblocked user from the list
       const updatedList = blockedUsers.filter(user => user.id !== selectedUser.id);
       setBlockedUsers(updatedList);
     }
-    // Close modal and reset selection
     setIsModalVisible(false);
     setSelectedUser(null);
   };
 
-  // Triggered when "Cancel" is pressed inside the modal
   const handleCancel = () => {
     setIsModalVisible(false);
     setSelectedUser(null);
   };
 
-  // Renders each row in the FlatList
   const renderItem = ({ item }) => (
     <View style={styles.listItem}>
       <View style={styles.userInfo}>
         <Image source={{ uri: item.avatar }} style={styles.avatar} />
-        <Text style={styles.userName}>{item.name}</Text>
+        <Text style={[styles.userName, { color: theme.colors.text }]}>{item.name}</Text>
       </View>
       <TouchableOpacity 
-        style={styles.unblockButtonList} 
+        style={[styles.unblockButtonList, { backgroundColor: theme.mode === 'dark' ? '#3A3A45' : '#CFCFCF' }]} 
         onPress={() => handleOpenModal(item)}
       >
-        <Text style={styles.unblockButtonListText}>Unblock</Text>
+        <Text style={[styles.unblockButtonListText, { color: theme.mode === 'dark' ? '#E0E0E0' : '#444444' }]}>Unblock</Text>
       </TouchableOpacity>
     </View>
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { backgroundColor: theme.colors.surface }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Icon name="arrow-back" size={24} color="#555" />
+          <Icon name="arrow-back" size={24} color={theme.colors.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Blocked Account</Text>
-        <View style={{ width: 24 }} /> {/* Empty view for flex alignment */}
+        <Text style={[styles.headerTitle, { color: theme.colors.primary }]}>Blocked Account</Text>
+        <View style={{ width: 24 }} />
       </View>
 
       {/* Blocked Users List */}
@@ -94,26 +90,32 @@ export default function BlockedAccountsScreen({ navigation }) {
         onRequestClose={handleCancel}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.modalCard}>
+          <View style={[styles.modalCard, { backgroundColor: theme.colors.surface }]}>
             
-            {/* Dynamic Title */}
-            <Text style={styles.modalTitle}>
-              Unblock {selectedUser?.name} ?
+            {/* Dynamic Title - Added safe fallback to prevent crashes */}
+            <Text style={[styles.modalTitle, { color: theme.colors.primary }]}>
+              Unblock {selectedUser?.name || ''} ?
             </Text>
             
-            {/* Dynamic Body Text */}
-            <Text style={styles.modalSubtitle}>
-              {selectedUser?.name} Will Now Be Able To Send You Request Again And Message You On Shadibiha.Com. They Won't Be Notified That You Unblocked Them.
+            {/* Dynamic Body Text - Added safe fallback to prevent crashes */}
+            <Text style={[styles.modalSubtitle, { color: theme.colors.subtext }]}>
+              {selectedUser?.name || ''} Will Now Be Able To Send You Request Again And Message You On Shadibiha.Com. They Won't Be Notified That You Unblocked Them.
             </Text>
 
             {/* Action Buttons */}
             <View style={styles.modalButtonRow}>
-              <TouchableOpacity style={styles.modalUnblockButton} onPress={handleConfirmUnblock}>
-                <Text style={styles.modalUnblockButtonText}>Unblock</Text>
+              <TouchableOpacity 
+                style={[styles.modalUnblockButton, { backgroundColor: theme.mode === 'dark' ? '#3A3A45' : '#CFCFCF' }]} 
+                onPress={handleConfirmUnblock}
+              >
+                <Text style={[styles.modalUnblockButtonText, { color: theme.mode === 'dark' ? '#E0E0E0' : '#444444' }]}>Unblock</Text>
               </TouchableOpacity>
               
-              <TouchableOpacity style={styles.modalCancelButton} onPress={handleCancel}>
-                <Text style={styles.modalCancelButtonText}>Cancel</Text>
+              <TouchableOpacity 
+                style={[styles.modalCancelButton, { backgroundColor: theme.colors.text }]} 
+                onPress={handleCancel}
+              >
+                <Text style={[styles.modalCancelButtonText, { color: theme.colors.surface }]}>Cancel</Text>
               </TouchableOpacity>
             </View>
 
@@ -128,7 +130,6 @@ export default function BlockedAccountsScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFAFA',
   },
   header: {
     flexDirection: 'row',
@@ -136,7 +137,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    backgroundColor: '#FFFFFF',
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -149,7 +149,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#8B1A32',
   },
   listContainer: {
     paddingHorizontal: 20,
@@ -175,16 +174,13 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#333333',
   },
   unblockButtonList: {
-    backgroundColor: '#CFCFCF', // Light grey matching design
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 6,
   },
   unblockButtonListText: {
-    color: '#444444',
     fontSize: 14,
     fontWeight: '600',
   },
@@ -198,7 +194,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   modalCard: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 8,
     paddingVertical: 35,
     paddingHorizontal: 25,
@@ -213,13 +208,11 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#8B1A32',
     marginBottom: 15,
     textAlign: 'center',
   },
   modalSubtitle: {
     fontSize: 13,
-    color: '#666666',
     textAlign: 'center',
     lineHeight: 20,
     marginBottom: 30,
@@ -230,7 +223,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   modalUnblockButton: {
-    backgroundColor: '#CFCFCF',
     paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 8,
@@ -239,12 +231,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalUnblockButtonText: {
-    color: '#444444',
     fontSize: 15,
     fontWeight: '600',
   },
   modalCancelButton: {
-    backgroundColor: '#333333',
     paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 8,
@@ -252,7 +242,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalCancelButtonText: {
-    color: '#FFFFFF',
     fontSize: 15,
     fontWeight: '600',
   },

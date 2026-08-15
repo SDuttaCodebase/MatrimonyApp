@@ -11,63 +11,75 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import useThemeStore from '../../store/useThemeStore';
 
 export default function ChangePasswordScreen({ navigation }) {
+  const { theme } = useThemeStore();
   const [mobile, setMobile] = useState('');
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
         style={styles.keyboardView}
       >
-        {/* Header */}
-        <View style={styles.header}>
+        <View style={[styles.header, { backgroundColor: theme.colors.surface }]}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-            <Icon name="arrow-back" size={24} color="#555" />
+            <Icon name="arrow-back" size={24} color={theme.colors.text} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Change Password</Text>
-          <View style={{ width: 24 }} /> {/* Empty view for flex alignment */}
+          <Text style={[styles.headerTitle, { color: theme.colors.primary }]}>Change Password</Text>
+          <View style={{ width: 24 }} />
         </View>
 
-        {/* Main Content */}
         <View style={styles.contentContainer}>
           
-          {/* Text Section */}
-          <Text style={styles.pageTitle}>Change Password</Text>
-          <Text style={styles.instructionsText}>
+          <Text style={[styles.pageTitle, { color: theme.colors.text }]}>Change Password</Text>
+          
+          <Text style={[styles.instructionsText, { color: theme.colors.subtext }]}>
             Before Changing Your Password Please Confirm That You Are Able To Receive SMS Or Call At Your Number.
           </Text>
-          <Text style={styles.instructionsText}>
+          
+          <Text style={[styles.instructionsText, { color: theme.colors.subtext }]}>
             We Are Sending A 4 Digit OTP On Your Phone Number
           </Text>
 
-          {/* Input Section */}
-          <Text style={styles.inputLabel}>Mobile No.</Text>
+          <Text style={[styles.inputLabel, { color: theme.colors.primary }]}>Mobile No.</Text>
+          
           <View style={styles.inputRow}>
-            {/* Country Code Dropdown Fake Button */}
-            <TouchableOpacity style={styles.countryCodePicker}>
-              <Text style={styles.countryCodeText}>+ 91</Text>
-              <MaterialIcons name="arrow-drop-down" size={20} color="#333" />
+            <TouchableOpacity 
+              style={[
+                styles.countryCodePicker, 
+                { 
+                  backgroundColor: theme.mode === 'dark' ? '#2A2A35' : '#F5F5F5',
+                  borderColor: theme.colors.border 
+                }
+              ]}
+            >
+              <Text style={[styles.countryCodeText, { color: theme.colors.text }]}>+ 91</Text>
+              <MaterialIcons name="arrow-drop-down" size={20} color={theme.colors.text} />
             </TouchableOpacity>
 
-            {/* Phone Number Input */}
             <TextInput
-              style={styles.textInput}
+              style={[
+                styles.textInput, 
+                { 
+                  backgroundColor: theme.mode === 'dark' ? '#2A2A35' : '#F5F5F5',
+                  borderColor: theme.colors.border,
+                  color: theme.colors.text
+                }
+              ]}
               placeholder="Mobile No."
-              placeholderTextColor="#B0B0B0"
+              placeholderTextColor={theme.mode === 'dark' ? '#888888' : '#B0B0B0'}
               keyboardType="phone-pad"
               value={mobile}
               onChangeText={setMobile}
             />
           </View>
 
-          {/* Spacer pushes the button to the bottom */}
           <View style={{ flex: 1 }} />
 
-          {/* Change Button */}
           <TouchableOpacity 
-            style={styles.changeButton} 
+            style={[styles.changeButton, { backgroundColor: theme.colors.primary }]} 
             onPress={() => navigation.navigate('ChangePassOTP')}
           >
             <Text style={styles.changeButtonText}>Change</Text>
@@ -82,7 +94,6 @@ export default function ChangePasswordScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFAFA', // Standard light background
   },
   keyboardView: {
     flex: 1,
@@ -93,9 +104,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    backgroundColor: '#FFFFFF',
-    elevation: 2, // shadow for Android
-    shadowColor: '#000', // shadow for iOS
+    elevation: 2,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
@@ -106,30 +116,26 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#8B1A32', // Deep maroon
   },
   contentContainer: {
     flex: 1,
     paddingHorizontal: 20,
     paddingTop: 30,
-    paddingBottom: 40, // Space from the bottom of the screen
+    paddingBottom: 40,
   },
   pageTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#666666',
     marginBottom: 15,
   },
   instructionsText: {
     fontSize: 13,
-    color: '#444444',
     lineHeight: 20,
     marginBottom: 20,
   },
   inputLabel: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#8B1A32', // Maroon label
     marginBottom: 10,
     marginTop: 10,
   },
@@ -142,32 +148,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F5F5F5',
     borderWidth: 1,
-    borderColor: '#E0E0E0',
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 10,
-    width: '25%', // Takes up a quarter of the row
+    width: '25%',
   },
   countryCodeText: {
     fontSize: 14,
-    color: '#333333',
     marginRight: 4,
   },
   textInput: {
-    backgroundColor: '#F5F5F5',
     borderWidth: 1,
-    borderColor: '#E0E0E0',
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 15,
     fontSize: 14,
-    color: '#333333',
-    width: '70%', // Takes up the remaining space
+    width: '70%',
   },
   changeButton: {
-    backgroundColor: '#C2183D', // Bright red/maroon for the button
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',

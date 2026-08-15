@@ -1,4 +1,3 @@
-// src/screens/Auth/OtpScreen.js
 import React, { useState, useRef } from 'react';
 import { 
   View, 

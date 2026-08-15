@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import useThemeStore from '../../store/useThemeStore';
 
 export default function AccountDeletedSuccessScreen({ navigation }) {
-  
+  const { theme } = useThemeStore();
+
   useEffect(() => {
     // 3-second timer before redirecting to Login
     const timer = setTimeout(() => {
@@ -17,9 +19,9 @@ export default function AccountDeletedSuccessScreen({ navigation }) {
   }, [navigation]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={styles.contentContainer}>
-        <Text style={styles.successText}>
+        <Text style={[styles.successText, { color: theme.colors.primary }]}>
           Your Account Has Been{'\n'}Successfully Deleted.
         </Text>
       </View>
@@ -30,7 +32,6 @@ export default function AccountDeletedSuccessScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
   },
   contentContainer: {
     flex: 1,
@@ -41,7 +42,6 @@ const styles = StyleSheet.create({
   successText: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#8B1A32',
     textAlign: 'center',
     lineHeight: 30,
   },

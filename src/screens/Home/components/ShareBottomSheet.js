@@ -11,24 +11,27 @@ import {
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import useThemeStore from '../../../store/useThemeStore';
 
 const { height: windowHeight } = Dimensions.get('window');
 
 // Reusable Share Option Item matching the Refer A Friend page style
-const ShareOption = ({ iconFamily, iconName, label, color, onPress }) => (
+const ShareOption = ({ iconFamily, iconName, label, color, onPress, theme }) => (
   <TouchableOpacity style={styles.optionItem} onPress={onPress}>
-    <View style={[styles.iconCircle, { backgroundColor: '#FFFFFF' }]}>
+    <View style={[styles.iconCircle, { backgroundColor: theme.colors.surface, shadowColor: theme.colors.text }]}>
       {iconFamily === 'MaterialCommunityIcons' ? (
         <MaterialCommunityIcons name={iconName} size={30} color={color} />
       ) : (
         <FontAwesome name={iconName} size={30} color={color} />
       )}
     </View>
-    <Text style={styles.optionLabel}>{label}</Text>
+    <Text style={[styles.optionLabel, { color: theme.colors.text }]}>{label}</Text>
   </TouchableOpacity>
 );
 
 export default function ShareBottomSheet({ visible, onClose, profile }) {
+  const { theme } = useThemeStore();
+
   const handleShareOption = (platform) => {
     console.log(`Sharing to ${platform}...`);
     onClose();
@@ -47,10 +50,10 @@ export default function ShareBottomSheet({ visible, onClose, profile }) {
           
           {/* Prevent touches inside the sheet from closing it */}
           <TouchableWithoutFeedback>
-            <View style={styles.sheetContainer}>
+            <View style={[styles.sheetContainer, { backgroundColor: theme.colors.background, shadowColor: theme.colors.text }]}>
               
               {/* Top Drag Indicator Handle */}
-              <View style={styles.dragHandle} />
+              <View style={[styles.dragHandle, { backgroundColor: theme.colors.border }]} />
 
               {/* Share Options Grid */}
               <View style={styles.gridContainer}>
@@ -63,6 +66,7 @@ export default function ShareBottomSheet({ visible, onClose, profile }) {
                     label="Message" 
                     color="#00A8FF" 
                     onPress={() => handleShareOption('Message')}
+                    theme={theme}
                   />
                   <ShareOption 
                     iconFamily="MaterialCommunityIcons" 
@@ -70,6 +74,7 @@ export default function ShareBottomSheet({ visible, onClose, profile }) {
                     label="Gmail" 
                     color="#EA4335" 
                     onPress={() => handleShareOption('Gmail')}
+                    theme={theme}
                   />
                   <ShareOption 
                     iconFamily="FontAwesome" 
@@ -77,6 +82,7 @@ export default function ShareBottomSheet({ visible, onClose, profile }) {
                     label="Whatsapp" 
                     color="#25D366" 
                     onPress={() => handleShareOption('Whatsapp')}
+                    theme={theme}
                   />
                 </View>
 
@@ -88,6 +94,7 @@ export default function ShareBottomSheet({ visible, onClose, profile }) {
                     label="Facebook" 
                     color="#1877F2" 
                     onPress={() => handleShareOption('Facebook')}
+                    theme={theme}
                   />
                   <ShareOption 
                     iconFamily="MaterialCommunityIcons" 
@@ -95,6 +102,7 @@ export default function ShareBottomSheet({ visible, onClose, profile }) {
                     label="Instagram" 
                     color="#E1306C" 
                     onPress={() => handleShareOption('Instagram')}
+                    theme={theme}
                   />
                 </View>
 
@@ -116,14 +124,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   sheetContainer: {
-    backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingHorizontal: 25,
     paddingTop: 15,
     paddingBottom: 40,
     maxHeight: windowHeight * 0.45,
-    shadowColor: '#000',
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
@@ -133,7 +139,6 @@ const styles = StyleSheet.create({
     width: 40,
     height: 5,
     borderRadius: 3,
-    backgroundColor: '#D3D3D3',
     alignSelf: 'center',
     marginBottom: 25,
   },
@@ -156,7 +161,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
-    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -165,7 +169,6 @@ const styles = StyleSheet.create({
   optionLabel: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#666666',
     textAlign: 'center',
   },
 });

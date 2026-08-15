@@ -1,3 +1,5 @@
+// src/theme/theme.js (or wherever your theme file is located)
+
 const palette = {
   brandDarkest: '#80001E',
   brandDark: '#80263B', 

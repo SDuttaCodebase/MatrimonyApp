@@ -74,7 +74,7 @@ export default function HundredPercentMatchesBanner() {
             onPress={() => navigation.navigate('VerifiedSoulmates')}
             style={[styles.cardContainer, { width: BANNER_WIDTH }]}
           >
-            <View style={[styles.imagePlaceholder, { backgroundColor: '#80001E' }]}>
+            <View style={[styles.imagePlaceholder, { backgroundColor: theme.colors.brandDarkest }]}>
               <View style={styles.overlay}>
                 <Text style={styles.bannerTitle}>{banner.title}</Text>
                 <Text style={styles.bannerSubtitle}>{banner.subtitle}</Text>
@@ -92,7 +92,7 @@ export default function HundredPercentMatchesBanner() {
             key={index}
             style={[
               styles.dot,
-              { backgroundColor: '#CCCCCC' },
+              { backgroundColor: theme.mode === 'dark' ? '#3A3A45' : '#CCCCCC' },
               currentIndex === index && [
                 styles.activeDot,
                 { backgroundColor: theme.colors.primary },

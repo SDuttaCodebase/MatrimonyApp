@@ -16,9 +16,9 @@ export default function TopHeader() {
         { backgroundColor: theme.colors.background },
       ]}
     >
-      {/* Left Icon: Hamburger Menu */}
+      {/* Left Icon: Hamburger Menu (Color dynamically changes now) */}
       <TouchableOpacity onPress={() => navigation.openDrawer()}>
-        <Icon name="menu" size={28} color="#000" /> {/* Your 3-line icon */}
+        <Icon name="menu" size={28} color={theme.colors.text} /> 
       </TouchableOpacity>
 
       {/* Center Title: App Brand Name using custom font */}
@@ -26,12 +26,12 @@ export default function TopHeader() {
         Shadibaha
       </Text>
 
-      {/* Right Icon: Search */}
+      {/* Right Icon: Search Vector Icon replacing the emoji */}
       <TouchableOpacity
         style={styles.iconButton}
         onPress={() => navigation.navigate('Search')}
       >
-        <Text style={[styles.iconText, { color: theme.colors.text }]}>🔍</Text>
+        <Icon name="search" size={26} color={theme.colors.text} />
       </TouchableOpacity>
     </View>
   );
@@ -48,9 +48,6 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     padding: 5,
-  },
-  iconText: {
-    fontSize: 22,
   },
   brandText: {
     fontFamily: 'SansitaRegular',

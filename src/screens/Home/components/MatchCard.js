@@ -9,7 +9,7 @@ export default function MatchCard({ name = "Lorem Ipsum", details = "Hindu, Beng
   return (
     <TouchableOpacity style={[styles.cardContainer, { backgroundColor: theme.colors.surface }]}>
       {/* Small Image Placeholder */}
-      <View style={[styles.imagePlaceholder, { backgroundColor: '#C0C0C0' }]} />
+      <View style={[styles.imagePlaceholder, { backgroundColor: theme.mode === 'dark' ? '#2A2A35' : '#C0C0C0' }]} />
       
       {/* Details underneath the image */}
       <View style={styles.infoContainer}>

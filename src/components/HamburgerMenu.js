@@ -1,12 +1,16 @@
+// src/components/HamburgerMenu.js
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView, Dimensions, Switch, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'; 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import useThemeStore from '../store/useThemeStore';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 export default function HamburgerMenu({ navigation }) {
-  // Set default active state
+  // 1. ALL HOOKS MUST BE DECLARED AT THE VERY TOP, UNCONDITIONALLY
+  const { theme, toggleTheme } = useThemeStore();
+  const isDarkMode = theme.mode === 'dark';
   const [activeItem, setActiveItem] = useState('Notification');
 
   // Menu data array
@@ -22,15 +26,13 @@ export default function HamburgerMenu({ navigation }) {
 
   const handleMenuPress = (item) => {
     setActiveItem(item.title);
-    
-    // Check if the route exists before navigating to prevent crashes
     if (item.id) {
       navigation.navigate(item.id);
     }
   };
 
   const renderIcon = (item, isSelected) => {
-    const color = isSelected ? '#D32F2F' : '#333333'; // Red if active, Dark Gray if inactive
+    const color = isSelected ? theme.colors.primary : theme.colors.subtext;
     if (item.library === 'MaterialCommunityIcons') {
       return <MaterialCommunityIcons name={isSelected && item.title === 'Notification' ? 'bell' : item.icon} size={24} color={color} />;
     }
@@ -38,21 +40,22 @@ export default function HamburgerMenu({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.surface }]}>
+      
       {/* Profile Header Section */}
-      <View style={styles.profileSection}>
+      <View style={[styles.profileSection, { borderBottomColor: theme.colors.border }]}>
         <Image 
-          source={{ uri: 'https://i.pravatar.cc/150?img=1' }} // Replace with actual user image
+          source={{ uri: 'https://i.pravatar.cc/150?img=1' }} 
           style={styles.profileImage} 
         />
         <View style={styles.profileTextContainer}>
-          <Text style={styles.profileName}>Lorem Ipsum</Text>
-          <Text style={styles.profileRole}>UI/UX Designer</Text>
+          <Text style={[styles.profileName, { color: theme.colors.text }]}>Sandipan Dutta</Text>
+          <Text style={[styles.profileRole, { color: theme.colors.subtext }]}>Computer Science Student</Text>
         </View>
       </View>
 
       {/* Menu Items List */}
-      <View style={styles.menuContainer}>
+      <ScrollView contentContainerStyle={styles.menuContainer} showsVerticalScrollIndicator={false}>
         {menuItems.map((item, index) => {
           const isSelected = activeItem === item.title;
           return (
@@ -64,18 +67,44 @@ export default function HamburgerMenu({ navigation }) {
               <View style={styles.iconContainer}>
                 {renderIcon(item, isSelected)}
               </View>
-              <Text style={[styles.menuItemText, isSelected && styles.activeMenuItemText]}>
+              <Text style={[
+                styles.menuItemText, 
+                { color: theme.colors.text },
+                isSelected && { color: theme.colors.primary, fontWeight: '600' }
+              ]}>
                 {item.title}
               </Text>
             </TouchableOpacity>
           );
         })}
-      </View>
+
+        {/* --- DARK MODE TOGGLE ROW --- */}
+        <View style={styles.menuItem}>
+          <View style={styles.iconContainer}>
+            <MaterialCommunityIcons 
+              name={isDarkMode ? "weather-night" : "white-balance-sunny"} 
+              size={24} 
+              color={theme.colors.primary} 
+            />
+          </View>
+          <Text style={[styles.menuItemText, { color: theme.colors.text, flex: 1 }]}>
+            Dark Mode
+          </Text>
+          <Switch
+            trackColor={{ false: '#D3D3D3', true: theme.colors.brandLight }}
+            thumbColor={isDarkMode ? theme.colors.primary : '#f4f3f4'}
+            ios_backgroundColor="#D3D3D3"
+            onValueChange={toggleTheme}
+            value={isDarkMode}
+          />
+        </View>
+
+      </ScrollView>
 
       {/* Footer Section */}
-      <View style={styles.footerContainer}>
-        <Text style={styles.footerText}>About Application</Text>
-        <Text style={styles.footerSubText}>Version 0.1</Text>
+      <View style={[styles.footerContainer, { borderTopColor: theme.colors.border }]}>
+        <Text style={[styles.footerText, { color: theme.colors.subtext }]}>Shadibiha.Com</Text>
+        <Text style={[styles.footerSubText, { color: theme.colors.subtext }]}>Version 0.1</Text>
       </View>
     </SafeAreaView>
   );
@@ -84,16 +113,15 @@ export default function HamburgerMenu({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-    width: width * 0.75, // Takes up 75% of screen width like a standard drawer
+    width: width * 0.75,
   },
-  // Profile Header Styles
   profileSection: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 24,
     paddingTop: 40,
-    paddingBottom: 30,
+    paddingBottom: 25,
+    borderBottomWidth: 1,
   },
   profileImage: {
     width: 50,
@@ -108,23 +136,20 @@ const styles = StyleSheet.create({
   profileName: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#000000',
   },
   profileRole: {
     fontSize: 12,
-    color: '#888888',
     marginTop: 2,
   },
-  
-  // Menu Item Styles
   menuContainer: {
-    flex: 1,
     paddingHorizontal: 24,
+    paddingTop: 10,
+    paddingBottom: 20,
   },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 18,
+    paddingVertical: 15,
   },
   iconContainer: {
     width: 30,
@@ -133,28 +158,20 @@ const styles = StyleSheet.create({
   menuItemText: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#333333',
     marginLeft: 12,
   },
-  activeMenuItemText: {
-    color: '#D32F2F', // The red color for active state
-    fontWeight: '600',
-  },
-
-  // Footer Styles
   footerContainer: {
-    paddingBottom: 40,
+    paddingVertical: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    borderTopWidth: 1,
   },
   footerText: {
     fontSize: 12,
-    color: '#666666',
     fontWeight: '500',
   },
   footerSubText: {
     fontSize: 10,
-    color: '#999999',
-    marginTop: 4,
+    marginTop: 2,
   },
 });

@@ -7,18 +7,28 @@ import {
   SafeAreaView 
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import useThemeStore from '../../store/useThemeStore';
 
-// Custom Radio Button Component
-const RadioButton = ({ label, selected, onPress }) => (
+const RadioButton = ({ label, selected, onPress, theme }) => (
   <TouchableOpacity style={styles.radioContainer} onPress={onPress} activeOpacity={0.8}>
-    <View style={[styles.outerCircle, selected && styles.selectedOuterCircle]}>
-      {selected && <View style={styles.innerCircle} />}
+    <View 
+      style={[
+        styles.outerCircle, 
+        { backgroundColor: theme.mode === 'dark' ? '#3A3A45' : '#E0E0E0' },
+        selected && [
+          styles.selectedOuterCircle, 
+          { backgroundColor: theme.mode === 'dark' ? '#4A4A55' : '#F0D4DA' }
+        ]
+      ]}
+    >
+      {selected && <View style={[styles.innerCircle, { backgroundColor: theme.colors.primary }]} />}
     </View>
-    <Text style={styles.radioLabel}>{label}</Text>
+    <Text style={[styles.radioLabel, { color: theme.colors.text }]}>{label}</Text>
   </TouchableOpacity>
 );
 
 export default function DeleteAccountScreen({ navigation }) {
+  const { theme } = useThemeStore();
   const [selectedReason, setSelectedReason] = useState('Marriage Fixed');
 
   const reasons = [
@@ -43,28 +53,28 @@ export default function DeleteAccountScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { backgroundColor: theme.colors.surface }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Icon name="arrow-back" size={24} color="#555" />
+          <Icon name="arrow-back" size={24} color={theme.colors.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Delete Account</Text>
-        <View style={{ width: 24 }} /> {/* Empty view for flex alignment */}
+        <Text style={[styles.headerTitle, { color: theme.colors.primary }]}>Delete Account</Text>
+        <View style={{ width: 24 }} />
       </View>
 
       {/* Main Content */}
       <View style={styles.contentContainer}>
         
-        <Text style={styles.topText}>
+        <Text style={[styles.topText, { color: theme.colors.text }]}>
           We Hope You Found Your Life Partner On Shadibiha.Com .
         </Text>
 
-        <Text style={styles.warningText}>
+        <Text style={[styles.warningText, { color: theme.mode === 'dark' ? '#FF6B6B' : '#D32F2F' }]}>
           Note : Profile Once Deleted Cannot Be Restart Again
         </Text>
 
-        <Text style={styles.instructionText}>
+        <Text style={[styles.instructionText, { color: theme.colors.subtext }]}>
           Please Choose A Reason For Profile Deletion: -
         </Text>
 
@@ -76,15 +86,18 @@ export default function DeleteAccountScreen({ navigation }) {
               label={reason}
               selected={selectedReason === reason}
               onPress={() => setSelectedReason(reason)}
+              theme={theme}
             />
           ))}
         </View>
 
-        {/* Spacer pushes the button to the bottom */}
         <View style={{ flex: 1 }} />
 
         {/* Delete Button */}
-        <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
+        <TouchableOpacity 
+          style={[styles.deleteButton, { backgroundColor: theme.colors.primary }]} 
+          onPress={handleDelete}
+        >
           <Text style={styles.deleteButtonText}>Delete My Account</Text>
         </TouchableOpacity>
 
@@ -96,7 +109,6 @@ export default function DeleteAccountScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFAFA',
   },
   header: {
     flexDirection: 'row',
@@ -104,7 +116,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    backgroundColor: '#FFFFFF',
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -117,7 +128,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#8B1A32', // Maroon header
   },
   contentContainer: {
     flex: 1,
@@ -127,25 +137,20 @@ const styles = StyleSheet.create({
   },
   topText: {
     fontSize: 15,
-    color: '#444444',
     fontWeight: '500',
     marginBottom: 20,
     lineHeight: 22,
   },
   warningText: {
     fontSize: 13,
-    color: '#D32F2F', // Red note
     fontWeight: '600',
     marginBottom: 25,
   },
   instructionText: {
     fontSize: 13,
-    color: '#555555',
     fontWeight: '500',
     marginBottom: 20,
   },
-  
-  // Custom Radio Button Styles
   radioListContainer: {
     marginTop: 10,
   },
@@ -158,29 +163,21 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
     borderRadius: 11,
-    backgroundColor: '#E0E0E0', // Solid grey when unselected
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
   },
-  selectedOuterCircle: {
-    backgroundColor: '#F0D4DA', // Light pink background when selected
-  },
+  selectedOuterCircle: {},
   innerCircle: {
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: '#8B1A32', // Deep maroon dot
   },
   radioLabel: {
     fontSize: 14,
-    color: '#333333',
     fontWeight: '500',
   },
-  
-  // Button Styles
   deleteButton: {
-    backgroundColor: '#C2183D',
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',

@@ -30,7 +30,7 @@ export default function MatchesList({ title, subtitle, data = [1, 2, 3, 4] }) {
           )}
         </View>
         <TouchableOpacity onPress={() => navigation.navigate('VerifiedSoulmates')}>
-          <Text style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
+          <Text style={[styles.viewAll, { color: theme.colors.primary }]}>
             View All
           </Text>
         </TouchableOpacity>

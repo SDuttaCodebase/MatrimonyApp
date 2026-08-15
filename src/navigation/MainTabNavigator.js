@@ -2,10 +2,11 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import useThemeStore from '../store/useThemeStore';
 
-// Import our screens and components
 import HamburgerMenu from '../components/HamburgerMenu';
 import HomeScreen from '../screens/Home/HomeScreen';
 import NetworkScreen from '../screens/Network/NetworkScreen';
@@ -15,9 +16,50 @@ import ProfileScreen from '../screens/Profile/ProfileScreen';
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
-// 1. We move your existing Tab Navigator into its own functional component
+const TabIconRenderer = ({ route, color, networkBadgeCount, chatBadgeCount }) => {
+  let iconName;
+  let badgeCount = 0;
+  let isFontAwesome = false;
+
+  if (route.name === 'Home') {
+    iconName = 'home';
+  } else if (route.name === 'Network') {
+    iconName = 'users';
+    isFontAwesome = true;
+    badgeCount = networkBadgeCount;
+  } else if (route.name === 'Chat') {
+    iconName = 'comment-dots';
+    isFontAwesome = true;
+    badgeCount = chatBadgeCount;
+  } else if (route.name === 'Profile') {
+    iconName = 'user-circle';
+    isFontAwesome = true;
+  }
+
+  return (
+    <View style={styles.iconWrapper}>
+      {isFontAwesome ? (
+        <FontAwesome5 name={iconName} size={22} color={color} />
+      ) : (
+        <MaterialCommunityIcons name={iconName} size={26} color={color} />
+      )}
+
+      {badgeCount > 0 && (
+        <View style={styles.badgeContainer}>
+          <MaterialCommunityIcons name="heart" size={20} color="#FF1493" style={styles.heartIcon} />
+          <Text style={styles.badgeText}>
+            {badgeCount > 99 ? '99+' : badgeCount}
+          </Text>
+        </View>
+      )}
+    </View>
+  );
+};
+
 function BottomTabs() {
   const { theme } = useThemeStore();
+  const networkBadgeCount = 5; 
+  const chatBadgeCount = 4;    
 
   return (
     <Tab.Navigator
@@ -34,15 +76,14 @@ function BottomTabs() {
           paddingTop: 10,
         },
         tabBarShowLabel: false,
-        tabBarIcon: ({ color, size }) => {
-          let icon;
-          if (route.name === 'Home') icon = '🏠';
-          else if (route.name === 'Network') icon = '👥';
-          else if (route.name === 'Chat') icon = '💬';
-          else if (route.name === 'Profile') icon = '👤';
-
-          return <Text style={{ fontSize: 24, color: color }}>{icon}</Text>;
-        },
+        tabBarIcon: ({ color }) => (
+          <TabIconRenderer 
+            route={route} 
+            color={color} 
+            networkBadgeCount={networkBadgeCount} 
+            chatBadgeCount={chatBadgeCount} 
+          />
+        ),
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
@@ -53,15 +94,53 @@ function BottomTabs() {
   );
 }
 
-// 2. We export the Drawer as the main navigator, injecting your custom HamburgerMenu,
-// and setting the BottomTabs as the primary screen inside the drawer.
 export default function MainTabNavigator() {
+  const { theme } = useThemeStore();
+
   return (
     <Drawer.Navigator
       drawerContent={props => <HamburgerMenu {...props} />}
-      screenOptions={{ headerShown: false }}
+      screenOptions={{ 
+        headerShown: false,
+        drawerStyle: {
+          backgroundColor: theme.colors.surface, // Fixes the white side border edge!
+          width: '75%',
+        },
+      }}
     >
       <Drawer.Screen name="MainTabs" component={BottomTabs} />
     </Drawer.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  iconWrapper: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  badgeContainer: {
+    position: 'absolute',
+    top: -6,
+    right: -16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 22,
+    height: 22,
+  },
+  heartIcon: {
+    position: 'absolute',
+    textShadowColor: 'rgba(0, 0, 0, 0.1)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
+  },
+  badgeText: {
+    color: '#FFFFFF',
+    fontSize: 10,
+    fontWeight: '700',
+    textAlign: 'center',
+    zIndex: 1,
+  },
+});

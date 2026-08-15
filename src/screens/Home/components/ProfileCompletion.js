@@ -12,7 +12,7 @@ export default function ProfileCompletion({ percentage }) {
       {/* Left Side: Avatar Placeholder & Text */}
       <View style={styles.leftContent}>
         {/* We will replace this View with an actual Image component later */}
-        <View style={styles.avatarPlaceholder} />
+        <View style={[styles.avatarPlaceholder, { backgroundColor: theme.mode === 'dark' ? '#2A2A35' : '#E0E0E0' }]} />
         
         <View style={styles.textContainer}>
           <Text style={[styles.title, { color: theme.colors.text }]}>
@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#E0E0E0',
     marginRight: 10,
   },
   textContainer: {
