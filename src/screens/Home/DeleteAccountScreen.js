@@ -15,10 +15,7 @@ const RadioButton = ({ label, selected, onPress, theme }) => (
       style={[
         styles.outerCircle, 
         { backgroundColor: theme.mode === 'dark' ? '#3A3A45' : '#E0E0E0' },
-        selected && [
-          styles.selectedOuterCircle, 
-          { backgroundColor: theme.mode === 'dark' ? '#4A4A55' : '#F0D4DA' }
-        ]
+        selected && { backgroundColor: theme.mode === 'dark' ? '#4A4A55' : '#F0D4DA' }
       ]}
     >
       {selected && <View style={[styles.innerCircle, { backgroundColor: theme.colors.primary }]} />}
@@ -54,7 +51,7 @@ export default function DeleteAccountScreen({ navigation }) {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      {/* Header */}
+      
       <View style={[styles.header, { backgroundColor: theme.colors.surface }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color={theme.colors.text} />
@@ -63,11 +60,10 @@ export default function DeleteAccountScreen({ navigation }) {
         <View style={{ width: 24 }} />
       </View>
 
-      {/* Main Content */}
       <View style={styles.contentContainer}>
         
         <Text style={[styles.topText, { color: theme.colors.text }]}>
-          We Hope You Found Your Life Partner On Shadibiha.Com .
+          We Hope You Found Your Life Partner On Shadibiha.Com.
         </Text>
 
         <Text style={[styles.warningText, { color: theme.mode === 'dark' ? '#FF6B6B' : '#D32F2F' }]}>
@@ -75,10 +71,9 @@ export default function DeleteAccountScreen({ navigation }) {
         </Text>
 
         <Text style={[styles.instructionText, { color: theme.colors.subtext }]}>
-          Please Choose A Reason For Profile Deletion: -
+          Please Choose A Reason For Profile Deletion:
         </Text>
 
-        {/* Radio Button List */}
         <View style={styles.radioListContainer}>
           {reasons.map((reason, index) => (
             <RadioButton 
@@ -93,7 +88,6 @@ export default function DeleteAccountScreen({ navigation }) {
 
         <View style={{ flex: 1 }} />
 
-        {/* Delete Button */}
         <TouchableOpacity 
           style={[styles.deleteButton, { backgroundColor: theme.colors.primary }]} 
           onPress={handleDelete}
@@ -167,7 +161,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 12,
   },
-  selectedOuterCircle: {},
   innerCircle: {
     width: 10,
     height: 10,
