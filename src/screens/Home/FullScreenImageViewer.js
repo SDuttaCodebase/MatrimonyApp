@@ -6,15 +6,14 @@ import {
   ScrollView, 
   Dimensions, 
   TouchableOpacity, 
-  Text, 
   SafeAreaView, 
   Image 
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import useThemeStore from '../../store/useThemeStore';
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get('window');
 
-// 3 Demo images for the uploaded photo gallery carousel
 const DEMO_IMAGES = [
   { id: '1', uri: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop' },
   { id: '2', uri: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800&auto=format&fit=crop' },
@@ -27,7 +26,6 @@ export default function FullScreenImageViewer({ navigation }) {
   const [isPaused, setIsPaused] = useState(false);
   const scrollViewRef = useRef(null);
 
-  // Auto-scroll every 3 seconds unless paused by touch
   useEffect(() => {
     if (isPaused) return;
 
@@ -43,7 +41,6 @@ export default function FullScreenImageViewer({ navigation }) {
     return () => clearInterval(timer);
   }, [currentIndex, isPaused]);
 
-  // Track manual swipe positioning
   const handleScroll = (event) => {
     const contentOffsetX = event.nativeEvent.contentOffset.x;
     const index = Math.round(contentOffsetX / windowWidth);
@@ -53,19 +50,15 @@ export default function FullScreenImageViewer({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      
-      {/* Top Navigation Back Arrow Bar */}
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={styles.headerBar}>
         <TouchableOpacity 
           onPress={() => navigation.goBack()} 
           style={styles.backButton}
         >
-          <Text style={styles.backArrowText}>←</Text>
+          <Icon name="arrow-back" size={28} color={theme.colors.text} />
         </TouchableOpacity>
       </View>
-
-      {/* Full Screen Horizontal Image Carousel */}
       <View style={styles.carouselWrapper}>
         <ScrollView
           ref={scrollViewRef}
@@ -86,20 +79,18 @@ export default function FullScreenImageViewer({ navigation }) {
           ))}
         </ScrollView>
       </View>
-
-      {/* Bottom Pagination Dots */}
       <View style={styles.paginationContainer}>
         {DEMO_IMAGES.map((_, index) => (
           <View
             key={index}
             style={[
               styles.dot,
-              currentIndex === index && styles.activeDot,
+              { backgroundColor: theme.colors.border },
+              currentIndex === index && [styles.activeDot, { backgroundColor: theme.colors.primary }]
             ]}
           />
         ))}
       </View>
-
     </SafeAreaView>
   );
 }
@@ -107,7 +98,6 @@ export default function FullScreenImageViewer({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212', // Dark immersive theme
   },
   headerBar: {
     paddingHorizontal: 20,
@@ -118,11 +108,6 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     justifyContent: 'center',
-  },
-  backArrowText: {
-    color: '#FFFFFF',
-    fontSize: 26,
-    fontWeight: 'bold',
   },
   carouselWrapper: {
     flex: 1,
@@ -150,11 +135,9 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#555555',
     marginHorizontal: 4,
   },
   activeDot: {
-    backgroundColor: '#FFFFFF',
     width: 8,
     height: 8,
     borderRadius: 4,

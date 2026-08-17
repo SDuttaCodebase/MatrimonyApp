@@ -11,47 +11,51 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SettingsScreen from './SettingsScreen';
+import useThemeStore from '../../store/useThemeStore';
 
 export default function NewPasswordScreen({ navigation }) {
+  const { theme } = useThemeStore();
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handlePasswordChange = () => {
-    // Add your password validation and API call here
     console.log('Password successfully changed!');
-    // Example: navigate back to Settings or Account after success
-    navigation.navigate('AccountScreen');
+    navigation.navigate('SettingsScreen');
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
         style={styles.keyboardView}
       >
-        {/* Header */}
-        <View style={styles.header}>
+        <View style={[styles.header, { backgroundColor: theme.colors.surface }]}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-            <Icon name="arrow-back" size={24} color="#555" />
+            <Icon name="arrow-back" size={24} color={theme.colors.text} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Change Password</Text>
-          <View style={{ width: 24 }} /> {/* Empty view for flex alignment */}
+          <Text style={[styles.headerTitle, { color: theme.colors.primary }]}>Change Password</Text>
+          <View style={{ width: 24 }} />
         </View>
 
-        {/* Main Content */}
         <View style={styles.contentContainer}>
           
-          <Text style={styles.pageTitle}>Change Password</Text>
+          <Text style={[styles.pageTitle, { color: theme.colors.text }]}>Change Password</Text>
 
-          {/* New Password Input */}
-          <View style={styles.inputContainer}>
+          <View 
+            style={[
+              styles.inputContainer, 
+              { 
+                backgroundColor: theme.mode === 'dark' ? '#2A2A35' : '#F5F5F5',
+                borderColor: theme.colors.border 
+              }
+            ]}
+          >
             <TextInput
-              style={styles.textInput}
+              style={[styles.textInput, { color: theme.colors.text }]}
               placeholder="New Password"
-              placeholderTextColor="#B0B0B0"
+              placeholderTextColor={theme.mode === 'dark' ? '#888888' : '#B0B0B0'}
               secureTextEntry={!showNewPassword}
               value={newPassword}
               onChangeText={setNewPassword}
@@ -63,17 +67,24 @@ export default function NewPasswordScreen({ navigation }) {
               <MaterialCommunityIcons 
                 name={showNewPassword ? "eye-outline" : "eye-off-outline"} 
                 size={20} 
-                color="#777777" 
+                color={theme.colors.subtext} 
               />
             </TouchableOpacity>
           </View>
 
-          {/* Confirm Password Input */}
-          <View style={styles.inputContainer}>
+          <View 
+            style={[
+              styles.inputContainer, 
+              { 
+                backgroundColor: theme.mode === 'dark' ? '#2A2A35' : '#F5F5F5',
+                borderColor: theme.colors.border 
+              }
+            ]}
+          >
             <TextInput
-              style={styles.textInput}
+              style={[styles.textInput, { color: theme.colors.text }]}
               placeholder="Confirm Password"
-              placeholderTextColor="#B0B0B0"
+              placeholderTextColor={theme.mode === 'dark' ? '#888888' : '#B0B0B0'}
               secureTextEntry={!showConfirmPassword}
               value={confirmPassword}
               onChangeText={setConfirmPassword}
@@ -85,16 +96,17 @@ export default function NewPasswordScreen({ navigation }) {
               <MaterialCommunityIcons 
                 name={showConfirmPassword ? "eye-outline" : "eye-off-outline"} 
                 size={20} 
-                color="#777777" 
+                color={theme.colors.subtext} 
               />
             </TouchableOpacity>
           </View>
 
-          {/* Spacer pushes the button to the bottom */}
           <View style={{ flex: 1 }} />
 
-          {/* Change Button */}
-          <TouchableOpacity style={styles.changeButton} onPress={SettingsScreen}>
+          <TouchableOpacity 
+            style={[styles.changeButton, { backgroundColor: theme.colors.primary }]} 
+            onPress={handlePasswordChange}
+          >
             <Text style={styles.changeButtonText}>Change</Text>
           </TouchableOpacity>
 
@@ -107,7 +119,6 @@ export default function NewPasswordScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFAFA',
   },
   keyboardView: {
     flex: 1,
@@ -118,7 +129,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    backgroundColor: '#FFFFFF',
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -131,7 +141,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#8B1A32', 
   },
   contentContainer: {
     flex: 1,
@@ -142,15 +151,12 @@ const styles = StyleSheet.create({
   pageTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#555555',
     marginBottom: 25,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F5F5F5',
     borderWidth: 1,
-    borderColor: '#EAEAEA',
     borderRadius: 8,
     marginBottom: 20,
     paddingHorizontal: 15,
@@ -159,13 +165,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 15,
     fontSize: 14,
-    color: '#333333',
   },
   eyeIcon: {
     padding: 10,
   },
   changeButton: {
-    backgroundColor: '#C2183D',
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',

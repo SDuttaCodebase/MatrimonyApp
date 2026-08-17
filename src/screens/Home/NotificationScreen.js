@@ -2,115 +2,124 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import useThemeStore from '../../store/useThemeStore';
 
-// Reusable component for basic notifications
-const SimpleNotification = ({ name, action, time }) => (
+const SimpleNotification = ({ name, action, time, theme }) => (
   <View style={styles.notificationItem}>
     <Image source={{ uri: 'https://i.pravatar.cc/150?img=11' }} style={styles.avatar} />
     <View style={styles.textContainer}>
-      <Text style={styles.notificationText}>
-        <Text style={styles.boldName}>{name}</Text> {action}
+      <Text style={[styles.notificationText, { color: theme.colors.subtext }]}>
+        <Text style={[styles.boldName, { color: theme.colors.text }]}>{name}</Text> {action}
       </Text>
     </View>
-    <Text style={styles.timeText}>{time}</Text>
+    <Text style={[styles.timeText, { color: theme.colors.subtext }]}>{time}</Text>
   </View>
 );
 
-// Reusable component for love notifications
-const LoveNotification = ({ name, action, time }) => (
+const LoveNotification = ({ name, action, time, theme }) => (
   <View style={styles.notificationItem}>
     <Image source={{ uri: 'https://i.pravatar.cc/150?img=11' }} style={styles.avatar} />
     <View style={styles.textContainer}>
-      <Text style={styles.notificationText}>
-        <Text style={styles.boldName}>{name}</Text> {action}
+      <Text style={[styles.notificationText, { color: theme.colors.subtext }]}>
+        <Text style={[styles.boldName, { color: theme.colors.text }]}>{name}</Text> {action}
       </Text>
       <MaterialCommunityIcons name="heart" size={16} color="#FF0000" style={styles.heartIcon} />
     </View>
-    <Text style={styles.timeText}>{time}</Text>
+    <Text style={[styles.timeText, { color: theme.colors.subtext }]}>{time}</Text>
   </View>
 );
 
-// Reusable component for actionable notifications
-const ActionNotification = ({ name, action, primaryBtnText, secondaryBtnText, time }) => (
+const ActionNotification = ({ name, action, primaryBtnText, secondaryBtnText, time, theme }) => (
   <View style={styles.notificationItem}>
     <Image source={{ uri: 'https://i.pravatar.cc/150?img=11' }} style={styles.avatar} />
     
     <View style={styles.actionMainContainer}>
-      <Text style={styles.notificationText}>
-        <Text style={styles.boldName}>{name}</Text>{'\n'}
-        <Text style={styles.subActionText}>{action}</Text>
+      <Text style={[styles.notificationText, { color: theme.colors.subtext }]}>
+        <Text style={[styles.boldName, { color: theme.colors.text }]}>{name}</Text>{'\n'}
+        <Text style={[styles.subActionText, { color: theme.colors.subtext }]}>{action}</Text>
       </Text>
       
       <View style={styles.buttonRow}>
-        <TouchableOpacity style={styles.primaryButton}>
+        <TouchableOpacity style={[styles.primaryButton, { backgroundColor: theme.colors.primary }]}>
           <Text style={styles.primaryButtonText}>{primaryBtnText}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.secondaryButton}>
-          <Text style={styles.secondaryButtonText}>{secondaryBtnText}</Text>
+        <TouchableOpacity 
+          style={[
+            styles.secondaryButton, 
+            { 
+              backgroundColor: theme.mode === 'dark' ? '#2A2A35' : '#FDF1F3',
+              borderColor: theme.mode === 'dark' ? theme.colors.border : '#F0D4DA'
+            }
+          ]}
+        >
+          <Text style={[styles.secondaryButtonText, { color: theme.colors.primary }]}>{secondaryBtnText}</Text>
         </TouchableOpacity>
       </View>
     </View>
 
     <View style={styles.actionTimeContainer}>
-      <Text style={styles.timeText}>{time}</Text>
+      <Text style={[styles.timeText, { color: theme.colors.subtext }]}>{time}</Text>
     </View>
   </View>
 );
 
 export default function NotificationScreen({ navigation }) {
+  const { theme } = useThemeStore();
+
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <View style={[styles.header, { backgroundColor: theme.colors.surface }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Icon name="arrow-back" size={24} color="#555" />
+          <Icon name="arrow-back" size={24} color={theme.colors.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Notification</Text>
-        <View style={{ width: 24 }} /> {/* Empty view for flex alignment */}
+        <Text style={[styles.headerTitle, { color: theme.colors.primary }]}>Notification</Text>
+        <View style={{ width: 24 }} />
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         
-        {/* Recent Section */}
-        <Text style={styles.sectionTitle}>Recent</Text>
-        <SimpleNotification name="Avisekh Das" action="Just Viewed Your Profile" time="10m" />
-        <SimpleNotification name="Avisekh Das" action="Viewed Your Profile" time="20m" />
-        <SimpleNotification name="Avisekh Das" action="Viewed Your Profile" time="1h" />
+        <Text style={[styles.sectionTitle, { color: theme.colors.primary }]}>Recent</Text>
+        <SimpleNotification name="Avisekh Das" action="Just Viewed Your Profile" time="10m" theme={theme} />
+        <SimpleNotification name="Avisekh Das" action="Viewed Your Profile" time="20m" theme={theme} />
+        <SimpleNotification name="Avisekh Das" action="Viewed Your Profile" time="1h" theme={theme} />
 
-        {/* Who Send Love Section */}
-        <Text style={styles.sectionTitle}>Who Send Love</Text>
-        <LoveNotification name="Avisekh Das" action="Send You Love" time="10m" />
-        <LoveNotification name="Avisekh Das" action="Send You Love" time="20m" />
-        <LoveNotification name="Avisekh Das" action="Send You Love" time="1h" />
+        <Text style={[styles.sectionTitle, { color: theme.colors.primary }]}>Who Send Love</Text>
+        <LoveNotification name="Avisekh Das" action="Send You Love" time="10m" theme={theme} />
+        <LoveNotification name="Avisekh Das" action="Send You Love" time="20m" theme={theme} />
+        <LoveNotification name="Avisekh Das" action="Send You Love" time="1h" theme={theme} />
 
-        {/* Just Joined Section */}
-        <Text style={styles.sectionTitle}>These Are The Just Joined Profiles</Text>
+        <Text style={[styles.sectionTitle, { color: theme.colors.primary }]}>These Are The Just Joined Profiles</Text>
         <ActionNotification 
           name="Avisekh Das" action="Is Requested To Accept Him" 
           primaryBtnText="Send Request" secondaryBtnText="Not Interested" time="30m" 
+          theme={theme}
         />
         <ActionNotification 
           name="Avisekh Das" action="Is Requested To Accept Him" 
           primaryBtnText="Send Request" secondaryBtnText="Not Interested" time="30m" 
+          theme={theme}
         />
         <ActionNotification 
           name="Avisekh Das" action="Is Requested To Accept Him" 
           primaryBtnText="Send Request" secondaryBtnText="Not Interested" time="30m" 
+          theme={theme}
         />
 
-        {/* New Requests Section */}
-        <Text style={styles.sectionTitle}>New Requests</Text>
+        <Text style={[styles.sectionTitle, { color: theme.colors.primary }]}>New Requests</Text>
         <ActionNotification 
           name="Avisekh Das" action="Is Requested To Accept Him" 
           primaryBtnText="Accept Request" secondaryBtnText="Ignore" time="30m" 
+          theme={theme}
         />
         <ActionNotification 
           name="Avisekh Das" action="Is Requested To Accept Him" 
           primaryBtnText="Accept Request" secondaryBtnText="Ignore" time="4h" 
+          theme={theme}
         />
         <ActionNotification 
           name="Avisekh Das" action="Is Requested To Accept Him" 
           primaryBtnText="Accept Request" secondaryBtnText="Ignore" time="20h" 
+          theme={theme}
         />
         
       </ScrollView>
@@ -121,7 +130,6 @@ export default function NotificationScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFAFA',
   },
   header: {
     flexDirection: 'row',
@@ -129,9 +137,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    backgroundColor: '#FFFFFF',
-    elevation: 2, // shadow for Android
-    shadowColor: '#000', // shadow for iOS
+    elevation: 2,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
@@ -142,7 +149,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#8B1A32', // Deep maroon color from your design
   },
   scrollContent: {
     paddingHorizontal: 20,
@@ -151,7 +157,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#8B1A32',
     marginTop: 25,
     marginBottom: 15,
   },
@@ -165,7 +170,7 @@ const styles = StyleSheet.create({
     height: 45,
     borderRadius: 22.5,
     marginRight: 15,
-    alignSelf: 'flex-start', // keeps avatar at the top for multi-line items
+    alignSelf: 'flex-start',
   },
   textContainer: {
     flex: 1,
@@ -175,35 +180,28 @@ const styles = StyleSheet.create({
   },
   notificationText: {
     fontSize: 14,
-    color: '#555555',
   },
   boldName: {
     fontWeight: '700',
-    color: '#333333',
   },
   heartIcon: {
     marginLeft: 6,
   },
   timeText: {
     fontSize: 12,
-    color: '#999999',
     marginLeft: 10,
   },
-  
-  // Styles specific to items with buttons
   actionMainContainer: {
     flex: 1,
   },
   subActionText: {
     fontSize: 13,
-    color: '#777777',
   },
   buttonRow: {
     flexDirection: 'row',
     marginTop: 10,
   },
   primaryButton: {
-    backgroundColor: '#C2183D', // Button Red
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 6,
@@ -215,21 +213,18 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   secondaryButton: {
-    backgroundColor: '#FDF1F3', // Light pink background
     borderWidth: 1,
-    borderColor: '#F0D4DA',
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 6,
   },
   secondaryButtonText: {
-    color: '#C2183D',
     fontSize: 12,
     fontWeight: '600',
   },
   actionTimeContainer: {
     justifyContent: 'flex-end',
-    alignSelf: 'stretch', // Pushes the time to the bottom right for these specific rows
+    alignSelf: 'stretch',
     paddingBottom: 5,
   }
 });

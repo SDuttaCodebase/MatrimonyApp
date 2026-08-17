@@ -9,9 +9,8 @@ import {
   SafeAreaView 
 } from 'react-native';
 import useThemeStore from '../../store/useThemeStore';
-import ShareBottomSheet from './components/ShareBottomSheet'; // Import the share sheet
+import ShareBottomSheet from './components/ShareBottomSheet';
 
-// Dummy data updated with idCode so ProfileDetailScreen can read it properly
 const DEMO_SHORTLIST = Array(12).fill(null).map((_, index) => ({
   idCode: `AVS99${index}`, 
   name: 'Avisekh Singharoy',
@@ -25,11 +24,9 @@ const DEMO_SHORTLIST = Array(12).fill(null).map((_, index) => ({
 export default function ShortlistScreen({ navigation }) {
   const { theme } = useThemeStore();
   
-  // State for the Share Bottom Sheet
   const [shareModalVisible, setShareModalVisible] = useState(false);
   const [selectedProfileForShare, setSelectedProfileForShare] = useState(null);
 
-  // Handler to open the share sheet without triggering the card click
   const handleOpenShare = (profile, event) => {
     event.stopPropagation();
     setSelectedProfileForShare(profile);
@@ -37,12 +34,12 @@ export default function ShortlistScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: '#FFFFFF' }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       
       {/* Top Header */}
-      <View style={styles.headerBar}>
+      <View style={[styles.headerBar, { backgroundColor: theme.colors.surface, borderBottomColor: theme.colors.border }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Text style={styles.backText}>←</Text>
+          <Text style={[styles.backText, { color: theme.colors.text }]}>←</Text>
         </TouchableOpacity>
         <Text style={[styles.headerTitle, { color: theme.colors.primary }]}>
           Shortlist
@@ -57,13 +54,19 @@ export default function ShortlistScreen({ navigation }) {
             key={index} 
             activeOpacity={0.95}
             onPress={() => navigation.navigate('ProfileDetail', { profile })}
-            style={[styles.cardContainer, { borderColor: '#EAEAEA' }]}
+            style={[
+              styles.cardContainer, 
+              { 
+                backgroundColor: theme.colors.surface, 
+                borderColor: theme.colors.border 
+              }
+            ]}
           >
             
             {/* Top Row: Image & Details */}
             <View style={styles.cardTopRow}>
               {/* Profile Image Placeholder */}
-              <View style={[styles.imagePlaceholder, { backgroundColor: '#CCC' }]} />
+              <View style={[styles.imagePlaceholder, { backgroundColor: theme.mode === 'dark' ? '#3A3A45' : '#CCC' }]} />
               
               {/* Text Details Column */}
               <View style={styles.detailsColumn}>
@@ -72,7 +75,7 @@ export default function ShortlistScreen({ navigation }) {
                     {profile.name}
                   </Text>
                   
-                  {/* 2. Attach the handleOpenShare function to the Share Icon */}
+                  {/* Share Icon */}
                   <TouchableOpacity 
                     style={styles.shareIconBtn}
                     onPress={(e) => handleOpenShare(profile, e)}
@@ -81,11 +84,11 @@ export default function ShortlistScreen({ navigation }) {
                   </TouchableOpacity>
                 </View>
                 
-                <Text style={styles.subText}>
-                  {profile.age}yrs <Text style={styles.pipe}>|</Text> {profile.height}
+                <Text style={[styles.subText, { color: theme.colors.subtext }]}>
+                  {profile.age}yrs <Text style={[styles.pipe, { color: theme.colors.border }]}>|</Text> {profile.height}
                 </Text>
-                <Text style={styles.subText}>{profile.religion}, {profile.community}</Text>
-                <Text style={styles.subText}>{profile.location}</Text>
+                <Text style={[styles.subText, { color: theme.colors.subtext }]}>{profile.religion}, {profile.community}</Text>
+                <Text style={[styles.subText, { color: theme.colors.subtext }]}>{profile.location}</Text>
               </View>
             </View>
 
@@ -112,7 +115,7 @@ export default function ShortlistScreen({ navigation }) {
         ))}
       </ScrollView>
 
-      {/* 3. Mount the ShareBottomSheet at the bottom of the screen */}
+      {/* ShareBottomSheet Component */}
       <ShareBottomSheet 
         visible={shareModalVisible} 
         onClose={() => setShareModalVisible(false)} 
@@ -134,7 +137,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
   },
   backButton: {
     width: 40,
@@ -143,7 +145,6 @@ const styles = StyleSheet.create({
   },
   backText: {
     fontSize: 24,
-    color: '#333',
   },
   headerTitle: {
     fontSize: 20,
@@ -158,7 +159,6 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   cardContainer: {
-    backgroundColor: '#FAFAFA',
     borderWidth: 1,
     borderRadius: 8,
     padding: 12,
@@ -191,18 +191,17 @@ const styles = StyleSheet.create({
   },
   shareIconBtn: {
     paddingLeft: 10,
-    paddingBottom: 10, // Adds a little extra touch area
+    paddingBottom: 10,
   },
   shareEmoji: {
     fontSize: 18,
   },
   subText: {
     fontSize: 12,
-    color: '#666',
     marginBottom: 4,
   },
   pipe: {
-    color: '#CCC',
+    // handled dynamically
   },
   buttonRow: {
     flexDirection: 'row',

@@ -2,57 +2,44 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'; 
-import { useTranslation } from 'react-i18next'; // 1. Import the translation hook
-
-// Reusable component for each setting option
-const SettingsItem = ({ icon, title, onPress }) => (
-  <TouchableOpacity style={styles.itemContainer} onPress={onPress}>
-    <MaterialIcons name={icon} size={24} color="#4A4A4A" style={styles.icon} />
-    <Text style={styles.itemText}>{title}</Text>
-  </TouchableOpacity>
-);
+import { useTranslation } from 'react-i18next';
+import useThemeStore from '../../store/useThemeStore';
 
 export default function SettingsScreen({ navigation }) {
-  const { t } = useTranslation(); // 2. Initialize the hook
+  const { t } = useTranslation();
+  const { theme } = useThemeStore();
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <View style={[styles.header, { backgroundColor: theme.colors.surface }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Icon name="arrow-back" size={24} color="#555" />
+          <Icon name="arrow-back" size={24} color={theme.colors.text} />
         </TouchableOpacity>
-        {/* 3. Wrap hardcoded text with the translation function */}
-        <Text style={styles.headerTitle}>{t('Settings')}</Text>
-        <View style={{ width: 24 }} /> {/* Empty view for flex alignment */}
+        <Text style={[styles.headerTitle, { color: theme.colors.primary }]}>{t('Settings')}</Text>
+        <View style={{ width: 24 }} />
       </View>
 
-      {/* Settings Options List */}
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         
-        <SettingsItem 
-          icon="person-outline" 
-          title={t('Account')} 
-          onPress={() => navigation.navigate('AccountScreen')} 
-        />
+        <TouchableOpacity style={styles.itemContainer} onPress={() => navigation.navigate('AccountScreen')}>
+          <MaterialIcons name="person-outline" size={24} color={theme.colors.text} style={styles.icon} />
+          <Text style={[styles.itemText, { color: theme.colors.text }]}>{t('Account')}</Text>
+        </TouchableOpacity>
         
-        <SettingsItem 
-          icon="security" 
-          title={t('Privacy')} 
-          onPress={() => navigation.navigate('PrivacyMenuScreen')} 
-        />
+        <TouchableOpacity style={styles.itemContainer} onPress={() => navigation.navigate('PrivacyMenuScreen')}>
+          <MaterialIcons name="security" size={24} color={theme.colors.text} style={styles.icon} />
+          <Text style={[styles.itemText, { color: theme.colors.text }]}>{t('Privacy')}</Text>
+        </TouchableOpacity>
         
-        <SettingsItem 
-          icon="g-translate" 
-          title={t('App Language')} 
-          onPress={() => navigation.navigate('AppLanguageScreen')} 
-        />
+        <TouchableOpacity style={styles.itemContainer} onPress={() => navigation.navigate('AppLanguageScreen')}>
+          <MaterialIcons name="g-translate" size={24} color={theme.colors.text} style={styles.icon} />
+          <Text style={[styles.itemText, { color: theme.colors.text }]}>{t('App Language')}</Text>
+        </TouchableOpacity>
         
-        <SettingsItem 
-          icon="people-outline" 
-          title={t('Refer A Friend')} 
-          onPress={() => navigation.navigate('ReferFriendScreen')} 
-        />
+        <TouchableOpacity style={styles.itemContainer} onPress={() => navigation.navigate('ReferFriendScreen')}>
+          <MaterialIcons name="people-outline" size={24} color={theme.colors.text} style={styles.icon} />
+          <Text style={[styles.itemText, { color: theme.colors.text }]}>{t('Refer A Friend')}</Text>
+        </TouchableOpacity>
 
       </ScrollView>
     </SafeAreaView>
@@ -62,7 +49,6 @@ export default function SettingsScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFAFA', // Very light gray/white background
   },
   header: {
     flexDirection: 'row',
@@ -70,9 +56,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    backgroundColor: '#FFFFFF',
-    elevation: 2, // shadow for Android
-    shadowColor: '#000', // shadow for iOS
+    elevation: 2,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
@@ -83,11 +68,10 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#8B1A32', // Deep maroon color to match your design
   },
   scrollContent: {
     paddingHorizontal: 20,
-    paddingTop: 30, // Space between header and first item
+    paddingTop: 30,
   },
   itemContainer: {
     flexDirection: 'row',
@@ -95,12 +79,11 @@ const styles = StyleSheet.create({
     paddingVertical: 18,
   },
   icon: {
-    width: 30, // Fixed width so text aligns perfectly vertically
+    width: 30,
     marginRight: 10,
   },
   itemText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#333333',
   },
 });

@@ -11,59 +11,54 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import useThemeStore from '../../store/useThemeStore';
 
-// Reusable component for the social share buttons
-const ShareOption = ({ iconFamily, iconName, label, color, onPress }) => (
+const ShareOption = ({ iconFamily, iconName, label, color, theme, onPress }) => (
   <TouchableOpacity style={styles.shareOptionContainer} onPress={onPress}>
-    <View style={styles.shareIconCircle}>
+    <View style={[styles.shareIconCircle, { backgroundColor: theme.colors.background, shadowColor: theme.mode === 'dark' ? '#000' : '#000' }]}>
       {iconFamily === 'MaterialCommunityIcons' ? (
         <MaterialCommunityIcons name={iconName} size={32} color={color} />
       ) : (
         <FontAwesome name={iconName} size={32} color={color} />
       )}
     </View>
-    <Text style={styles.shareLabel}>{label}</Text>
+    <Text style={[styles.shareLabel, { color: theme.colors.subtext }]}>{label}</Text>
   </TouchableOpacity>
 );
 
 export default function ReferFriendScreen({ navigation }) {
+  const { theme } = useThemeStore();
   const [isShareModalVisible, setShareModalVisible] = useState(false);
 
-  // Function to simulate sharing action
   const handleShareToApp = (platform) => {
     console.log(`Sharing to ${platform}...`);
     setShareModalVisible(false);
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <View style={[styles.header, { backgroundColor: theme.colors.surface }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Icon name="arrow-back" size={24} color="#555" />
+          <Icon name="arrow-back" size={24} color={theme.colors.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Refer A Friend</Text>
+        <Text style={[styles.headerTitle, { color: theme.colors.primary }]}>Refer A Friend</Text>
         <View style={{ width: 24 }} /> 
       </View>
 
-      {/* Main Content */}
       <View style={styles.contentContainer}>
         
-        {/* Gift Graphic */}
         <View style={styles.giftContainer}>
           <MaterialCommunityIcons name="gift" size={140} color="#FF1493" style={styles.giftIcon} />
         </View>
 
-        {/* Link / Text Box */}
-        <View style={styles.linkBox}>
-          <Text style={styles.linkText}>
+        <View style={[styles.linkBox, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
+          <Text style={[styles.linkText, { color: theme.colors.primary }]}>
             Amet://: Minim Mollit Non Deserunt ://:Ullamco{'\n'}Est Sit Aliqua Dolor Do Amet://:
           </Text>
         </View>
 
-        {/* Share Button */}
         <TouchableOpacity 
-          style={styles.shareButton} 
+          style={[styles.shareButton, { backgroundColor: theme.colors.primary }]} 
           onPress={() => setShareModalVisible(true)}
         >
           <Text style={styles.shareButtonText}>Share</Text>
@@ -71,7 +66,6 @@ export default function ReferFriendScreen({ navigation }) {
 
       </View>
 
-      {/* Custom Share Bottom Sheet Modal */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -84,46 +78,49 @@ export default function ReferFriendScreen({ navigation }) {
           onPressOut={() => setShareModalVisible(false)}
         >
           <TouchableWithoutFeedback>
-            <View style={styles.bottomSheet}>
+            <View style={[styles.bottomSheet, { backgroundColor: theme.colors.surface }]}>
               
-              {/* Top Drag Indicator */}
-              <View style={styles.dragIndicator} />
+              <View style={[styles.dragIndicator, { backgroundColor: theme.colors.border }]} />
 
-              {/* Share Options Grid */}
               <View style={styles.shareGrid}>
                 <ShareOption 
                   iconFamily="MaterialCommunityIcons" 
                   iconName="message-processing" 
                   label="Message" 
-                  color="#00A8FF" // Bright blue
+                  color="#00A8FF" 
+                  theme={theme}
                   onPress={() => handleShareToApp('Message')}
                 />
                 <ShareOption 
                   iconFamily="MaterialCommunityIcons" 
                   iconName="gmail" 
                   label="Gmail" 
-                  color="#EA4335" // Google red
+                  color="#EA4335" 
+                  theme={theme}
                   onPress={() => handleShareToApp('Gmail')}
                 />
                 <ShareOption 
                   iconFamily="FontAwesome" 
                   iconName="whatsapp" 
                   label="Whatsapp" 
-                  color="#25D366" // WhatsApp green
+                  color="#25D366" 
+                  theme={theme}
                   onPress={() => handleShareToApp('WhatsApp')}
                 />
                 <ShareOption 
                   iconFamily="FontAwesome" 
                   iconName="facebook-square" 
                   label="Facebook" 
-                  color="#1877F2" // Facebook blue
+                  color="#1877F2" 
+                  theme={theme}
                   onPress={() => handleShareToApp('Facebook')}
                 />
                 <ShareOption 
                   iconFamily="MaterialCommunityIcons" 
                   iconName="instagram" 
                   label="Instagram" 
-                  color="#E1306C" // Instagram magenta
+                  color="#E1306C" 
+                  theme={theme}
                   onPress={() => handleShareToApp('Instagram')}
                 />
               </View>
@@ -140,7 +137,6 @@ export default function ReferFriendScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFAFA',
   },
   header: {
     flexDirection: 'row',
@@ -148,7 +144,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    backgroundColor: '#FFFFFF',
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -159,7 +154,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#8B1A32',
   },
   contentContainer: {
     flex: 1,
@@ -171,7 +165,6 @@ const styles = StyleSheet.create({
     marginBottom: 60,
   },
   giftIcon: {
-    // Adds a slight shadow to make the gift pop
     textShadowColor: 'rgba(255, 20, 147, 0.3)',
     textShadowOffset: { width: 0, height: 10 },
     textShadowRadius: 20,
@@ -179,22 +172,18 @@ const styles = StyleSheet.create({
   linkBox: {
     width: '100%',
     borderWidth: 1,
-    borderColor: '#E0E0E0',
     borderRadius: 8,
     paddingVertical: 15,
     paddingHorizontal: 10,
-    backgroundColor: '#FFFFFF',
     marginBottom: 30,
   },
   linkText: {
-    color: '#0096D6', // Blue link color
     textAlign: 'center',
     fontSize: 13,
     lineHeight: 20,
     fontWeight: '500',
   },
   shareButton: {
-    backgroundColor: '#C2183D',
     paddingVertical: 15,
     borderRadius: 8,
     width: '100%',
@@ -206,19 +195,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
   },
-
-  // Bottom Sheet Modal Styles
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)', // Dimmed background
-    justifyContent: 'flex-end', // Aligns modal to the bottom
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    justifyContent: 'flex-end',
   },
   bottomSheet: {
-    backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingTop: 15,
-    paddingBottom: 40, // Extra padding for bottom screen edge
+    paddingBottom: 40,
     paddingHorizontal: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -3 },
@@ -229,7 +215,6 @@ const styles = StyleSheet.create({
   dragIndicator: {
     width: 40,
     height: 5,
-    backgroundColor: '#D3D3D3',
     borderRadius: 3,
     alignSelf: 'center',
     marginBottom: 30,
@@ -240,7 +225,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   shareOptionContainer: {
-    width: '33.33%', // Creates a 3-column grid
+    width: '33.33%',
     alignItems: 'center',
     marginBottom: 25,
   },
@@ -248,11 +233,9 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#FFFFFF', // White background
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
-    // Add a soft shadow to the icons to match the design
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -261,7 +244,6 @@ const styles = StyleSheet.create({
   },
   shareLabel: {
     fontSize: 12,
-    color: '#666666',
     fontWeight: '500',
   },
 });

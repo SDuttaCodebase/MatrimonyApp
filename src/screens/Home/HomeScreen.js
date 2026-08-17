@@ -26,7 +26,6 @@ export default function HomeScreen() {
         
         <FeaturedProfileCard />
         
-        {/* 2. Add the New Matches Section */}
         <MatchesList 
           title="12 New Matches" 
           subtitle="Your New Recent Matches" 
@@ -34,7 +33,6 @@ export default function HomeScreen() {
 
         <HundredPercentMatchesBanner />
 
-        {/* 3. Add the Recently Viewed Section */}
         <MatchesList 
           title="Recently Viewed Profile" 
           subtitle="New Members Who Recently Viewed Your Profile" 
@@ -50,6 +48,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: 40, // Added a bit more padding so the last list isn't cut off
+    paddingBottom: 40,
   },
 });

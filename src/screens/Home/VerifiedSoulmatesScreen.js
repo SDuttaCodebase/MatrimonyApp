@@ -12,7 +12,6 @@ import useThemeStore from '../../store/useThemeStore';
 import TopHeader from './components/TopHeader'; 
 import ShareBottomSheet from './components/ShareBottomSheet'; 
 
-// Dummy data for Verified Soulmates
 const DEMO_PROFILES = [
   {
     idCode: 'SG101',
@@ -110,20 +109,19 @@ export default function VerifiedSoulmatesScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: '#F8F9FA' }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       
       {/* Main Header */}
       <TopHeader />
 
-      {/* NEW: Sub-header with Title and Filter Button */}
-      <View style={styles.subHeaderRow}>
-        <Text style={[styles.pageTitle, { color: theme.colors.brandDarkest || '#333' }]}>
+      {/* Sub-header with Title and Filter Button */}
+      <View style={[styles.subHeaderRow, { backgroundColor: theme.colors.surface, borderBottomColor: theme.colors.border }]}>
+        <Text style={[styles.pageTitle, { color: theme.colors.text }]}>
           Verified Soulmates
         </Text>
         
-        {/* We will connect this to your filter modal/screen next! */}
         <TouchableOpacity 
-          style={[styles.filterButton, { borderColor: theme.colors.primary }]}
+          style={[styles.filterButton, { borderColor: theme.colors.primary, backgroundColor: theme.colors.background }]}
           onPress={() => navigation.navigate('Filter')}
         >
           <Text style={[styles.filterText, { color: theme.colors.primary }]}>
@@ -143,10 +141,16 @@ export default function VerifiedSoulmatesScreen({ navigation }) {
             key={index} 
             activeOpacity={0.95}
             onPress={() => navigation.navigate('ProfileDetail', { profile })}
-            style={[styles.cardContainer, { borderColor: '#EAEAEA', backgroundColor: '#FFFFFF' }]}
+            style={[
+              styles.cardContainer, 
+              { 
+                borderColor: theme.colors.border, 
+                backgroundColor: theme.colors.surface 
+              }
+            ]}
           >
             <View style={styles.cardTopRow}>
-              <View style={[styles.imagePlaceholder, { backgroundColor: '#CCC' }]} />
+              <View style={[styles.imagePlaceholder, { backgroundColor: theme.mode === 'dark' ? '#3A3A45' : '#CCC' }]} />
               
               <View style={styles.detailsColumn}>
                 <View style={styles.nameRow}>
@@ -167,11 +171,11 @@ export default function VerifiedSoulmatesScreen({ navigation }) {
                   </View>
                 </View>
                 
-                <Text style={styles.subText}>
-                  {profile.age}yrs <Text style={styles.pipe}>|</Text> {profile.height}
+                <Text style={[styles.subText, { color: theme.colors.subtext }]}>
+                  {profile.age}yrs <Text style={[styles.pipe, { color: theme.colors.border }]}>|</Text> {profile.height}
                 </Text>
-                <Text style={styles.subText}>{profile.religion}, {profile.community}</Text>
-                <Text style={styles.subText}>{profile.location}</Text>
+                <Text style={[styles.subText, { color: theme.colors.subtext }]}>{profile.religion}, {profile.community}</Text>
+                <Text style={[styles.subText, { color: theme.colors.subtext }]}>{profile.location}</Text>
               </View>
             </View>
 
@@ -215,9 +219,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 15,
     paddingVertical: 12,
-    backgroundColor: '#FFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
   },
   pageTitle: {
     fontSize: 16,
@@ -263,9 +265,9 @@ const styles = StyleSheet.create({
   nameText: { fontSize: 16, fontWeight: 'bold', flex: 1, paddingRight: 10 },
   iconStack: { alignItems: 'center', justifyContent: 'space-between' },
   iconBtn: { paddingBottom: 8, paddingLeft: 10 },
-  emojiIcon: { fontSize: 18, color: '#666' },
-  subText: { fontSize: 12, color: '#666', marginBottom: 4 },
-  pipe: { color: '#CCC' },
+  emojiIcon: { fontSize: 18 },
+  subText: { fontSize: 12, marginBottom: 4 },
+  pipe: {},
   buttonRow: { flexDirection: 'row', justifyContent: 'space-between' },
   actionBtn: {
     flex: 1, paddingVertical: 10, borderRadius: 6, alignItems: 'center', justifyContent: 'center'

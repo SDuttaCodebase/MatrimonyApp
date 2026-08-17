@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import useThemeStore from '../../store/useThemeStore';
 
-// Dummy data for recent searches
 const INITIAL_SEARCHES = [
   { id: '1', name: 'Rahul Roy' },
   { id: '2', name: 'Pranj Das' },
@@ -26,37 +25,34 @@ const INITIAL_SEARCHES = [
 export default function SearchScreen({ navigation }) {
   const { theme } = useThemeStore();
   
-  // States for managing edit mode and the search history list
   const [isEditing, setIsEditing] = useState(false);
   const [recentSearches, setRecentSearches] = useState(INITIAL_SEARCHES);
 
-  // Toggle between Edit and Done
   const toggleEdit = () => {
     setIsEditing(!isEditing);
   };
 
-  // Remove an item from the recent searches list
   const removeSearch = (id) => {
     setRecentSearches((prevSearches) => prevSearches.filter(item => item.id !== id));
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: '#FFFFFF' }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       
       {/* Top Header & Search Bar */}
-      <View style={styles.headerBar}>
+      <View style={[styles.headerBar, { backgroundColor: theme.colors.surface }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Text style={styles.backText}>←</Text>
+          <Text style={[styles.backText, { color: theme.colors.text }]}>←</Text>
         </TouchableOpacity>
 
         {/* Search Input Container */}
-        <View style={styles.searchContainer}>
+        <View style={[styles.searchContainer, { backgroundColor: theme.mode === 'dark' ? '#2A2A35' : '#F5F6F8', borderColor: theme.colors.border }]}>
           <Text style={styles.searchIcon}>🔍</Text>
           <TextInput
-            style={styles.searchInput}
+            style={[styles.searchInput, { color: theme.colors.text }]}
             placeholder="Search By Names"
-            placeholderTextColor="#999"
-            autoFocus={true} // Automatically opens keyboard when screen loads
+            placeholderTextColor={theme.mode === 'dark' ? '#888888' : '#999'}
+            autoFocus={true}
           />
           <TouchableOpacity style={styles.micButton}>
             <Text style={styles.searchIcon}>🎤</Text>
@@ -69,7 +65,7 @@ export default function SearchScreen({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.divider} />
+      <View style={[styles.divider, { backgroundColor: theme.colors.border }]} />
 
       {/* Recent Searches Section */}
       {recentSearches.length > 0 && (
@@ -77,7 +73,7 @@ export default function SearchScreen({ navigation }) {
           
           {/* Section Header */}
           <View style={styles.recentHeaderRow}>
-            <Text style={[styles.recentTitle, { color: '#6A2A35' }]}> {/* Deep red color matching design */}
+            <Text style={[styles.recentTitle, { color: theme.colors.primary }]}>
               Recent Searches
             </Text>
             <TouchableOpacity onPress={toggleEdit}>
@@ -92,32 +88,33 @@ export default function SearchScreen({ navigation }) {
             {recentSearches.map((item) => (
               <View key={item.id} style={styles.recentItem}>
                 <View style={styles.avatarWrapper}>
-                  {/* Avatar Placeholder (Faded if in edit mode) */}
+                  {/* Avatar Placeholder */}
                   <View 
                     style={[
                       styles.avatarPlaceholder, 
+                      { backgroundColor: theme.mode === 'dark' ? '#3A3A45' : '#B0B0B0' },
                       isEditing && styles.avatarEditing 
                     ]} 
                   />
                   
-                  {/* Absolute positioned Delete Button (Only visible in edit mode) */}
+                  {/* Absolute positioned Delete Button */}
                   {isEditing && (
                     <TouchableOpacity 
-                      style={styles.deleteButton} 
+                      style={[styles.deleteButton, { borderColor: theme.colors.surface }]} 
                       onPress={() => removeSearch(item.id)}
                     >
                       <Text style={styles.deleteText}>✖</Text>
                     </TouchableOpacity>
                   )}
                 </View>
-                <Text style={styles.recentName} numberOfLines={1}>{item.name}</Text>
+                <Text style={[styles.recentName, { color: theme.colors.subtext }]} numberOfLines={1}>{item.name}</Text>
               </View>
             ))}
           </ScrollView>
         </View>
       )}
       
-      <View style={styles.divider} />
+      <View style={[styles.divider, { backgroundColor: theme.colors.border }]} />
 
     </SafeAreaView>
   );
@@ -132,6 +129,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 15,
     paddingVertical: 10,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
   backButton: {
     width: 30,
@@ -139,19 +141,16 @@ const styles = StyleSheet.create({
   },
   backText: {
     fontSize: 24,
-    color: '#333',
   },
   searchContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F5F6F8',
     borderRadius: 8,
     paddingHorizontal: 10,
     marginHorizontal: 10,
     height: 40,
     borderWidth: 1,
-    borderColor: '#EAEAEA',
   },
   searchIcon: {
     fontSize: 16,
@@ -161,7 +160,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10,
     fontSize: 14,
-    color: '#333',
   },
   micButton: {
     paddingLeft: 5,
@@ -176,7 +174,6 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: '#F0F0F0',
     width: '100%',
   },
   recentSection: {
@@ -215,10 +212,9 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#B0B0B0',
   },
   avatarEditing: {
-    opacity: 0.5, // Fades the avatar when in edit mode
+    opacity: 0.5,
   },
   deleteButton: {
     position: 'absolute',
@@ -231,7 +227,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#FFF',
   },
   deleteText: {
     color: '#FFFFFF',
@@ -240,7 +235,6 @@ const styles = StyleSheet.create({
   },
   recentName: {
     fontSize: 11,
-    color: '#555',
     textAlign: 'center',
   },
 });

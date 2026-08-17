@@ -1,18 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-
-// Reusable Custom Radio Button
-const RadioButton = ({ label, selected, onPress }) => (
-  <TouchableOpacity style={styles.radioContainer} onPress={onPress} activeOpacity={0.8}>
-    <View style={[styles.outerCircle, selected && styles.selectedOuterCircle]}>
-      {selected && <View style={styles.innerCircle} />}
-    </View>
-    <Text style={styles.radioLabel}>{label}</Text>
-  </TouchableOpacity>
-);
+import useThemeStore from '../../store/useThemeStore';
 
 export default function PhotoPrivacyScreen({ navigation }) {
+  const { theme } = useThemeStore();
   const [selectedPrivacy, setSelectedPrivacy] = useState('Visible To All');
 
   const privacyOptions = [
@@ -22,47 +14,58 @@ export default function PhotoPrivacyScreen({ navigation }) {
 
   const handleSave = () => {
     let dynamicMessage = '';
-
-    // Format the text based on the selection
     if (selectedPrivacy === 'Visible To All') {
       dynamicMessage = 'Photo is now visible to All Members.';
     } else {
       dynamicMessage = `Photo is now visible to ${selectedPrivacy}.`;
     }
-
-    // Navigate to the success screen and pass the message
     navigation.navigate('PrivacySuccessScreen', { message: dynamicMessage });
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <View style={[styles.header, { backgroundColor: theme.colors.surface }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Icon name="arrow-back" size={24} color="#555" />
+          <Icon name="arrow-back" size={24} color={theme.colors.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Photo Privacy</Text>
-        <View style={{ width: 24 }} /> 
+        <Text style={[styles.headerTitle, { color: theme.colors.primary }]}>Photo Privacy</Text>
+        <View style={{ width: 24 }} />
       </View>
 
       <View style={styles.contentContainer}>
-        <Text style={styles.pageTitle}>Who Can View My Photo ?</Text>
+        <Text style={[styles.pageTitle, { color: theme.colors.subtext }]}>Who Can View My Photo ?</Text>
 
         <View style={styles.radioList}>
-          {privacyOptions.map((option, index) => (
-            <RadioButton 
-              key={index}
-              label={option}
-              selected={selectedPrivacy === option}
-              onPress={() => setSelectedPrivacy(option)}
-            />
-          ))}
+          {privacyOptions.map((option, index) => {
+            const selected = selectedPrivacy === option;
+            return (
+              <TouchableOpacity 
+                key={index} 
+                style={styles.radioContainer} 
+                onPress={() => setSelectedPrivacy(option)} 
+                activeOpacity={0.8}
+              >
+                <View 
+                  style={[
+                    styles.outerCircle, 
+                    { backgroundColor: theme.mode === 'dark' ? '#3A3A45' : '#E0E0E0' },
+                    selected && { backgroundColor: theme.mode === 'dark' ? '#4A4A55' : '#F0D4DA' }
+                  ]}
+                >
+                  {selected && <View style={[styles.innerCircle, { backgroundColor: theme.colors.primary }]} />}
+                </View>
+                <Text style={[styles.radioLabel, { color: theme.colors.text }]}>{option}</Text>
+              </TouchableOpacity>
+            );
+          })}
         </View>
 
-        {/* Spacer pushes the button to the bottom */}
         <View style={{ flex: 1 }} />
 
-        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+        <TouchableOpacity 
+          style={[styles.saveButton, { backgroundColor: theme.colors.primary }]} 
+          onPress={handleSave}
+        >
           <Text style={styles.saveButtonText}>save & continue</Text>
         </TouchableOpacity>
       </View>
@@ -73,7 +76,6 @@ export default function PhotoPrivacyScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFAFA',
   },
   header: {
     flexDirection: 'row',
@@ -81,18 +83,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    backgroundColor: '#FFFFFF',
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
   },
-  backButton: { padding: 4 },
+  backButton: { 
+    padding: 4 
+  },
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#8B1A32',
   },
   contentContainer: {
     flex: 1,
@@ -103,12 +105,11 @@ const styles = StyleSheet.create({
   pageTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#555555',
     marginBottom: 25,
   },
-  
-  // Custom Radio Button Styles
-  radioList: { marginTop: 10 },
+  radioList: { 
+    marginTop: 10 
+  },
   radioContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -118,26 +119,19 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: '#E0E0E0',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
   },
-  selectedOuterCircle: { backgroundColor: '#F0D4DA' },
   innerCircle: {
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: '#8B1A32',
   },
   radioLabel: {
     fontSize: 14,
-    color: '#444444',
   },
-  
-  // Button Styles
   saveButton: {
-    backgroundColor: '#C2183D',
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',

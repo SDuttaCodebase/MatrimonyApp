@@ -1,140 +1,110 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   View, 
   Text, 
   StyleSheet, 
   TouchableOpacity, 
-  SafeAreaView 
+  SafeAreaView, 
+  TextInput, 
+  KeyboardAvoidingView, 
+  Platform 
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import useThemeStore from '../../store/useThemeStore';
 
 export default function NotEnoughMatchesScreen({ navigation }) {
-  
-  const handleEditPreferences = () => {
-    navigation.navigate('PartnerPreferencesScreen');
-  };
+  const { theme } = useThemeStore();
+  const [feedback, setFeedback] = useState('');
 
-  const handleFinalDelete = () => {
+  const handleDeleteAccount = () => {
+    // This takes the user to the password confirmation popup we built earlier
     navigation.navigate('ConfirmDeletePasswordScreen');
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Icon name="arrow-back" size={24} color="#555" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Delete Account</Text>
-        <View style={{ width: 24 }} /> {/* Empty view for flex alignment */}
-      </View>
-
-      {/* Main Content */}
-      <View style={styles.contentContainer}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.keyboardView}>
         
-        <Text style={styles.mainText}>
-          We Still Hope That You Can Find Your Special One!
-        </Text>
+        <View style={[styles.header, { backgroundColor: theme.colors.surface }]}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Icon name="arrow-back" size={24} color={theme.colors.text} />
+          </TouchableOpacity>
+          <Text style={[styles.headerTitle, { color: theme.colors.primary }]}>Delete Account</Text>
+          <View style={{ width: 24 }} />
+        </View>
 
-        {/* Edit Preferences Button */}
-        <TouchableOpacity style={styles.editButton} onPress={handleEditPreferences}>
-          <Text style={styles.editButtonText}>Edit My Preferences</Text>
-        </TouchableOpacity>
-
-        {/* Secondary Text with clickable inline "Tap Here" */}
-        <Text style={styles.subText}>
-          If You Still Wish To Delete Your Profile Then{' '}
-          <Text style={styles.tapHereText} onPress={handleFinalDelete}>
-            Tap Here
+        <View style={styles.contentContainer}>
+          <Text style={[styles.pageTitle, { color: theme.colors.text }]}>Not Getting Enough Matches</Text>
+          
+          <Text style={[styles.instructionsText, { color: theme.colors.subtext }]}>
+            We are sorry to hear that you aren't finding the right matches. Please let us know how we can improve before you leave.
           </Text>
-        </Text>
 
-        {/* Spacer pushes the bottom button down */}
-        <View style={{ flex: 1 }} />
+          <TextInput
+            style={[
+              styles.textInput, 
+              { 
+                backgroundColor: theme.mode === 'dark' ? '#2A2A35' : '#F5F5F5', 
+                borderColor: theme.colors.border, 
+                color: theme.colors.text 
+              }
+            ]}
+            placeholder="Share your feedback (optional)..."
+            placeholderTextColor={theme.mode === 'dark' ? '#888888' : '#B0B0B0'}
+            multiline={true}
+            numberOfLines={6}
+            textAlignVertical="top"
+            value={feedback}
+            onChangeText={setFeedback}
+          />
 
-        {/* Final Delete Button */}
-        <TouchableOpacity style={styles.deleteButton} onPress={handleFinalDelete}>
-          <Text style={styles.deleteButtonText}>Delete My Account</Text>
-        </TouchableOpacity>
+          <View style={{ flex: 1 }} />
 
-      </View>
+          <TouchableOpacity 
+            style={[styles.deleteButton, { backgroundColor: theme.colors.primary }]} 
+            onPress={handleDeleteAccount}
+          >
+            <Text style={styles.deleteButtonText}>Delete My Account</Text>
+          </TouchableOpacity>
+        </View>
+
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FAFAFA',
+  container: { flex: 1 },
+  keyboardView: { flex: 1 },
+  header: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'space-between', 
+    paddingHorizontal: 20, 
+    paddingVertical: 15, 
+    elevation: 2, 
+    shadowColor: '#000', 
+    shadowOffset: { width: 0, height: 2 }, 
+    shadowOpacity: 0.1, 
+    shadowRadius: 2 
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    backgroundColor: '#FFFFFF',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+  backButton: { padding: 4 },
+  headerTitle: { fontSize: 20, fontWeight: '700' },
+  contentContainer: { flex: 1, paddingHorizontal: 20, paddingTop: 30, paddingBottom: 40 },
+  pageTitle: { fontSize: 18, fontWeight: '700', marginBottom: 15 },
+  instructionsText: { fontSize: 14, lineHeight: 22, marginBottom: 25 },
+  textInput: { 
+    borderWidth: 1, 
+    borderRadius: 8, 
+    padding: 15, 
+    fontSize: 14, 
+    minHeight: 120 
   },
-  backButton: {
-    padding: 4,
+  deleteButton: { 
+    paddingVertical: 15, 
+    borderRadius: 8, 
+    alignItems: 'center', 
+    justifyContent: 'center' 
   },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#8B1A32', // Maroon header
-  },
-  contentContainer: {
-    flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 50,
-    paddingBottom: 40,
-  },
-  mainText: {
-    fontSize: 15,
-    color: '#444444',
-    fontWeight: '600',
-    textAlign: 'center',
-    marginBottom: 40,
-  },
-  editButton: {
-    backgroundColor: '#C2183D', // Bright red/maroon
-    paddingVertical: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginHorizontal: 10, // Slightly indented compared to the bottom button
-    marginBottom: 30,
-  },
-  editButtonText: {
-    color: '#FFFFFF',
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  subText: {
-    fontSize: 13,
-    color: '#555555',
-    textAlign: 'center',
-    fontWeight: '500',
-  },
-  tapHereText: {
-    color: '#C2183D',
-    fontWeight: '700',
-  },
-  deleteButton: {
-    backgroundColor: '#C2183D',
-    paddingVertical: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  deleteButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '700',
-  },
+  deleteButtonText: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' },
 });

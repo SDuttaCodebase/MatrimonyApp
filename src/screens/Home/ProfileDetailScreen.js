@@ -8,8 +8,10 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import useThemeStore from '../../store/useThemeStore';
-import ShareBottomSheet from './components/ShareBottomSheet'; // Imported share sheet component
+import ShareBottomSheet from './components/ShareBottomSheet';
 
 const INTERESTS = [
   'Travelling',
@@ -31,6 +33,8 @@ const TABS = [
 
 export default function ProfileDetailScreen({ route, navigation }) {
   const { theme } = useThemeStore();
+  const unlockButtonBg = theme.mode === 'dark' ? '#3A2A30' : '#FFD1DC';
+  
   const profile = route?.params?.profile || {
     idCode: 'ABW1230',
     name: 'Rahul Roy',
@@ -42,161 +46,136 @@ export default function ProfileDetailScreen({ route, navigation }) {
   };
 
   const [activeTab, setActiveTab] = useState('Personal Details');
-  const [shareModalVisible, setShareModalVisible] = useState(false); // Share modal state
+  const [shareModalVisible, setShareModalVisible] = useState(false);
 
-  // Renders content dynamically based on the selected tab pill
   const renderTabContent = () => {
     switch (activeTab) {
       case 'Family Details':
         return (
-          <View style={styles.attributesContainer}>
-            <Text
-              style={[
-                styles.sectionTitle,
-                { color: theme.colors.brandDarkest, marginBottom: 15 },
-              ]}
-            >
+          <View style={[styles.attributesContainer, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
+            <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
               Nuclear Family
             </Text>
-            <View style={styles.attrRow}>
-              <Text style={styles.detailLabel}>Father's Name :</Text>
-              <Text style={styles.detailValue}> Brijesh Roy</Text>
+            <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+              <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Father's Name :</Text>
+              <Text style={[styles.detailValue, { color: theme.colors.text }]}>Brijesh Roy</Text>
             </View>
-            <View style={styles.attrRow}>
-              <Text style={styles.detailLabel}>Father's Occupation :</Text>
-              <Text style={styles.detailValue}> Service</Text>
+            <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+              <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Father's Occupation :</Text>
+              <Text style={[styles.detailValue, { color: theme.colors.text }]}>Service</Text>
             </View>
-            <View style={styles.attrRow}>
-              <Text style={styles.detailLabel}>Mother's Occupation :</Text>
-              <Text style={styles.detailValue}> House Wife</Text>
+            <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+              <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Mother's Occupation :</Text>
+              <Text style={[styles.detailValue, { color: theme.colors.text }]}>House Wife</Text>
             </View>
-            <View style={styles.attrRow}>
-              <Text style={styles.detailLabel}>Sister's Name :</Text>
-              <Text style={styles.detailValue}> Priya Roy</Text>
+            <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+              <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Sister's Name :</Text>
+              <Text style={[styles.detailValue, { color: theme.colors.text }]}>Priya Roy</Text>
             </View>
-            <View style={styles.attrRow}>
-              <Text style={styles.detailLabel}>Sister's Marital Status :</Text>
-              <Text style={styles.detailValue}> Married</Text>
+            <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+              <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Sister's Marital Status :</Text>
+              <Text style={[styles.detailValue, { color: theme.colors.text }]}>Married</Text>
             </View>
-            <View style={styles.attrRow}>
-              <Text style={styles.detailLabel}>Brother's Name :</Text>
-              <Text style={styles.detailValue}> Anik Roy</Text>
+            <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+              <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Brother's Name :</Text>
+              <Text style={[styles.detailValue, { color: theme.colors.text }]}>Anik Roy</Text>
             </View>
-            <View style={styles.attrRow}>
-              <Text style={styles.detailLabel}>Brother's Marital Status :</Text>
-              <Text style={styles.detailValue}> Married</Text>
+            <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+              <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Brother's Marital Status :</Text>
+              <Text style={[styles.detailValue, { color: theme.colors.text }]}>Married</Text>
             </View>
           </View>
         );
 
       case 'Career & Occup':
         return (
-          <View style={styles.attributesContainer}>
-            <View style={styles.attrRow}>
-              <Text style={styles.detailLabel}>Highest Qualificarion :</Text>
-              <Text
-                style={[
-                  styles.detailValue,
-                  { color: theme.colors.primary, fontWeight: 'bold' },
-                ]}
-              >
-                {' '}
-                🎓 M.S Engineering
-              </Text>
+          <View style={[styles.attributesContainer, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
+            <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+              <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Highest Qualification :</Text>
+              <View style={styles.valueWithIcon}>
+                <MaterialIcons name="school" size={16} color={theme.colors.primary} />
+                <Text style={[styles.detailValue, styles.boldValue, { color: theme.colors.primary, marginLeft: 6 }]}>
+                  M.S Engineering
+                </Text>
+              </View>
             </View>
-            <View style={styles.attrRow}>
-              <Text style={styles.detailLabel}>Occupation :</Text>
-              <Text
-                style={[
-                  styles.detailValue,
-                  { color: theme.colors.primary, fontWeight: 'bold' },
-                ]}
-              >
-                {' '}
-                💼 Service
-              </Text>
+            <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+              <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Occupation :</Text>
+              <View style={styles.valueWithIcon}>
+                <MaterialIcons name="work" size={16} color={theme.colors.primary} />
+                <Text style={[styles.detailValue, styles.boldValue, { color: theme.colors.primary, marginLeft: 6 }]}>
+                  Service
+                </Text>
+              </View>
             </View>
-            <View style={styles.attrRow}>
-              <Text style={styles.detailLabel}>Sector :</Text>
-              <Text
-                style={[
-                  styles.detailValue,
-                  { color: theme.colors.primary, fontWeight: 'bold' },
-                ]}
-              >
-                {' '}
-                🏢 IT Sector
-              </Text>
+            <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+              <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Sector :</Text>
+              <View style={styles.valueWithIcon}>
+                <MaterialIcons name="business" size={16} color={theme.colors.primary} />
+                <Text style={[styles.detailValue, styles.boldValue, { color: theme.colors.primary, marginLeft: 6 }]}>
+                  IT Sector
+                </Text>
+              </View>
             </View>
-            <View style={styles.attrRow}>
-              <Text style={styles.detailLabel}>Designation :</Text>
-              <Text
-                style={[
-                  styles.detailValue,
-                  { color: theme.colors.primary, fontWeight: 'bold' },
-                ]}
-              >
-                {' '}
-                💻 UI/UX Designer
-              </Text>
+            <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+              <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Designation :</Text>
+              <View style={styles.valueWithIcon}>
+                <MaterialIcons name="laptop-mac" size={16} color={theme.colors.primary} />
+                <Text style={[styles.detailValue, styles.boldValue, { color: theme.colors.primary, marginLeft: 6 }]}>
+                  UI/UX Designer
+                </Text>
+              </View>
             </View>
-            <View style={styles.attrRow}>
-              <Text style={styles.detailLabel}>Annual Income(Lpa) :</Text>
-              <Text
-                style={[
-                  styles.detailValue,
-                  { color: theme.colors.primary, fontWeight: 'bold' },
-                ]}
-              >
-                {' '}
-                💰 9lpa - 11lpa
-              </Text>
+            <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+              <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Annual Income :</Text>
+              <View style={styles.valueWithIcon}>
+                <MaterialIcons name="attach-money" size={16} color={theme.colors.primary} />
+                <Text style={[styles.detailValue, styles.boldValue, { color: theme.colors.primary, marginLeft: 6 }]}>
+                  9lpa - 11lpa
+                </Text>
+              </View>
             </View>
           </View>
         );
 
       case 'Horoscope':
         return (
-          <View style={styles.attributesContainer}>
-            <View style={styles.attrRow}>
-              <Text style={styles.detailLabel}>Zodiac :</Text>
-              <Text
-                style={[
-                  styles.detailValue,
-                  { color: theme.colors.primary, fontWeight: 'bold' },
-                ]}
-              >
-                {' '}
-                ♈ Aries
-              </Text>
+          <View style={[styles.attributesContainer, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
+            <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+              <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Zodiac :</Text>
+              <View style={styles.valueWithIcon}>
+                <MaterialCommunityIcons name="zodiac-aries" size={16} color={theme.colors.primary} />
+                <Text style={[styles.detailValue, styles.boldValue, { color: theme.colors.primary, marginLeft: 6 }]}>
+                  Aries
+                </Text>
+              </View>
             </View>
-            <View style={styles.attrRow}>
-              <Text style={styles.detailLabel}>Date Of Birth :</Text>
-              <Text
-                style={[
-                  styles.detailValue,
-                  { color: theme.colors.primary, fontWeight: 'bold' },
-                ]}
-              >
-                {' '}
-                🎂 18 - 05 - 1991
-              </Text>
+            <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+              <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Date Of Birth :</Text>
+              <View style={styles.valueWithIcon}>
+                <MaterialIcons name="cake" size={16} color={theme.colors.primary} />
+                <Text style={[styles.detailValue, styles.boldValue, { color: theme.colors.primary, marginLeft: 6 }]}>
+                  18 - 05 - 1991
+                </Text>
+              </View>
             </View>
-            <View style={styles.attrRow}>
-              <Text style={styles.detailLabel}>Time Of Birth :</Text>
-              <Text
-                style={[
-                  styles.detailValue,
-                  { color: theme.colors.primary, fontWeight: 'bold' },
-                ]}
-              >
-                {' '}
-                ⏰ 09:05am
-              </Text>
+            <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+              <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Time Of Birth :</Text>
+              <View style={styles.valueWithIcon}>
+                <MaterialIcons name="access-time" size={16} color={theme.colors.primary} />
+                <Text style={[styles.detailValue, styles.boldValue, { color: theme.colors.primary, marginLeft: 6 }]}>
+                  09:05am
+                </Text>
+              </View>
             </View>
-            <View style={styles.attrRow}>
-              <Text style={styles.detailLabel}>Manglika Dosha :</Text>
-              <Text style={styles.detailValue}> 📄 ****** 🔒</Text>
+            <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+              <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Manglika Dosha :</Text>
+              <View style={styles.valueWithIcon}>
+                <MaterialIcons name="description" size={16} color={theme.colors.text} />
+                <Text style={[styles.detailValue, { color: theme.colors.text, marginLeft: 6 }]}>
+                  ****** 🔒
+                </Text>
+              </View>
             </View>
           </View>
         );
@@ -205,84 +184,82 @@ export default function ProfileDetailScreen({ route, navigation }) {
       default:
         return (
           <>
-            {/* About Section */}
-            <View style={styles.sectionContainer}>
-              <Text
-                style={[
-                  styles.sectionTitle,
-                  { color: theme.colors.brandDarkest },
-                ]}
-              >
+            <View style={[styles.sectionContainer, { backgroundColor: theme.colors.surface }]}>
+              <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
                 About
               </Text>
-              <Text style={styles.aboutText}>
+              <Text style={[styles.aboutText, { color: theme.colors.subtext }]}>
                 Amet Minim Mollit Non Deserunt Ullamco Est Sit Aliqua Dolor Do
                 Amet Sint. Velit Officia Consequ
               </Text>
 
               <View style={styles.religionRow}>
-                <Text style={styles.detailLabel}>Religion :</Text>
-                <Text style={styles.detailValue}> 🕉️ {profile.religion}</Text>
+                <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Religion :</Text>
+                <View style={[styles.valueWithIcon, { marginLeft: 8 }]}>
+                  <MaterialCommunityIcons name="om" size={16} color={theme.colors.text} />
+                  <Text style={[styles.detailValue, { color: theme.colors.text, marginLeft: 4 }]}>
+                    {profile.religion}
+                  </Text>
+                </View>
               </View>
             </View>
 
-            {/* Detailed Attributes Grid */}
-            <View style={styles.attributesContainer}>
-              <View style={styles.attrRow}>
-                <Text style={styles.detailLabel}>Sub - Community :</Text>
-                <Text style={styles.detailValue}>
-                  {' '}
-                  🌸 {profile.community.split(' ')[1] || 'Kashyap'}
-                </Text>
+            <View style={[styles.attributesContainer, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
+              <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+                <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Sub - Community :</Text>
+                <View style={styles.valueWithIcon}>
+                  <MaterialCommunityIcons name="flower" size={16} color={theme.colors.text} />
+                  <Text style={[styles.detailValue, { color: theme.colors.text, marginLeft: 6 }]}>
+                    {profile.community.split(' ')[1] || 'Kashyap'}
+                  </Text>
+                </View>
               </View>
-              <View style={styles.attrRow}>
-                <Text style={styles.detailLabel}>Caste :</Text>
-                <Text style={styles.detailValue}> 📜 General</Text>
+              <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+                <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Caste :</Text>
+                <View style={styles.valueWithIcon}>
+                  <MaterialCommunityIcons name="script-text-outline" size={16} color={theme.colors.text} />
+                  <Text style={[styles.detailValue, { color: theme.colors.text, marginLeft: 6 }]}>General</Text>
+                </View>
               </View>
-              <View style={styles.attrRow}>
-                <Text style={styles.detailLabel}>Marital Status :</Text>
-                <Text style={styles.detailValue}>
-                  {' '}
-                  👤 Single & Never Married
-                </Text>
+              <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+                <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Marital Status :</Text>
+                <View style={styles.valueWithIcon}>
+                  <MaterialIcons name="person" size={16} color={theme.colors.text} />
+                  <Text style={[styles.detailValue, { color: theme.colors.text, marginLeft: 6 }]}>Single & Never Married</Text>
+                </View>
               </View>
-              <View style={styles.attrRow}>
-                <Text style={styles.detailLabel}>Diet :</Text>
-                <Text style={styles.detailValue}> 🥗 Non- Veg</Text>
+              <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+                <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Diet :</Text>
+                <View style={styles.valueWithIcon}>
+                  <MaterialCommunityIcons name="food-apple" size={16} color={theme.colors.text} />
+                  <Text style={[styles.detailValue, { color: theme.colors.text, marginLeft: 6 }]}>Non-Veg</Text>
+                </View>
               </View>
-              <View style={styles.attrRow}>
-                <Text style={styles.detailLabel}>Complexion :</Text>
-                <Text style={styles.detailValue}> 👤 Light Skin Tone</Text>
+              <View style={[styles.attrRow, { borderBottomColor: theme.colors.border }]}>
+                <Text style={[styles.detailLabel, { color: theme.colors.subtext }]}>Complexion :</Text>
+                <View style={styles.valueWithIcon}>
+                  <MaterialIcons name="person-outline" size={16} color={theme.colors.text} />
+                  <Text style={[styles.detailValue, { color: theme.colors.text, marginLeft: 6 }]}>Light Skin Tone</Text>
+                </View>
               </View>
             </View>
 
-            {/* Interests In Box */}
-            <View style={styles.sectionContainer}>
-              <Text
-                style={[
-                  styles.sectionTitle,
-                  { color: theme.colors.brandDarkest, marginBottom: 15 },
-                ]}
-              >
+            <View style={[styles.sectionContainer, { backgroundColor: theme.colors.surface }]}>
+              <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
                 Interests In :
               </Text>
 
-              <View style={styles.interestsBox}>
+              <View style={[styles.interestsBox, { borderColor: theme.colors.border }]}>
                 <View style={styles.interestsGrid}>
                   {INTERESTS.map((interest, index) => (
                     <View
                       key={index}
                       style={[
                         styles.interestChip,
-                        { borderColor: theme.colors.primary },
+                        { borderColor: theme.colors.primary, backgroundColor: theme.colors.surface },
                       ]}
                     >
-                      <Text
-                        style={[
-                          styles.interestText,
-                          { color: theme.colors.brandDarkest },
-                        ]}
-                      >
+                      <Text style={[styles.interestText, { color: theme.colors.text }]}>
                         {interest}
                       </Text>
                     </View>
@@ -296,16 +273,13 @@ export default function ProfileDetailScreen({ route, navigation }) {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: '#F8F9FA' }]}>
-      {/* Top Navigation Bar */}
-      <View style={styles.headerBar}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <View style={[styles.headerBar, { backgroundColor: theme.colors.surface }]}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.backButton}
         >
-          <Text style={[styles.backText, { color: theme.colors.brandDarkest }]}>
-            ←
-          </Text>
+          <MaterialIcons name="arrow-back" size={24} color={theme.colors.text} />
         </TouchableOpacity>
       </View>
 
@@ -313,82 +287,67 @@ export default function ProfileDetailScreen({ route, navigation }) {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* 1. Top Profile Image Card Preview */}
-        <View style={styles.heroCard}>
+        <View style={[styles.heroCard, { backgroundColor: theme.mode === 'dark' ? '#2A2A35' : '#CCC' }]}>
           <TouchableOpacity
             activeOpacity={0.95}
             onPress={() => navigation.navigate('FullScreenImageViewer')}
           >
-            <View style={[styles.imagePlaceholder, { backgroundColor: '#888' }]}>
-              {/* Top Left: ID Code */}
+            <View style={[styles.imagePlaceholder, { backgroundColor: theme.mode === 'dark' ? '#2A2A35' : '#888' }]}>
+              
               <View style={styles.idBadge}>
                 <Text style={styles.idText}>ID Code - #{profile.idCode}</Text>
               </View>
 
-              {/* Right Side Action Icons */}
               <View style={styles.actionColumn}>
                 <TouchableOpacity style={styles.iconButton}>
-                  <Text style={styles.iconText}>⋮</Text>
+                  <MaterialIcons name="more-vert" size={20} color="#FFF" />
                 </TouchableOpacity>
 
-                {/* Share Icon Button triggering bottom sheet */}
                 <TouchableOpacity 
                   style={styles.iconButton}
                   onPress={() => setShareModalVisible(true)}
                 >
-                  <Text style={styles.iconText}>🔗</Text>
+                  <MaterialIcons name="share" size={18} color="#FFF" />
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.iconButton}>
-                  <Text style={styles.iconText}>🤍</Text>
+                  <MaterialIcons name="favorite-border" size={18} color="#FFF" />
                 </TouchableOpacity>
+                
                 <TouchableOpacity style={styles.iconButton}>
-                  <Text style={styles.iconText}>🖼</Text>
+                  <MaterialIcons name="photo-library" size={18} color="#FFF" />
                 </TouchableOpacity>
               </View>
 
-              {/* Bottom Overlay Info */}
               <View style={styles.heroBottomOverlay}>
                 <Text style={styles.heroNameText}>
                   {profile.name}{' '}
-                  <Text style={{ fontWeight: 'normal' }}>
+                  <Text style={styles.normalText}>
                     | {profile.age}yrs | {profile.height}
                   </Text>
                 </Text>
                 <Text style={styles.heroSubText}>
                   {profile.religion}, {profile.community}
                 </Text>
-                <Text style={styles.heroSubText}>📍 {profile.location}</Text>
+                
+                <View style={styles.locationRow}>
+                  <MaterialIcons name="location-on" size={14} color="#E0E0E0" />
+                  <Text style={[styles.heroSubText, { marginLeft: 4 }]}>{profile.location}</Text>
+                </View>
 
-                {/* Send Request & Message Buttons */}
                 <View style={styles.heroButtonRow}>
                   <TouchableOpacity
-                    style={[
-                      styles.heroActionBtn,
-                      { backgroundColor: theme.colors.surface },
-                    ]}
+                    style={[styles.heroActionBtn, { backgroundColor: theme.colors.surface }]}
                   >
-                    <Text
-                      style={[
-                        styles.heroBtnText,
-                        { color: theme.colors.primary },
-                      ]}
-                    >
+                    <Text style={[styles.heroBtnText, { color: theme.colors.primary }]}>
                       Send Request
                     </Text>
                   </TouchableOpacity>
+                  
                   <TouchableOpacity
-                    style={[
-                      styles.heroActionBtn,
-                      { backgroundColor: theme.colors.surface },
-                    ]}
+                    style={[styles.heroActionBtn, { backgroundColor: theme.colors.surface }]}
                   >
-                    <Text
-                      style={[
-                        styles.heroBtnText,
-                        { color: theme.colors.primary },
-                      ]}
-                    >
+                    <Text style={[styles.heroBtnText, { color: theme.colors.primary }]}>
                       Message
                     </Text>
                   </TouchableOpacity>
@@ -398,42 +357,37 @@ export default function ProfileDetailScreen({ route, navigation }) {
           </TouchableOpacity>
         </View>
 
-        {/* 2. Masked Contact & Email Info Card */}
-        <View style={styles.infoCard}>
+        <View style={[styles.infoCard, { backgroundColor: theme.colors.surface }]}>
           <View style={styles.infoRow}>
             <View style={styles.labelContainer}>
-              <Text style={styles.infoLabel}>Contact Number :</Text>
+              <Text style={[styles.infoLabel, { color: theme.colors.text }]}>Contact Number :</Text>
             </View>
-            <View style={styles.valueContainer}>
-              <Text style={styles.infoMask}>📞 ****** 🔒</Text>
+            <View style={styles.valueWithIcon}>
+              <MaterialIcons name="phone" size={16} color={theme.colors.subtext} />
+              <Text style={[styles.infoMask, { color: theme.colors.subtext, marginLeft: 6 }]}>****** 🔒</Text>
             </View>
             <TouchableOpacity
-              style={[styles.unlockSmallBtn, { backgroundColor: '#FFD1DC' }]}
+              style={[styles.unlockSmallBtn, { backgroundColor: unlockButtonBg }]}
             >
-              <Text
-                style={[
-                  styles.unlockSmallText,
-                  { color: theme.colors.primary },
-                ]}
-              >
+              <Text style={[styles.unlockSmallText, { color: theme.colors.primary }]}>
                 Unlock
               </Text>
             </TouchableOpacity>
           </View>
 
-          <View style={styles.divider} />
+          <View style={[styles.divider, { backgroundColor: theme.colors.border }]} />
 
           <View style={styles.infoRow}>
             <View style={styles.labelContainer}>
-              <Text style={styles.infoLabel}>Email Id :</Text>
+              <Text style={[styles.infoLabel, { color: theme.colors.text }]}>Email Id :</Text>
             </View>
-            <View style={styles.valueContainer}>
-              <Text style={styles.infoMask}>✉️ ****** 🔒</Text>
+            <View style={[styles.valueWithIcon, { flex: 1 }]}>
+              <MaterialIcons name="email" size={16} color={theme.colors.subtext} />
+              <Text style={[styles.infoMask, { color: theme.colors.subtext, marginLeft: 6 }]}>****** 🔒</Text>
             </View>
           </View>
         </View>
 
-        {/* 3. Tab Pills Scrollable Header */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -441,24 +395,22 @@ export default function ProfileDetailScreen({ route, navigation }) {
         >
           {TABS.map(tab => {
             const isSelected = activeTab === tab;
+            const tabTextColor = isSelected ? '#FFF' : theme.colors.subtext;
+
             return (
               <TouchableOpacity
                 key={tab}
                 style={[
                   styles.tabPill,
                   {
-                    borderColor: isSelected ? theme.colors.primary : '#E0E0E0',
+                    borderColor: isSelected ? theme.colors.primary : theme.colors.border,
+                    backgroundColor: theme.colors.surface,
                   },
                   isSelected && { backgroundColor: theme.colors.primary },
                 ]}
                 onPress={() => setActiveTab(tab)}
               >
-                <Text
-                  style={[
-                    styles.tabText,
-                    { color: isSelected ? '#FFF' : '#666' },
-                  ]}
-                >
+                <Text style={[styles.tabText, { color: tabTextColor }]}>
                   {tab}
                 </Text>
               </TouchableOpacity>
@@ -466,26 +418,20 @@ export default function ProfileDetailScreen({ route, navigation }) {
           })}
         </ScrollView>
 
-        {/* 4. Unlock Banner Callout */}
         <View
-          style={[styles.unlockBanner, { borderColor: theme.colors.primary }]}
+          style={[styles.unlockBanner, { backgroundColor: theme.colors.surface, borderColor: theme.colors.primary }]}
         >
-          <Text style={styles.unlockBannerText}>To Unlock Profile</Text>
+          <Text style={[styles.unlockBannerText, { color: theme.colors.text }]}>To Unlock Profile</Text>
           <TouchableOpacity
-            style={[
-              styles.buyNowBtn,
-              { backgroundColor: theme.colors.primary },
-            ]}
+            style={[styles.buyNowBtn, { backgroundColor: theme.colors.primary }]}
           >
             <Text style={styles.buyNowText}>Go Buy Now</Text>
           </TouchableOpacity>
         </View>
 
-        {/* 5. Dynamic Tab Content Rendering */}
         {renderTabContent()}
       </ScrollView>
 
-      {/* Share Bottom Sheet Modal */}
       <ShareBottomSheet 
         visible={shareModalVisible} 
         onClose={() => setShareModalVisible(false)} 
@@ -502,15 +448,11 @@ const styles = StyleSheet.create({
   headerBar: {
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: '#FFF',
   },
   backButton: {
     width: 40,
     height: 40,
     justifyContent: 'center',
-  },
-  backText: {
-    fontSize: 24,
   },
   scrollContent: {
     paddingHorizontal: 15,
@@ -520,7 +462,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 15,
     overflow: 'hidden',
-    backgroundColor: '#CCC',
     elevation: 3,
   },
   imagePlaceholder: {
@@ -557,10 +498,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  iconText: {
-    color: '#FFF',
-    fontSize: 18,
-  },
   heroBottomOverlay: {
     position: 'absolute',
     bottom: 0,
@@ -579,6 +516,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 2,
   },
+  locationRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 2,
+  },
   heroButtonRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -596,7 +538,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   infoCard: {
-    backgroundColor: '#FFF',
     borderRadius: 12,
     padding: 15,
     marginTop: 15,
@@ -614,22 +555,22 @@ const styles = StyleSheet.create({
   labelContainer: {
     width: 130,
   },
-  valueContainer: {
-    flex: 1,
+  valueWithIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   infoLabel: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#333',
   },
   infoMask: {
     fontSize: 13,
-    color: '#666',
   },
   unlockSmallBtn: {
     paddingVertical: 4,
     paddingHorizontal: 12,
     borderRadius: 6,
+    marginLeft: 15,
   },
   unlockSmallText: {
     fontSize: 12,
@@ -637,7 +578,6 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: '#F0F0F0',
     marginVertical: 8,
   },
   tabScrollRow: {
@@ -655,7 +595,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   sectionContainer: {
-    backgroundColor: '#FFF',
     borderRadius: 12,
     padding: 15,
     marginBottom: 15,
@@ -663,11 +602,10 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: 15,
   },
   aboutText: {
     fontSize: 13,
-    color: '#666',
     lineHeight: 18,
     marginBottom: 12,
   },
@@ -678,17 +616,14 @@ const styles = StyleSheet.create({
   detailLabel: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#555',
   },
   detailValue: {
     fontSize: 13,
-    color: '#333',
   },
   unlockBanner: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#FFF',
     borderWidth: 1.5,
     borderRadius: 12,
     padding: 15,
@@ -697,7 +632,6 @@ const styles = StyleSheet.create({
   unlockBannerText: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#333',
   },
   buyNowBtn: {
     paddingVertical: 10,
@@ -710,7 +644,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   attributesContainer: {
-    backgroundColor: '#FFF',
     borderRadius: 12,
     padding: 15,
     marginBottom: 15,
@@ -718,13 +651,12 @@ const styles = StyleSheet.create({
   attrRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#F8F9FA',
   },
   interestsBox: {
     borderWidth: 1,
-    borderColor: '#E0E0E0',
     borderRadius: 12,
     padding: 15,
   },
@@ -740,10 +672,15 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     alignItems: 'center',
     marginBottom: 12,
-    backgroundColor: '#FAFAFA',
   },
   interestText: {
     fontSize: 13,
     fontWeight: '600',
+  },
+  normalText: {
+    fontWeight: 'normal',
+  },
+  boldValue: {
+    fontWeight: 'bold',
   },
 });

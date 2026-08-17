@@ -10,6 +10,7 @@ import {
   Platform,
   ScrollView 
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import useThemeStore from '../../store/useThemeStore';
 
 const MAX_CHARACTERS = 500;
@@ -18,20 +19,18 @@ export default function RegisterStep4Screen({ navigation }) {
   const { theme } = useThemeStore();
   const [bio, setBio] = useState('');
 
-  // Calculate remaining or current length based on design preference
   const currentLength = bio.length;
 
-  const handleCreateBio = () => {
-    navigation.replace('MarriageFixedSuccessScreen');
+  const handleDeleteAccount = () => {
+    navigation.navigate('ConfirmDeletePasswordScreen');
   };
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.surface }]}>
       
-      {/* Top Back Navigation Bar */}
       <View style={styles.headerBar}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Text style={[styles.backText, { color: theme.colors.text }]}>←</Text>
+          <Icon name="arrow-back" size={24} color={theme.colors.text} />
         </TouchableOpacity>
       </View>
 
@@ -45,12 +44,19 @@ export default function RegisterStep4Screen({ navigation }) {
             What Was The Reason For Your Account Deletion ?
           </Text>
 
-          {/* Multi-line Bio Input Box */}
-          <View style={[styles.textAreaWrapper, { borderColor: theme.colors.border }]}>
+          <View 
+            style={[
+              styles.textAreaWrapper, 
+              { 
+                borderColor: theme.colors.border,
+                backgroundColor: theme.mode === 'dark' ? '#2A2A35' : '#FAFAFA'
+              }
+            ]}
+          >
             <TextInput
-              style={styles.textArea}
+              style={[styles.textArea, { color: theme.colors.text }]}
               placeholder="Write Here"
-              placeholderTextColor="#999"
+              placeholderTextColor={theme.mode === 'dark' ? '#888888' : '#999999'}
               multiline={true}
               numberOfLines={6}
               maxLength={MAX_CHARACTERS}
@@ -60,7 +66,6 @@ export default function RegisterStep4Screen({ navigation }) {
             />
           </View>
 
-          {/* Character Counter Indicator */}
           <View style={styles.counterContainer}>
             <Text style={[styles.counterText, { color: theme.colors.primary }]}>
               {currentLength} <Text style={{ color: theme.colors.subtext }}>( {MAX_CHARACTERS} Max )</Text>
@@ -69,13 +74,12 @@ export default function RegisterStep4Screen({ navigation }) {
 
         </ScrollView>
 
-        {/* Create Bio Button */}
         <View style={styles.footerContainer}>
           <TouchableOpacity 
             style={[styles.createButton, { backgroundColor: theme.colors.primary }]}
-            onPress={handleCreateBio}
+            onPress={handleDeleteAccount}
           >
-            <Text style={styles.createButtonText}>Delete Account </Text>
+            <Text style={styles.createButtonText}>Delete Account</Text>
           </TouchableOpacity>
         </View>
 
@@ -98,9 +102,6 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
   },
-  backText: {
-    fontSize: 24,
-  },
   scrollContent: {
     paddingHorizontal: 30,
     paddingTop: 10,
@@ -114,14 +115,12 @@ const styles = StyleSheet.create({
   textAreaWrapper: {
     borderWidth: 1,
     borderRadius: 12,
-    backgroundColor: '#FAFAFA',
     padding: 12,
     height: 180,
   },
   textArea: {
     flex: 1,
     fontSize: 15,
-    color: '#333',
   },
   counterContainer: {
     alignItems: 'flex-end',
