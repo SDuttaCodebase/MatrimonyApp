@@ -235,7 +235,9 @@ const ZODIAC_LIST = [
 ];
 
 export default function ProfileScreen({ navigation }) {
-  const { theme } = useThemeStore();
+  const themeStore = useThemeStore();
+  const theme = themeStore?.theme || { dark: true, colors: { primary: '#80001E' } };
+  const styles = getStyles(theme);
 
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 22;
@@ -301,8 +303,7 @@ export default function ProfileScreen({ navigation }) {
   });
 
   const [showCompanySuggestions, setShowCompanySuggestions] = useState(false);
-  const [showDesignationSuggestions, setShowDesignationSuggestions] =
-    useState(false);
+  const [showDesignationSuggestions, setShowDesignationSuggestions] = useState(false);
   const [showPlaceSuggestions, setShowPlaceSuggestions] = useState(false);
 
   const handleInputChange = (field, value) => {
@@ -390,26 +391,12 @@ export default function ProfileScreen({ navigation }) {
   const getClockRotation = (hour) => {
     const numHour = parseInt(hour) || 12;
     const normalizedHour = numHour === 12 ? 0 : numHour;
-    // 12 o'clock is at -90 degrees, each hour is 30 degrees
     return `${(normalizedHour * 30) - 90 + 180}deg`;
   };
 
   const renderClockNumbers = () => {
     const radius = 68;
-    const numbers = [
-      '12',
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      '10',
-      '11',
-    ];
+    const numbers = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
 
     return numbers.map((num, index) => {
       const angle = index * 30 * (Math.PI / 180);
@@ -513,13 +500,13 @@ export default function ProfileScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: '#FFFFFF' }]}>
+    <SafeAreaView style={styles.container}>
       {/* Loading Overlay Screen */}
       {isLoading && (
         <View style={styles.loadingOverlay}>
           <View style={styles.loadingBox}>
-            <ActivityIndicator size="large" color="#80001E" />
-            <Text style={styles.loadingText}>Saving & Processing...</Text>
+            <ActivityIndicator size="large" color={theme.colors.primary} />
+            <Text style={[styles.loadingText, { color: theme.colors.primary }]}>Saving & Processing...</Text>
           </View>
         </View>
       )}
@@ -604,7 +591,7 @@ export default function ProfileScreen({ navigation }) {
                 <View
                   style={[
                     styles.pfpImagePlaceholder,
-                    { backgroundColor: '#DDD' },
+                    { backgroundColor: theme.dark ? '#333' : '#DDD' },
                   ]}
                 >
                   <Text style={styles.pfpEmoji}>📷</Text>
@@ -684,12 +671,10 @@ export default function ProfileScreen({ navigation }) {
                   onPress={() => handleInputChange('state', state)}
                   style={[
                     styles.selectionCard,
-                    isSelected
-                      ? {
-                          backgroundColor: '#FDF2F2',
-                          borderColor: theme.colors.primary,
-                        }
-                      : { backgroundColor: '#FFF', borderColor: '#EFEFEF' },
+                    isSelected && {
+                      backgroundColor: theme.dark ? '#2A1115' : '#FDF2F2',
+                      borderColor: theme.colors.primary,
+                    }
                   ]}
                 >
                   <View style={styles.cardLeftRow}>
@@ -742,12 +727,10 @@ export default function ProfileScreen({ navigation }) {
                   onPress={() => handleInputChange('city', cityName)}
                   style={[
                     styles.selectionCard,
-                    isSelected
-                      ? {
-                          backgroundColor: '#FDF2F2',
-                          borderColor: theme.colors.primary,
-                        }
-                      : { backgroundColor: '#FFF', borderColor: '#EFEFEF' },
+                    isSelected && {
+                      backgroundColor: theme.dark ? '#2A1115' : '#FDF2F2',
+                      borderColor: theme.colors.primary,
+                    }
                   ]}
                 >
                   <Text
@@ -885,8 +868,8 @@ export default function ProfileScreen({ navigation }) {
                     style={[
                       styles.heightText,
                       isFocused
-                        ? { color: '#333', fontSize: 22, fontWeight: 'bold' }
-                        : { color: '#B0B0B0', fontSize: 18 },
+                        ? { color: theme.dark ? '#FFF' : '#333', fontSize: 22, fontWeight: 'bold' }
+                        : { color: theme.dark ? '#AAA' : '#888', fontSize: 18 },
                     ]}
                   >
                     {h}
@@ -1453,8 +1436,8 @@ export default function ProfileScreen({ navigation }) {
                     style={[
                       styles.heightText,
                       isFocused
-                        ? { color: '#333', fontSize: 22, fontWeight: 'bold' }
-                        : { color: '#B0B0B0', fontSize: 18 },
+                        ? { color: theme.dark ? '#FFF' : '#333', fontSize: 22, fontWeight: 'bold' }
+                        : { color: theme.dark ? '#AAA' : '#888', fontSize: 18 },
                     ]}
                   >
                     {inc}
@@ -1715,7 +1698,7 @@ export default function ProfileScreen({ navigation }) {
           </View>
         )}
 
-        {/* Step 22: Type Your Horoscope Details with Fully Fixed Clock & Place Autocomplete */}
+        {/* Step 22: Type Your Horoscope Details */}
         {currentStep === 22 && (
           <View style={styles.familyContainer}>
             <Text
@@ -1754,14 +1737,14 @@ export default function ProfileScreen({ navigation }) {
                         styles.timeBox,
                         tempAmPm === 'am' && tempHour
                           ? {
-                              backgroundColor: '#FDF2F2',
-                              borderColor: '#80001E',
+                              backgroundColor: theme.dark ? '#2A1115' : '#FDF2F2',
+                              borderColor: theme.colors.primary,
                             }
                           : {},
                       ]}
                       onPress={() => {}}
                     >
-                      <Text style={[styles.timeBoxText, { color: '#80001E' }]}>
+                      <Text style={[styles.timeBoxText, { color: theme.colors.primary }]}>
                         {tempHour}
                       </Text>
                     </TouchableOpacity>
@@ -1774,7 +1757,7 @@ export default function ProfileScreen({ navigation }) {
                       <TouchableOpacity
                         style={[
                           styles.amPmBtn,
-                          tempAmPm === 'am' && { backgroundColor: '#FFC0CB' },
+                          tempAmPm === 'am' && { backgroundColor: theme.dark ? '#2A1115' : '#FFC0CB' },
                         ]}
                         onPress={() => setTempAmPm('am')}
                       >
@@ -1782,7 +1765,7 @@ export default function ProfileScreen({ navigation }) {
                           style={[
                             styles.amPmText,
                             tempAmPm === 'am' && {
-                              color: '#80001E',
+                              color: theme.colors.primary,
                               fontWeight: 'bold',
                             },
                           ]}
@@ -1793,7 +1776,7 @@ export default function ProfileScreen({ navigation }) {
                       <TouchableOpacity
                         style={[
                           styles.amPmBtn,
-                          tempAmPm === 'pm' && { backgroundColor: '#FFC0CB' },
+                          tempAmPm === 'pm' && { backgroundColor: theme.dark ? '#2A1115' : '#FFC0CB' },
                         ]}
                         onPress={() => setTempAmPm('pm')}
                       >
@@ -1801,7 +1784,7 @@ export default function ProfileScreen({ navigation }) {
                           style={[
                             styles.amPmText,
                             tempAmPm === 'pm' && {
-                              color: '#80001E',
+                              color: theme.colors.primary,
                               fontWeight: 'bold',
                             },
                           ]}
@@ -1812,7 +1795,6 @@ export default function ProfileScreen({ navigation }) {
                     </View>
                   </View>
 
-                  {/* Complete 12-Hour Circular Clock Face */}
                   <View style={styles.clockFaceCircle}>
                     <View style={styles.clockCenterDot} />
                     <View 
@@ -1820,9 +1802,9 @@ export default function ProfileScreen({ navigation }) {
                         styles.clockHandLine, 
                         { 
                           transform: [
-                            { translateX: 29 }, // Shift right so left edge is at center pin
+                            { translateX: 29 },
                             { rotate: getClockRotation(tempHour) },
-                            { translateX: -29 }  // Shift back
+                            { translateX: -29 }
                           ] 
                         }
                       ]} 
@@ -1959,7 +1941,7 @@ export default function ProfileScreen({ navigation }) {
       </ScrollView>
 
       {/* Bottom Sticky Navigation */}
-      <View style={[styles.bottomButtonRow, { borderTopColor: '#EFEFEF' }]}>
+      <View style={styles.bottomButtonRow}>
         <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
           <Text style={styles.skipButtonText}>Skip</Text>
         </TouchableOpacity>
@@ -2014,648 +1996,303 @@ export default function ProfileScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-  loadingOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    zIndex: 9999,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingBox: {
-    backgroundColor: '#FFF',
-    paddingVertical: 24,
-    paddingHorizontal: 32,
-    borderRadius: 16,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 8,
-  },
-  loadingText: {
-    marginTop: 12,
-    fontSize: 15,
-    fontWeight: 'bold',
-    color: '#80001E',
-  },
-  headerBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    backgroundColor: '#FFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
-  },
-  backButton: { width: 40, height: 40, justifyContent: 'center' },
-  backText: { fontSize: 24, color: '#333' },
-  headerTitleContainer: { flex: 1, alignItems: 'center' },
-  headerTitle: { fontSize: 16, fontWeight: 'bold', textAlign: 'center' },
-  headerSubtitle: {
-    fontSize: 12,
-    color: '#888',
-    marginTop: 2,
-    textAlign: 'center',
-  },
-  spacer: { width: 40 },
-  scrollContent: { paddingHorizontal: 20, paddingTop: 25, paddingBottom: 140 },
+// ==========================================
+// STYLESHEET (Fixed Light & Dark Themes)
+// ==========================================
+const getStyles = (theme) => {
+  const isDark = theme?.dark || theme?.mode === 'dark';
 
-  pfpContainer: { alignItems: 'center', marginBottom: 25 },
-  pfpWrapper: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    borderWidth: 2,
-    padding: 3,
-    marginBottom: 10,
-  },
-  pfpImagePlaceholder: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 45,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  actualPfpImage: { width: '100%', height: '100%', borderRadius: 45 },
-  pfpEmoji: { fontSize: 35 },
-  changePhotoBtn: {
-    paddingVertical: 6,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-  },
-  changePhotoText: { color: '#FFF', fontSize: 12, fontWeight: 'bold' },
+  const colors = {
+    background: isDark ? '#121212' : '#FFFFFF',
+    card: isDark ? '#1E1E1E' : '#FFFFFF',
+    inputBg: isDark ? '#2A2A2A' : '#EFEFEF',
+    text: isDark ? '#FFFFFF' : '#333333',
+    textSecondary: isDark ? '#AAAAAA' : '#666666',
+    border: isDark ? '#444444' : '#E0E0E0',
+    primary: theme?.colors?.primary || '#80001E', 
+    highlight: isDark ? '#2A1115' : '#FDF2F2', 
+  };
 
-  sectionContainer: {
-    backgroundColor: '#FFF',
-    borderRadius: 12,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  sectionHeading: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 15,
-  },
+  return StyleSheet.create({
+    container: { flex: 1, backgroundColor: colors.background },
+    loadingOverlay: {
+      position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+      backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 9999,
+      justifyContent: 'center', alignItems: 'center',
+    },
+    loadingBox: {
+      backgroundColor: colors.card,
+      paddingVertical: 24, paddingHorizontal: 32, borderRadius: 16,
+      alignItems: 'center', shadowColor: '#000',
+      shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 8, elevation: 8,
+    },
+    loadingText: { marginTop: 12, fontSize: 15, fontWeight: 'bold', color: colors.primary },
+    headerBar: {
+      flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+      paddingHorizontal: 20, paddingVertical: 15,
+      backgroundColor: colors.card,
+      borderBottomWidth: 1, borderBottomColor: isDark ? '#333' : '#F0F0F0',
+    },
+    backButton: { width: 40, height: 40, justifyContent: 'center' },
+    backText: { fontSize: 24, color: colors.text },
+    headerTitleContainer: { flex: 1, alignItems: 'center' },
+    headerTitle: { fontSize: 16, fontWeight: 'bold', textAlign: 'center', color: colors.primary },
+    headerSubtitle: { fontSize: 12, color: colors.textSecondary, marginTop: 2, textAlign: 'center' },
+    spacer: { width: 40 },
+    scrollContent: { paddingHorizontal: 20, paddingTop: 25, paddingBottom: 140 },
 
-  inputGroup: { marginBottom: 18 },
-  label: { fontSize: 13, fontWeight: 'bold', marginBottom: 6 },
-  dropdownHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    backgroundColor: '#EFEFEF',
-  },
-  dropdownSelectedText: { fontSize: 15, color: '#333' },
-  dropdownArrow: { fontSize: 12, color: '#666' },
-  dropdownListContainer: {
-    marginTop: 5,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    borderRadius: 8,
-    backgroundColor: '#FFF',
-    paddingVertical: 5,
-  },
-  dropdownOptionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#F0F0F0',
-  },
+    pfpContainer: { alignItems: 'center', marginBottom: 25 },
+    pfpWrapper: {
+      width: 100, height: 100, borderRadius: 50,
+      borderWidth: 2, borderColor: colors.primary, padding: 3, marginBottom: 10,
+    },
+    pfpImagePlaceholder: {
+      width: '100%', height: '100%', borderRadius: 45,
+      justifyContent: 'center', alignItems: 'center',
+    },
+    actualPfpImage: { width: '100%', height: '100%', borderRadius: 45 },
+    pfpEmoji: { fontSize: 35 },
+    changePhotoBtn: {
+      paddingVertical: 6, paddingHorizontal: 16, borderRadius: 20,
+      backgroundColor: colors.primary,
+    },
+    changePhotoText: { color: '#FFF', fontSize: 12, fontWeight: 'bold' },
 
-  radioButton: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    borderWidth: 1.5,
-    borderColor: '#CCC',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  radioDot: { width: 10, height: 10, borderRadius: 5 },
-  innerRadioDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#FFF',
-  },
-  dropdownOptionText: { fontSize: 14, color: '#444', marginLeft: 12 },
+    sectionContainer: {
+      backgroundColor: colors.card,
+      borderRadius: 12, padding: 20,
+      shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: isDark ? 0.3 : 0.05, shadowRadius: 3, elevation: 2,
+    },
+    sectionHeading: { fontSize: 16, fontWeight: 'bold', color: colors.text, marginBottom: 15 },
 
-  standardInputGroup: { marginBottom: 15 },
-  standardLabel: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#666',
-    marginBottom: 5,
-  },
-  textInput: {
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 14,
-    color: '#333',
-    backgroundColor: '#FAFAFA',
-  },
+    inputGroup: { marginBottom: 18 },
+    label: { fontSize: 13, fontWeight: 'bold', marginBottom: 6, color: colors.primary },
+    dropdownHeader: {
+      flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+      borderWidth: 1, borderColor: colors.border, borderRadius: 8,
+      paddingHorizontal: 16, paddingVertical: 14,
+      backgroundColor: colors.inputBg,
+    },
+    dropdownSelectedText: { fontSize: 15, color: colors.text },
+    dropdownArrow: { fontSize: 12, color: colors.textSecondary },
+    dropdownListContainer: {
+      marginTop: 5, borderWidth: 1, borderColor: colors.border, borderRadius: 8,
+      backgroundColor: colors.card, paddingVertical: 5,
+    },
+    dropdownOptionRow: {
+      flexDirection: 'row', alignItems: 'center',
+      paddingVertical: 12, paddingHorizontal: 16,
+      borderBottomWidth: 0.5, borderBottomColor: isDark ? '#333' : '#F0F0F0',
+    },
 
-  cardsContainer: { width: '100%' },
-  selectionCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 14,
-    borderRadius: 12,
-    borderWidth: 1.5,
-    marginBottom: 12,
-  },
-  cardLeftRow: { flexDirection: 'row', alignItems: 'center' },
-  stateIconCircle: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#F0F0F0',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  cardText: { fontSize: 15, color: '#333' },
+    radioButton: {
+      width: 20, height: 20, borderRadius: 10,
+      borderWidth: 1.5, borderColor: isDark ? '#666' : '#CCC',
+      justifyContent: 'center', alignItems: 'center',
+    },
+    radioDot: { width: 10, height: 10, borderRadius: 5, backgroundColor: colors.primary },
+    innerRadioDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: colors.card },
+    dropdownOptionText: { fontSize: 14, color: colors.text, marginLeft: 12 },
 
-  largeGridContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    paddingHorizontal: 5,
-  },
-  largeGridCard: {
-    width: '47%',
-    height: 135,
-    borderRadius: 16,
-    borderWidth: 1.5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-    paddingHorizontal: 12,
-  },
-  selectedLargeCard: { backgroundColor: '#FDF2F2', borderColor: '#80001E' },
-  unselectedLargeCard: {
-    backgroundColor: '#EFEFEF',
-    borderColor: 'transparent',
-  },
-  largeGridCardText: {
-    fontSize: 16,
-    color: '#555',
-    textAlign: 'center',
-    fontWeight: '500',
-  },
+    standardInputGroup: { marginBottom: 15 },
+    standardLabel: { fontSize: 12, fontWeight: '600', color: colors.textSecondary, marginBottom: 5 },
+    textInput: {
+      borderWidth: 1, borderColor: colors.border, borderRadius: 8,
+      paddingHorizontal: 12, paddingVertical: 10, fontSize: 14,
+      color: colors.text, backgroundColor: isDark ? '#2A2A2A' : '#FAFAFA',
+    },
 
-  dietCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 18,
-    paddingHorizontal: 18,
-    borderRadius: 16,
-    borderWidth: 1.5,
-    marginBottom: 16,
-  },
-  selectedDietCard: { backgroundColor: '#FDF2F2', borderColor: '#80001E' },
-  unselectedDietCard: {
-    backgroundColor: '#EFEFEF',
-    borderColor: 'transparent',
-  },
-  dietIconCircle: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    backgroundColor: '#FFF',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    elevation: 2,
-  },
-  dietCardText: { fontSize: 17, color: '#333', fontWeight: '500' },
+    cardsContainer: { width: '100%' },
+    selectionCard: {
+      flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+      padding: 14, borderRadius: 12, borderWidth: 1.5, marginBottom: 12,
+      backgroundColor: colors.card, borderColor: isDark ? '#333' : '#EFEFEF',
+    },
+    cardLeftRow: { flexDirection: 'row', alignItems: 'center' },
+    stateIconCircle: {
+      width: 36, height: 36, borderRadius: 18,
+      backgroundColor: isDark ? '#333' : '#F0F0F0', justifyContent: 'center', alignItems: 'center', marginRight: 12,
+    },
+    cardText: { fontSize: 15, color: colors.text },
 
-  heightPickerContainer: {
-    width: '100%',
-    alignItems: 'center',
-    paddingVertical: 40,
-  },
-  heightRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 18,
-    width: '100%',
-  },
-  heightRowFocused: {
-    backgroundColor: '#FAFAFA',
-    borderRadius: 12,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: '#E0E0E0',
-  },
-  heightText: { textAlign: 'center', marginHorizontal: 20 },
-  heightPointerLeft: {
-    color: '#80001E',
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginRight: 10,
-  },
-  heightPointerRight: {
-    color: '#80001E',
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginLeft: 10,
-  },
+    largeGridContainer: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingHorizontal: 5 },
+    largeGridCard: {
+      width: '47%', height: 135, borderRadius: 16, borderWidth: 1.5,
+      justifyContent: 'center', alignItems: 'center', marginBottom: 20, paddingHorizontal: 12,
+      backgroundColor: colors.inputBg, borderColor: 'transparent',
+    },
+    selectedLargeCard: { backgroundColor: colors.highlight, borderColor: colors.primary },
+    unselectedLargeCard: { backgroundColor: colors.inputBg, borderColor: 'transparent' },
+    largeGridCardText: { fontSize: 16, color: colors.text, textAlign: 'center', fontWeight: '500' },
 
-  complexionContainer: { width: '100%', alignItems: 'center', paddingTop: 10 },
-  complexionCard: {
-    width: '65%',
-    height: 150,
-    borderRadius: 16,
-    borderWidth: 1.5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 25,
-  },
-  selectedComplexionCard: {
-    backgroundColor: '#FDF2F2',
-    borderColor: '#80001E',
-  },
-  unselectedComplexionCard: {
-    backgroundColor: '#EFEFEF',
-    borderColor: 'transparent',
-  },
-  avatarBox: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#FFF',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    elevation: 2,
-  },
-  complexionCardText: { fontSize: 16, color: '#444', fontWeight: '500' },
+    dietCard: {
+      flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+      paddingVertical: 18, paddingHorizontal: 18, borderRadius: 16, borderWidth: 1.5, marginBottom: 16,
+      backgroundColor: colors.inputBg, borderColor: 'transparent'
+    },
+    selectedDietCard: { backgroundColor: colors.highlight, borderColor: colors.primary },
+    unselectedDietCard: { backgroundColor: colors.inputBg, borderColor: 'transparent' },
+    dietIconCircle: {
+      width: 42, height: 42, borderRadius: 21,
+      backgroundColor: colors.card, justifyContent: 'center', alignItems: 'center',
+      marginRight: 15, shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: isDark ? 0.3 : 0.1, elevation: 2,
+    },
+    dietCardText: { fontSize: 17, color: colors.text, fontWeight: '500' },
 
-  familyContainer: { width: '100%' },
-  familySectionTitle: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 12,
-  },
-  radioGroupRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  radioOption: { flexDirection: 'row', alignItems: 'center' },
-  radioLabelText: { fontSize: 15, color: '#333', marginLeft: 8 },
-  dividerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 20,
-  },
-  dividerLine: { flex: 1, height: 1, backgroundColor: '#E0E0E0' },
-  dividerText: { marginHorizontal: 15, color: '#888', fontSize: 14 },
-  familyInput: {
-    backgroundColor: '#EFEFEF',
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 15,
-    color: '#333',
-    marginBottom: 18,
-  },
-  companyInput: {
-    backgroundColor: '#EFEFEF',
-    borderRadius: 12,
-    paddingHorizontal: 18,
-    paddingVertical: 18,
-    fontSize: 16,
-    color: '#333',
-  },
+    heightPickerContainer: { width: '100%', alignItems: 'center', paddingVertical: 40 },
+    heightRow: {
+      flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+      paddingVertical: 18, width: '100%',
+    },
+    heightRowFocused: {
+      backgroundColor: colors.card, borderRadius: 12,
+      borderTopWidth: 1, borderBottomWidth: 1, borderColor: colors.border,
+    },
+    heightText: { textAlign: 'center', marginHorizontal: 20, color: colors.text },
+    heightPointerLeft: { color: colors.primary, fontSize: 16, fontWeight: 'bold', marginRight: 10 },
+    heightPointerRight: { color: colors.primary, fontSize: 16, fontWeight: 'bold', marginLeft: 10 },
 
-  timeModalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  timeModalContent: {
-    width: '90%',
-    maxHeight: '90%',
-    backgroundColor: '#FFF',
-    borderRadius: 16,
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  timeModalTitle: {
-    fontSize: 15,
-    color: '#666',
-    alignSelf: 'flex-start',
-    marginBottom: 15,
-  },
-  digitalTimeRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  timeBox: {
-    borderWidth: 1.5,
-    borderColor: '#E0E0E0',
-    borderRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    backgroundColor: '#FAFAFA',
-  },
-  timeBoxText: { fontSize: 24, fontWeight: 'bold', color: '#333' },
-  timeColon: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginHorizontal: 8,
-    color: '#333',
-  },
-  amPmContainer: {
-    marginLeft: 12,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    borderRadius: 6,
-    overflow: 'hidden',
-  },
-  amPmBtn: {
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    backgroundColor: '#FAFAFA',
-    alignItems: 'center',
-  },
-  amPmText: { fontSize: 12, color: '#888' },
+    complexionContainer: { width: '100%', alignItems: 'center', paddingTop: 10 },
+    complexionCard: {
+      width: '65%', height: 150, borderRadius: 16, borderWidth: 1.5,
+      justifyContent: 'center', alignItems: 'center', marginBottom: 25,
+      backgroundColor: colors.inputBg, borderColor: 'transparent'
+    },
+    selectedComplexionCard: { backgroundColor: colors.highlight, borderColor: colors.primary },
+    unselectedComplexionCard: { backgroundColor: colors.inputBg, borderColor: 'transparent' },
+    avatarBox: {
+      width: 60, height: 60, borderRadius: 30, backgroundColor: colors.card,
+      justifyContent: 'center', alignItems: 'center', marginBottom: 12,
+      shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: isDark ? 0.3 : 0.1, elevation: 2,
+    },
+    complexionCardText: { fontSize: 16, color: colors.text, fontWeight: '500' },
 
-  clockFaceCircle: { 
-    width: 170, 
-    height: 170, 
-    borderRadius: 85, 
-    backgroundColor: '#F0F0F0', 
-    position: 'relative', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    marginVertical: 8 
-  },
+    familyContainer: { width: '100%' },
+    familySectionTitle: { fontSize: 15, fontWeight: 'bold', color: colors.text, marginBottom: 12 },
+    radioGroupRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
+    radioOption: { flexDirection: 'row', alignItems: 'center' },
+    radioLabelText: { fontSize: 15, color: colors.text, marginLeft: 8 },
+    dividerRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 20 },
+    dividerLine: { flex: 1, height: 1, backgroundColor: colors.border },
+    dividerText: { marginHorizontal: 15, color: colors.textSecondary, fontSize: 14 },
+    familyInput: {
+      backgroundColor: colors.inputBg, borderRadius: 10,
+      paddingHorizontal: 16, paddingVertical: 14, fontSize: 15,
+      color: colors.text, marginBottom: 18,
+    },
+    companyInput: {
+      backgroundColor: colors.inputBg, borderRadius: 12,
+      paddingHorizontal: 18, paddingVertical: 18, fontSize: 16, color: colors.text,
+    },
 
-  clockCenterDot: { 
-    position: 'absolute', 
-    width: 8, 
-    height: 8, 
-    borderRadius: 4, 
-    backgroundColor: '#80001E', 
-    left: 83, 
-    top: 81, 
-    zIndex: 5 
-  },
-  clockHandLine: { 
-    position: 'absolute', 
-    width: 58, // Matches the radius length from center to numbers
-    height: 2, 
-    backgroundColor: '#80001E', 
-    left: 28,  // Center X of the 170x170 circle
-    top: 84,   // Center Y of the 170x170 circle
-  },
-  clockNodeTextContainer: {
-    position: 'absolute',
-    width: 10,
-    height: 14,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  clockNum: {
-    fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
-  },
-  clockNodeBubble: {
-    position: 'absolute',
-    width: 10,
-    height: 14,
-    borderRadius: 17,
-    backgroundColor: '#80001E',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  clockNodeBubbleText: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    fontSize: 14,
-    textAlign: 'center',
-  },
-  activeDotText: { color: '#FFF', fontWeight: 'bold', fontSize: 14 },
+    timeModalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center', alignItems: 'center' },
+    timeModalContent: {
+      width: '90%', maxHeight: '90%', backgroundColor: colors.card,
+      borderRadius: 16, paddingVertical: 16, paddingHorizontal: 16, alignItems: 'center',
+      shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 8, elevation: 6,
+    },
+    timeModalTitle: { fontSize: 15, color: colors.textSecondary, alignSelf: 'flex-start', marginBottom: 15 },
+    digitalTimeRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
+    timeBox: {
+      borderWidth: 1.5, borderColor: colors.border, borderRadius: 8,
+      paddingVertical: 8, paddingHorizontal: 14, backgroundColor: isDark ? '#121212' : '#FAFAFA',
+    },
+    timeBoxText: { fontSize: 24, fontWeight: 'bold', color: colors.text },
+    timeColon: { fontSize: 24, fontWeight: 'bold', marginHorizontal: 8, color: colors.text },
+    amPmContainer: { marginLeft: 12, borderWidth: 1, borderColor: colors.border, borderRadius: 6, overflow: 'hidden' },
+    amPmBtn: { paddingVertical: 4, paddingHorizontal: 8, backgroundColor: isDark ? '#121212' : '#FAFAFA', alignItems: 'center' },
+    amPmText: { fontSize: 12, color: colors.textSecondary },
 
-  timeModalButtonsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    marginTop: 20,
-  },
-  keyboardIconBtn: { padding: 6 },
-  modalRightActions: { flexDirection: 'row', alignItems: 'center' },
-  modalCancelText: {
-    fontSize: 15,
-    color: '#666',
-    marginRight: 20,
-    fontWeight: '600',
-  },
-  modalOkBtn: {
-    backgroundColor: '#FFC0CB',
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-  },
-  modalOkText: { fontSize: 15, color: '#80001E', fontWeight: 'bold' },
+    clockFaceCircle: { 
+      width: 170, height: 170, borderRadius: 85, backgroundColor: isDark ? '#121212' : '#F0F0F0', 
+      position: 'relative', justifyContent: 'center', alignItems: 'center', marginVertical: 8 
+    },
+    clockCenterDot: { position: 'absolute', width: 8, height: 8, borderRadius: 4, backgroundColor: colors.primary, left: 83, top: 81, zIndex: 5 },
+    clockHandLine: { position: 'absolute', width: 58, height: 2, backgroundColor: colors.primary, left: 28, top: 84 },
+    clockNodeTextContainer: { position: 'absolute', width: 10, height: 14, justifyContent: 'center', alignItems: 'center' },
+    clockNum: { fontSize: 14, color: colors.textSecondary, textAlign: 'center' },
+    clockNodeBubble: {
+      position: 'absolute', width: 10, height: 14, borderRadius: 17,
+      backgroundColor: colors.primary, justifyContent: 'center', alignItems: 'center',
+    },
+    clockNodeBubbleText: { color: '#FFF', fontWeight: 'bold', fontSize: 14, textAlign: 'center' },
 
-  autocompleteWrapper: { position: 'relative' },
-  suggestionsBox: {
-    position: 'absolute',
-    top: 65,
-    left: 0,
-    right: 0,
-    backgroundColor: '#FFF',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
-    maxHeight: 220,
-  },
-  suggestionRow: {
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#F0F0F0',
-  },
-  suggestionText: { fontSize: 15, color: '#333' },
+    timeModalButtonsRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginTop: 20 },
+    keyboardIconBtn: { padding: 6 },
+    modalRightActions: { flexDirection: 'row', alignItems: 'center' },
+    modalCancelText: { fontSize: 15, color: colors.textSecondary, marginRight: 20, fontWeight: '600' },
+    modalOkBtn: { backgroundColor: colors.highlight, paddingVertical: 8, paddingHorizontal: 20, borderRadius: 8 },
+    modalOkText: { fontSize: 15, color: colors.primary, fontWeight: 'bold' },
 
-  hobbiesContainer: { width: '100%' },
-  hobbyCategoryBox: {
-    backgroundColor: '#FFF',
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: '#EFEFEF',
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  hobbyCategoryTitle: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    color: '#80001E',
-    marginBottom: 14,
-  },
-  tagsFlexRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  hobbyTag: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    borderRadius: 22,
-    borderWidth: 1.5,
-    marginBottom: 8,
-  },
-  selectedHobbyTag: { backgroundColor: '#FDF2F2', borderColor: '#80001E' },
-  unselectedHobbyTag: { backgroundColor: '#FAFAFA', borderColor: '#EFEFEF' },
-  hobbyTagIcon: { fontSize: 14, marginRight: 6 },
-  hobbyTagText: { fontSize: 14, color: '#444' },
-  viewAllButton: { alignSelf: 'center', marginTop: 8, paddingVertical: 4 },
-  viewAllText: { fontSize: 14, fontWeight: 'bold' },
+    autocompleteWrapper: { position: 'relative' },
+    suggestionsBox: {
+      position: 'absolute', top: 65, left: 0, right: 0,
+      backgroundColor: colors.card, borderRadius: 12, borderWidth: 1, borderColor: colors.border,
+      shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: isDark ? 0.3 : 0.1, shadowRadius: 4, elevation: 4, maxHeight: 220,
+    },
+    suggestionRow: { paddingVertical: 12, paddingHorizontal: 16, borderBottomWidth: 0.5, borderBottomColor: isDark ? '#333' : '#F0F0F0' },
+    suggestionText: { fontSize: 15, color: colors.text },
 
-  qualificationCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    borderRadius: 14,
-    borderWidth: 1.5,
-    marginBottom: 14,
-  },
-  imageSelectionCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 35,
-    borderWidth: 1.5,
-    marginBottom: 12,
-  },
-  avatarCirclePlaceholder: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#E0E0E0',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 14,
-  },
-  selectedQualificationCard: {
-    backgroundColor: '#FDF2F2',
-    borderColor: '#80001E',
-  },
-  unselectedQualificationCard: {
-    backgroundColor: '#FAFAFA',
-    borderColor: '#EFEFEF',
-  },
-  qualificationCardText: { fontSize: 16, color: '#444', fontWeight: '500' },
+    hobbiesContainer: { width: '100%' },
+    hobbyCategoryBox: {
+      backgroundColor: colors.card, borderRadius: 14, borderWidth: 1, borderColor: colors.border,
+      padding: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: isDark ? 0.3 : 0.04, shadowRadius: 2, elevation: 1,
+    },
+    hobbyCategoryTitle: { fontSize: 15, fontWeight: 'bold', color: colors.primary, marginBottom: 14 },
+    tagsFlexRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+    hobbyTag: {
+      flexDirection: 'row', alignItems: 'center', paddingVertical: 10, paddingHorizontal: 14,
+      borderRadius: 22, borderWidth: 1.5, marginBottom: 8,
+    },
+    selectedHobbyTag: { backgroundColor: colors.highlight, borderColor: colors.primary },
+    unselectedHobbyTag: { backgroundColor: isDark ? '#121212' : '#FAFAFA', borderColor: colors.border },
+    hobbyTagIcon: { fontSize: 14, marginRight: 6 },
+    hobbyTagText: { fontSize: 14, color: colors.text },
+    viewAllButton: { alignSelf: 'center', marginTop: 8, paddingVertical: 4 },
+    viewAllText: { fontSize: 14, fontWeight: 'bold', color: colors.primary },
 
-  bottomButtonRow: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 25,
-    paddingVertical: 15,
-    backgroundColor: '#FFF',
-    borderTopWidth: 1,
-    borderTopColor: '#EFEFEF',
-  },
-  skipButton: { paddingVertical: 10 },
-  skipButtonText: { color: '#FF3B30', fontSize: 15, fontWeight: 'bold' },
-  nextButtonFixed: {
-    width: 130,
-    height: 45,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  nextButtonText: { color: '#FFF', fontSize: 15, fontWeight: 'bold' },
+    qualificationCard: {
+      flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+      paddingVertical: 16, paddingHorizontal: 20, borderRadius: 14, borderWidth: 1.5, marginBottom: 14,
+      backgroundColor: colors.card, borderColor: colors.border,
+    },
+    imageSelectionCard: {
+      flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+      paddingVertical: 10, paddingHorizontal: 16, borderRadius: 35, borderWidth: 1.5, marginBottom: 12,
+      backgroundColor: colors.card, borderColor: colors.border,
+    },
+    avatarCirclePlaceholder: {
+      width: 44, height: 44, borderRadius: 22, backgroundColor: isDark ? '#333' : '#E0E0E0',
+      justifyContent: 'center', alignItems: 'center', marginRight: 14,
+    },
+    selectedQualificationCard: { backgroundColor: colors.highlight, borderColor: colors.primary },
+    unselectedQualificationCard: { backgroundColor: isDark ? '#1E1E1E' : '#FAFAFA', borderColor: isDark ? '#333' : '#EFEFEF' },
+    qualificationCardText: { fontSize: 16, color: colors.text, fontWeight: '500' },
 
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    width: '80%',
-    backgroundColor: '#FFF',
-    borderRadius: 12,
-    padding: 20,
-    alignItems: 'center',
-  },
-  modalTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#333',
-  },
-  modalOption: {
-    width: '100%',
-    paddingVertical: 12,
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
-  },
-  cancelOption: { borderBottomWidth: 0, marginTop: 5 },
-  modalOptionText: { fontSize: 15, color: '#333', fontWeight: '500' },
-});
+    bottomButtonRow: {
+      position: 'absolute', bottom: 0, left: 0, right: 0,
+      flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+      paddingHorizontal: 25, paddingVertical: 15,
+      backgroundColor: colors.card, borderTopWidth: 1, borderTopColor: isDark ? '#333' : '#EFEFEF',
+    },
+    skipButton: { paddingVertical: 10 },
+    skipButtonText: { color: '#FF3B30', fontSize: 15, fontWeight: 'bold' },
+    nextButtonFixed: { width: 130, height: 45, borderRadius: 8, alignItems: 'center', justifyContent: 'center' },
+    nextButtonText: { color: '#FFF', fontSize: 15, fontWeight: 'bold' },
+
+    modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center', alignItems: 'center' },
+    modalContent: {
+      width: '80%', backgroundColor: colors.card, borderRadius: 12, padding: 20, alignItems: 'center',
+    },
+    modalTitle: { fontSize: 16, fontWeight: 'bold', marginBottom: 20, color: colors.text },
+    modalOption: {
+      width: '100%', paddingVertical: 12, alignItems: 'center', borderBottomWidth: 1, borderBottomColor: isDark ? '#333' : '#F0F0F0',
+    },
+    cancelOption: { borderBottomWidth: 0, marginTop: 5 },
+    modalOptionText: { fontSize: 15, color: colors.text, fontWeight: '500' },
+  });
+};
